@@ -7,14 +7,6 @@ library("matrixStats")
 
 # read in data
 uni.dtm<- read.csv("dtm.csv")
-uni.dtm$year <- NULL
-uni.dtm$region <- as.character(uni.dtm$region)
-uni.dtm[,2:10001] <- lapply(uni.dtm[,2:10001],as.integer)
-corp.1.uni <- uni.dtm[grep("MENA",uni.dtm$region),]
-corp.1.uni$region <- NULL
-means.corp.1 <- colSums(corp.1.uni) / sum(colSums(corp.1.uni))
-corp.2.uni <- uni.dtm[-(grep("MENA",uni.dtm$region)),]
-corp.2.uni$region <- NULL
 
 # The following function inputs a region and returns the scores of three word separating algorithsms - Linear Discriminant analysis, Standardized Mean Difference and Standardized Log Odds
 
@@ -118,4 +110,4 @@ write.csv(la.uni,"la.csv")
 top.200 <- function(data,score){
   return(rownames(data[order(score,decreasing=TRUE),])[1:200])
 }
-top.200(mena.uni,mena.uni$ld)
+top.200(mena.uni,mena.uni$smd)

@@ -1,4 +1,4 @@
-### This script analyzes human rights coverage with word separating algorithms.
+### This script analyzes women coverage with word separating algorithms.
 
 #  Prepping.
 rm(list=ls())
@@ -96,18 +96,25 @@ la.uni <- distinctive.words("LA")
 asia.uni <- distinctive.words("Asia")
 
 # write CSVs
-setwd("Results/distinctive\ words")
+setwd("Results/distinctive-words")
 
-write.csv(mena.uni,"mena.csv")
-write.csv(eeca.uni,"eeca.csv")
-write.csv(west.uni,"west.csv")
-write.csv(africa.uni,"africa.csv")
-write.csv(asia.uni,"asia.csv")
-write.csv(la.uni,"la.csv")
+write.order <- function(data,filename){
+  order <- data[order(data[,"smd"],decreasing=TRUE)[1:200],]
+  order <- subset(order,select=3)
+  write.table(order,file = filename,col.names = FALSE,sep = ":")
+}
+
+write.order(mena.uni,"mena.txt")
+write.order(la.uni,"la.txt")
+write.order(eeca.uni,"eeca.txt")
+write.order(west.uni,"west.txt")
+write.order(asia.uni,"asia.txt")
+write.order(africa.uni,"africa.txt")
+
 
 # write function to get top 200 words for a particular score
 
 top.200 <- function(data,score){
   return(rownames(data[order(score,decreasing=TRUE),])[1:200])
 }
-top.200(mena.uni,mena.uni$smd)
+write.csv(top.200(la.uni,la.uni$smd),"la.csv")

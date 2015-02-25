@@ -6,7 +6,7 @@ setwd("/Users/rterman/Dropbox/berkeley/Dissertation/Data\ and\ Analyais/Git\ Rep
 library("matrixStats")
 
 # read in data
-uni.dtm<- read.csv("dtm.csv")
+uni.dtm<- "Data/dtm-python.csv"
 
 # The following function inputs a region and returns the scores of three word separating algorithsms - Linear Discriminant analysis, Standardized Mean Difference and Standardized Log Odds
 
@@ -117,4 +117,4 @@ write.order(africa.uni,"africa.txt")
 top.200 <- function(data,score){
   return(rownames(data[order(score,decreasing=TRUE),])[1:200])
 }
-write.csv(top.200(la.uni,la.uni$smd),"la.csv")
+top.200(mena.uni,mena.uni$smd)

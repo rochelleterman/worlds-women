@@ -1,8 +1,9 @@
-setwd("/Users/rterman/Dropbox/berkeley/Dissertation/Data\ and\ Analyais/Git\ Repos/women")
+rm(list=ls())
+setwd("/Users/rterman/Dropbox/berkeley/Dissertation/Data\ and\ Analyais/Git\ Repos/worlds-women")
 
 ### Load Data
 
-women <- read.csv('women-no-nouns.csv')
+women <- read.csv('Data/women-processed.csv')
 names(women)
 summary(women$number.of.porter.stemmed.positive.words)
 
@@ -42,6 +43,7 @@ neg.mean("EECA")
 sent$neg <- lapply(sent$regions,neg.mean)
 sent$neg <- as.numeric(sent$neg)
 summary(sent$neg)
+sent$region
 
-barplot(sent$neg)
-
+barplot(sent$pos, names.arg=sent$region )
+barplot(sent$neg, names.arg=sent$region)

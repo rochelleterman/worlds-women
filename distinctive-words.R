@@ -6,7 +6,7 @@ setwd("/Users/rterman/Dropbox/berkeley/Dissertation/Data\ and\ Analyais/Git\ Rep
 library("matrixStats")
 
 # read in data
-uni.dtm<- "Data/dtm-python.csv"
+uni.dtm<- read.csv("Data/dtm-python.csv")
 
 # The following function inputs a region and returns the scores of three word separating algorithsms - Linear Discriminant analysis, Standardized Mean Difference and Standardized Log Odds
 
@@ -47,15 +47,6 @@ distinctive.words <- function(region){
   
   # A function to get Standardized mean difference scores
   s.m.d.scores <- function(corp.1,corp.2){ # where x,y args are dtm dataframes for the two authors
-    # calculate means and vars
-    n.corp.1 <- sum(colSums(corp.1))
-    n.corp.2 <- sum(colSums(corp.2))
-    means.corp.1 <- colSums(corp.1) / n.corp.1
-    var.corp.1 <- colVars(as.matrix(corp.1))
-    means.corp.2 <- colSums(corp.2) / n.corp.2
-    var.corp.2 <- colVars(as.matrix(corp.2))
-    
-    #calculate overall score
     score <- (means.corp.1 - means.corp.2) / sqrt((var.corp.1/n.corp.1) + (var.corp.2/n.corp.1))
     return(score)
   }
@@ -73,8 +64,8 @@ distinctive.words <- function(region){
     n.corp.2 <- sum(colSums(corp.2))
     x.corp.1 <- colSums(corp.1)
     x.corp.2 <- colSums(corp.2)
-    pi.corp.1 <- (x.corp.1 + 1) / (n.corp.1 + ncol(corp.1))
-    pi.corp.2 <- (x.corp.2 + 1) / (n.corp.2 + ncol(corp.2))  
+    pi.corp.1 <- (x.corp.1 + 1) / (n.corp.1 + ncol(corp.1)-1)
+    pi.corp.2 <- (x.corp.2 + 1) / (n.corp.2 + ncol(corp.2)-1)  
     log.odds.ratio <- log(pi.corp.1/(1-pi.corp.1)) - log(pi.corp.2 / (1-pi.corp.2))
     st.log.odds <- log.odds.ratio/sqrt(var(log.odds.ratio))
     return(st.log.odds)
@@ -117,4 +108,5 @@ write.order(africa.uni,"africa.txt")
 top.200 <- function(data,score){
   return(rownames(data[order(score,decreasing=TRUE),])[1:200])
 }
-top.200(mena.uni,mena.uni$smd)
+top.200(west.uni,west.uni$stlogoddse)
+head(sort(mena.uni$smd),10)

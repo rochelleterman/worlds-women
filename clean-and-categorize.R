@@ -6,7 +6,7 @@ library("foreign")
 
 setwd("/Users/rterman/Dropbox/berkeley/Dissertation/Data\ and\ Analyais/Git\ Repos/women")
 
-women <- read.csv('data/women-processed.csv')
+women <- read.csv('data/raw-joined/raw-all.csv')
 names(women)
 ##
 # index <- which(!grepl(("[0-9]"),women$DATE))
@@ -169,54 +169,6 @@ women$REGION[women$COUNTRY_CODE=="SRB"] <- "EECA"
 women$REGION[women$COUNTRY_CODE=="MAC"] <- "EECA"
 women$REGION[women$COUNTRY_CODE=="YUG"] <- "EECA"
 
-
-## This method is from my original method. It applies regions directly from COUNTRY_FINAL, including cases with no specific country, i.e. "Balkans"
-
-# Defining Regions
-
-africa <- c("burundi","comoros","dijibouti","eritrea","ethiopia","kenya","madagascar","kenya","malawi","mauritius","mayotte","mozambique","reunion","rwanda","seqychelles","somalia","south sudan", "uganda","tanzania","united republic of tanzania","zambia","zimbabwe","angola","cameroon","central african republic","chad","congo","democratic republic of congo","equatorial guinea","gabon","sao tome and principe","botswana","lesotho","namibia","south africa","swaziland","benin","burkina faso","cabo verde","cote d'ivoire","gambia","ghana","guinea","gunea-bissau","liberia","mali","mauritania","niger","nigeria","saint helena","senegal","sierra leone","togo","cape verde","guinea-bissau","djibouti","democratic republic of the congo","ivory coast","africa","losotho","ziare")
-africa <- paste(africa, collapse='|')
-
-latin.america <- c("Caribbean", "anguilla","antigua and barbuda","aruba","bahamas","barbados","bonaire,saint eustatius and saba","british virgin islands","cuba","curacao","dominica","dominican republic","grenada","guadeloupe","haiti","jamaica","montserrat","puerto rico","saint-barthelemy","saint kitts and nevis","saint lucia","trinidad and tobago","trinidad","turks and calcos islands","united states virgin islands","belize","costa rica","el salvador","guatemala","honduras","mexico","nicaragua","panama","argentina", "bolivia","brazil","chile","colombia","ecuador","falkland islands","malvinas","french guiana","paraguay","peru","suriname","uruguay","venezuela","mexico","uruguay","st. kitts and nevis","seychelles","antigua & barbuda","st. vincent and the grenadines","st. lucia","guyana","uruguay","Samoa","latin america","south america","maldives","ST KITTS-NEVIS","ST LUCIA","ST VINCENT","fiji","central america")
-latin.america <- paste(latin.america, collapse='|')
-
-central.asia <- c("kazakhstan","kyrgyzstan","tajikistan","turkmenistan","uzbekistan","belarus","bulgaria","czech republic","hungary","poland","republic of moldova","romania","rumania","russian federation","slovakia","ukraine","albania","andorra","bosnia","croatia","gibralter","greece","holy see","malta","montenegro","san marino","serbia","slovenia","yugoslavia","hungary","czechoslovakia","macedonia","kosovo","moldova","russia","georgia","cyprus","azerbaijan","chechnya","soviet union","kosovo","yugoslavia","croatia","czech","serbia","soviet","estonia","ussr","u.s.s.r.","kazakstan","SLOVAK REPUBLIC")
-central.asia <- paste(central.asia, collapse='|')
-
-mena <- c("armenia","bahrain","iraq","jordan","kuwait","lebanon","oman","qatar","saudi arabia","palestine","state of palestine","syria","syrian arab republic","turkey","united arab emirates","yemen","algeria","egypt","libya","morocco","sudan","tunisia","western sahara","iran","afghanistan","yemen arab republic","yemen people's republic","turkish","palestine","palestinian","israel","middle east","mena")
-mena <- paste(mena, collapse='|')
-
-
-west <- c("channel islands","denmark","estonia","finland","iceland","isle of man","jersey","latvia","lithuania","norway","sark","svaldbard and jan mayen islands","sweden","united kingdom","united kingdom of great britain and northern ireland","canada","japan", "australia", "new zealand","ireland","netherlands","belgium","luxembourg","france","monaco","liechtenstein","switzerland","spain","italy","andorra","portugal","germany","german federal republic","german democratic republic","austria-hungary","austria","papal states","irish","Europe","england","west","Nordic Countries", "United States of America")
-west <- paste(west, collapse='|')
-
-asia <- c("cambodia","china","japan","sri lanka","vietnam","india","pakistan","bangladesh","malaysia","indonesia","korea","laos","burma","myanmar","philippines","korea","thailand","TIMOR-LESTE","timor","tibet","bhutan","nepal","Singapore","asia","viet nam","samoa","taiwan","kashmir","hong kong","mongolia","Mariana islands","Solomon Islands","MACAO","guam")
-asia <- paste(asia,collapse='|')
-
-# Appying regions based on COUNTRY_FINAL
-
-women$REGION2 <- NA
-
-asia.index <- (grepl(asia, women$COUNTRY_FINAL,ignore.case=T))
-women$REGION2[asia.index] <- "Asia"
-
-la.index <- (grepl(latin.america, women$COUNTRY_FINAL,ignore.case=T))
-women$REGION2[la.index] <- "LA"
-
-mena.index <- (grepl(mena, women$COUNTRY_FINAL,ignore.case=T))
-women$REGION2[mena.index] <- "MENA"
-
-africa.index <- (grepl(africa, women$COUNTRY_FINAL,ignore.case=T))
-women$REGION2[africa.index] <- "Africa"
-
-ca.index <- (grepl(central.asia, women$COUNTRY_FINAL,ignore.case=T))
-women$REGION2[ca.index] <- "EECA"
-
-west.index <- (grepl(west, women$COUNTRY_FINAL,ignore.case=T))
-women$REGION2[west.index] <- "West"
-
-women$REGION2 <- as.character(women$REGION)
-
 ### basic analysis / summary stats
 
 women.foreign <- women[!women$COUNTRY_CODE=="USA",]
@@ -225,12 +177,12 @@ women.foreign <- women.foreign[!is.na(women.foreign$COUNTRY_CODE),]
 women.foreign$REGION <- as.factor(women.foreign$REGION)
 women.foreign$COUNTRY_FINAL <- as.factor(women.foreign$COUNTRY_FINAL)
 
-
 barplot(summary(women.foreign$REGION))
 summary(women.foreign$COUNTRY_FINAL)
 
 #### WRITE FILES #####
-write.csv(women, file="Data/women-processed.csv")
 
-con<-file('women-foreign.csv',encoding="utf8")
+write.csv(women,"Data/women-all.csv") # write all
+
+con<-file('Data/women-foreign.csv',encoding="utf8")
 write.csv(women.foreign,file=con,fileEncoding="UTF8")

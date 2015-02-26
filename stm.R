@@ -2,7 +2,7 @@ setwd("/Users/rterman/Dropbox/berkeley/Dissertation/Data\ and\ Analyais/Git\ Rep
 
 ### Load Data
 
-women <- read.csv('Data/women-no-nouns.csv')
+women <- read.csv('Data/women-processed.csv')
 names(women)
 
 ####################################
@@ -32,13 +32,13 @@ plotRemoved(out$documents,lower.thresh=seq(1,200,by=100))
 
 ### Model search across numbers of topics
 
-storage <- manyTopics(docs,vocab,K=c(13,14,15),prevalence=~REGION+s(YEAR),data=meta,runs=10,max.em.its=50)
+storage <- manyTopics(docs,vocab,K=c(10,15,20),prevalence=~REGION+s(YEAR),data=meta,runs=10,max.em.its=50)
 
-mean(storage$semcoh[[1]])
+mean(storage$exclusivity[[3]])
 
-mod.13 <- storage$out[[1]] # most coherent
-mod.14 <- storage$out[[2]] # most exclusive 
-mod.15 <- storage$out[[3]]
+mod.10 <- storage$out[[1]] # most coherent
+mod.15 <- storage$out[[2]] 
+mod.20 <- storage$out[[3]] # most exclusive 
 
 ### Select Model with fixed number of topics
 mod.14.select <- selectModel(docs,vocab,K=14,prevalence=~REGION+s(YEAR),max.em.its=50,data=meta,runs=10,seed=12345)
@@ -50,17 +50,13 @@ summary(mod.14.select)
 
 ### Tryin other number of topics
 
-mod.13.select <- selectModel(docs,vocab,K=13,prevalence=~REGION+s(YEAR),data=meta,runs=15,seed=33333)
-plotModels(mod.13.select)
-mod.13 <- mod.13.select$runout[[1]]
-topicQuality(model=mod.13, documents=docs)
-labelTopics(mod.13)
+mod.20.select <- selectModel(docs,vocab,K=20,prevalence=~REGION+s(YEAR),data=meta,runs=15,seed=33333)
+plotModels(mod.20)
+mod.20.fit <- mod.20.select$runout[[1]]
+topicQuality(model=mod.20.fit, documents=docs)
+labelTopics(mod.20.fit)
 
-mod.13.fit <- stm(docs,vocab, 13, prevalence=~REGION+s(YEAR), data=meta, seed = 12345 )
-labelTopics(mod.13.fit)
-topicQuality(model=mod.13.fit, documents=docs)
-
-mod.20 <- stm(docs,vocab, 20, prevalence=~REGION+s(YEAR), data=meta, seed = 12345 )
+mod.20 <- stm(docs,vocab, 20, prevalence=~REGION+s(YEAR), data=meta, seed = 22222)
 labelTopics(mod.20)
 topicQuality(model=mod.20, documents=docs)
 
@@ -103,28 +99,41 @@ thoughts19 <- findThoughts(model,texts=meta$TITLE,n=2,topics=19)$docs[[1]]
 thoughts20 <- findThoughts(model,texts=meta$TITLE,n=2,topics=20)$docs[[1]]
 
 
-plotQuote(thoughts1, width=40, main="Topic 1")# books
-plotQuote(thoughts2, width=40, main="Topic 2") # sexual assault
-plotQuote(thoughts3, width=40, main="Topic 3") # media
-plotQuote(thoughts4, width=40, main="Topic 4") # pol. violence 
-plotQuote(thoughts5, width=40, main="Topic 5") #war + rights?
-plotQuote(thoughts6, width=40, main="Topic 6") #religion + rights?
-plotQuote(thoughts7, width=40, main="Topic 7") #trafficking + FGM
-plotQuote(thoughts8, width=40, main="Topic 8") #politics + elections
-plotQuote(thoughts9, width=40, main="Topic 9") #film, art, theater
-plotQuote(thoughts10, width=40, main="Topic 10") #travel
-plotQuote(thoughts11, width=40, main="Topic 11") #sports
-plotQuote(thoughts12, width=40, main="Topic 12") #education
-plotQuote(thoughts13, width=40, main="Topic 13") #gender equality
-plotQuote(thoughts14, width=40, main="Topic 14") #diplomacy? international relations?
-plotQuote(thoughts15, width=40, main="Topic 15") # obit
-plotQuote(thoughts16, width=40, main="Topic 16") # reproductive + maternal health
-plotQuote(thoughts17, width=40, main="Topic 17") # personal stories
-plotQuote(thoughts18, width=40, main="Topic 18") # business
+plotQuote(thoughts1, width=40, main="Topic 1")# per. stories
+plotQuote(thoughts2, width=40, main="Topic 2") # fgm
+plotQuote(thoughts3, width=40, main="Topic 3") #  rights / protests
+plotQuote(thoughts4, width=40, main="Topic 4") # politics
+plotQuote(thoughts5, width=40, main="Topic 5") # law, abortion
+plotQuote(thoughts6, width=40, main="Topic 6") #religion
+plotQuote(thoughts7, width=40, main="Topic 7") # rape
+plotQuote(thoughts8, width=40, main="Topic 8") # medicine
+plotQuote(thoughts9, width=40, main="Topic 9") # sports
+plotQuote(thoughts10, width=40, main="Topic 10") #maternal health
+plotQuote(thoughts11, width=40, main="Topic 11") #war ???
+plotQuote(thoughts12, width=40, main="Topic 12") #buxiness
+plotQuote(thoughts13, width=40, main="Topic 13") #political violence
+plotQuote(thoughts14, width=40, main="Topic 14") # art, theater
+plotQuote(thoughts15, width=40, main="Topic 15") # sex tourism
+plotQuote(thoughts16, width=40, main="Topic 16") # books
+plotQuote(thoughts17, width=40, main="Topic 17") # marriage + family
+plotQuote(thoughts18, width=40, main="Topic 18") # travel
 plotQuote(thoughts19, width=40, main="Topic 19") # fashion
-plotQuote(thoughts20, width=40, main="Topic 20") # cancer
+plotQuote(thoughts20, width=40, main="Topic 20") # education
+
+labels = c("Personal stories","FGM","Rights","Politics","Law","Religion","Sexual Assault","Medicine","Sports","Reproductive Health","War","Business","Political Violence","Art, Theater","Prostitution","Literature","Marriage + Family","Travel","Fashion","Education")
+
+#### Corpus level summaries
+
+plot.STM(model,type="summary",custom.labels=labels,covarlevels=regions)
+
+plot.STM(model,type="hist",custom.labels=labels)
+
+plot.STM(model,type="labels",width=100)
 
 
+# Topic Correlation
+mod.out.corr<-topicCorr(model)
+plot.topicCorr(mod.out.corr)
 
 ### Topics, meta data relationships
 
@@ -155,12 +164,5 @@ plot.estimateEffect(prep.int,covariate="YEAR",method="continuous",topics=1,moder
 
 plot.estimateEffect(prep.int,covariate="YEAR",method="continuous",topics=1,moderator="REGION",moderator.value="MENA",linecol="blue", add=T, ylim=c(0,.25))
 
-#### Corpus level summaries
-
-plot.STM(model,type="summary")
-
-# Topic Correlation
-mod.out.corr<-topicCorr(model)
-plot.topicCorr(mod.out.corr)
 
 

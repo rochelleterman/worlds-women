@@ -6,6 +6,7 @@
 
 # R data files from past sessions
 .Rdata
+.Rapp.history
 
 # RStudio files
 .Rproj.user/
@@ -16,6 +17,7 @@
 
 # My Stuff #
 Data
-Data/*
+Data/raw-TXTs
 *.ipynb_checkpoints
 *.ipynb_checkpoints/*
+.pptx

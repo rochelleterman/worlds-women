@@ -1,4 +1,5 @@
 setwd("/Users/rterman/Dropbox/berkeley/Dissertation/Data\ and\ Analyais/Git\ Repos/worlds-women")
+library(stm)
 
 ### Load Data
 
@@ -9,7 +10,6 @@ names(women)
 ######### Pre-processing ###########
 ####################################
 
-library(stm)
 
 temp<-textProcessor(documents=women$TEXT.NO.NOUN,metadata=women)
 meta<-temp$meta
@@ -40,27 +40,27 @@ mod.10 <- storage$out[[1]] # most coherent
 mod.15 <- storage$out[[2]] 
 mod.20 <- storage$out[[3]] # most exclusive 
 
-### Select Model with fixed number of topics
-mod.14.select <- selectModel(docs,vocab,K=14,prevalence=~REGION+s(YEAR),max.em.its=50,data=meta,runs=10,seed=12345)
+## Set K = 5, just REGION covariate
 
-plotModels(mod.14.select) # Plot of selectModel results. Numerals represent the average for each model, and dots represent topic specific scores
+mod.5 <- stm(docs,vocab, 5, prevalence=~REGION, data=meta, seed = 22222)
+topicQuality(model=mod.5, documents=docs)
 
-mod.14.select <- mod.14.select$runout[[2]] # choose model
-summary(mod.14.select)
+### Set K = 20
 
-### Tryin other number of topics
-
+# selectModel
 mod.20.select <- selectModel(docs,vocab,K=20,prevalence=~REGION+s(YEAR),data=meta,runs=15,seed=33333)
 plotModels(mod.20)
 mod.20.fit <- mod.20.select$runout[[1]]
 topicQuality(model=mod.20.fit, documents=docs)
 labelTopics(mod.20.fit)
 
+# straight STM
 mod.20 <- stm(docs,vocab, 20, prevalence=~REGION+s(YEAR), data=meta, seed = 22222)
 labelTopics(mod.20)
 topicQuality(model=mod.20, documents=docs)
 
 ### Content covariate
+
 mod.13.content <- stm(docs, vocab, 13, prevalence=~REGION+s(YEAR), content=~REGION, data=meta, max.em.its=75, seed=12345)
 topicQuality(model=mod.13.content, documents=docs)
 labelTopics(mod.13.content)
@@ -70,7 +70,7 @@ labelTopics(mod.13.content)
 ######### Explore Topics ###########
 ####################################
 
-model <- mod.20
+model <- mod.5
 
 # Labels
 labelTopics(model)
@@ -126,9 +126,9 @@ labels = c("Personal stories","FGM","Rights","Politics","Law","Religion","Sexual
 
 plot.STM(model,type="summary",custom.labels=labels,covarlevels=regions)
 
-plot.STM(model,type="hist",custom.labels=labels)
+plot.STM(model,type="hist")
 
-plot.STM(model,type="labels",width=100)
+plot.STM(model,type="labels")
 
 
 # Topic Correlation
@@ -139,13 +139,17 @@ plot.topicCorr(mod.out.corr)
 
 #prep
 prep <- estimateEffect(1:20 ~ REGION + s(YEAR),model,meta=meta,uncertainty="Global")
+prep2 <- estimateEffect(1:5 ~ REGION,model,meta=meta,uncertainty="Global")
+
 
 # topics over time
-plot.estimateEffect(prep,"YEAR",method="continuous",topics=11,printlegend=TRUE,xlab="Year",xlim=c(1990,2014))
+plot.estimateEffect(prep,covariate="YEAR",method="continuous",topics=6,printlegend=TRUE,xlab="Year",xlim=c(1990,2014))
+
+plot.estimateEffect(prep,covariate="REGION",topics=c(2,),model=mod.20,method="difference",cov.value1="MENA",cov.value2="LA")
 
 # topics over region
 regions = c("Asia","EECA","MENA","Africa","LA","West")
-plot.estimateEffect(prep,"REGION",method="pointestimate",topics=9,printlegend=TRUE,labeltype="custom",custom.labels=regions,main="Topic X",xlab="topic proportions")
+plot.estimateEffect(prep,"REGION",method="pointestimate",topics=5,printlegend=TRUE,labeltype="custom",custom.labels=regions,main="Topic 6: Religion",xlab="topic proportions")
 
 # difference
 plot.estimateEffect(prep,"REGION",method="difference",topics=c(1,2,4),cov.value1="MENA",cov.value="LA",printlegend=TRUE,main="Topic 2")
@@ -153,16 +157,16 @@ plot.estimateEffect(prep,"REGION",method="difference",topics=c(1,2,4),cov.value1
 
 #### Interactions
 
-mod.20.int <- stm(docs,vocab, 20, prevalence=~REGION*s(YEAR), data=meta, seed = 12345 )
-labelTopics(mod.20)
-topicQuality(model=mod.20, documents=docs)
+mod.20.int <- stm(docs,vocab, 20, prevalence=~REGION*s(YEAR), data=meta, seed = 22222 )
+labelTopics(mod.20.int)
+topicQuality(model=mod.20.int, documents=docs)
 
 prep.int <- estimateEffect(1:20 ~ REGION * YEAR,mod.20.int,meta=meta,uncertainty="Global")
 
 # topics over time by region
-plot.estimateEffect(prep.int,covariate="YEAR",method="continuous",topics=1,moderator="REGION",moderator.value="West",linecol="red", add=F,ylim=c(0,.25))
+plot.estimateEffect(prep.int,covariate="YEAR",method="continuous",topics=6,moderator="REGION",moderator.value="West",linecol="red", add=F,ylim=c(0,.25))
 
-plot.estimateEffect(prep.int,covariate="YEAR",method="continuous",topics=1,moderator="REGION",moderator.value="MENA",linecol="blue", add=T, ylim=c(0,.25))
+plot.estimateEffect(prep.int,covariate="YEAR",method="continuous",topics=6,moderator="REGION",moderator.value="MENA",linecol="blue", add=T, ylim=c(0,.25))
 
 
 

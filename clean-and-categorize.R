@@ -1,38 +1,43 @@
-### This script will load, clean and country code articles about women.
+### This script:
+### 1. Loads Raw Data
+### 2. Cleans it
+### 3. Applies YEAR column
+### 4. Applies COUNTRY column
+### 5. Applies REGION column
+### 6. Exports data
 
 rm(list=ls())
-
 library("foreign")
-
 setwd("/Users/rterman/Dropbox/berkeley/Dissertation/Data\ and\ Analyais/Git\ Repos/women")
 
-women <- read.csv('data/raw-joined/raw-all.csv')
+# load data
+women <- read.csv('data/raw-all.csv')
 names(women)
-##
-# index <- which(!grepl(("[0-9]"),women$DATE))
 
-# Remove duplicates
-women <- women[!duplicated(women$TITLE),]
+names(women)
+women$GEOGRAPHIC <- NULL
 
-# Add new column for year
+
+###############################
+########## Year ###############
+###############################
+
 women$DATE <- as.character(women$DATE)
 women$YEAR <- substr(women$DATE, nchar(women$DATE)-4, nchar(women$DATE))
 women$YEAR <- as.integer(women$YEAR)
 summary(women$YEAR)
 
-names(women)
-women$GEOGRAPHIC <- NULL
 
 ####################################
 ########## Countries ###############
 ####################################
 
 # This country code spreadsheet will help me categorize countries + regions
-countries <- read.csv("/Users/rterman/Dropbox/berkeley/Dissertation/Data\ and\ Analyais/Git\ Repos/human-rights-coverage/country_codes.csv")
+countries <- read.csv("country_codes.csv")
 countries$Key <- as.character(countries$Key)
 countries$iso3c <- as.character(countries$iso3c)
 
-# get rid of OMAN
+# get rid of OMAN because it will match "women"
 
 countries <- countries[!countries$Value=="Oman",]
 
@@ -59,9 +64,9 @@ for(i in 1:n){
 
 sum(is.na(women$COUNTRY_TITLE)) # 18462
 
-###############################################
-### Countries by LexisNexis GEOGRAPHIC term ###
-###############################################
+############################################
+### Countries by LexisNexis COUNTRY term ###
+############################################
 
 # initialize columns
 women$COUNTRY_TOP_PERCENT <- NA # This column just takes the string with the top percent
@@ -138,15 +143,12 @@ unique(women$COUNTRY_FINAL[is.na(women$COUNTRY_CODE)])
 women$COUNTRY_CODE[women$COUNTRY_FINAL=="DRC"] <- "COD"
 women$COUNTRY_CODE[women$COUNTRY_FINAL=="Macedonia" & women$YEAR < 1992] <- "MKD"
 women$COUNTRY_CODE[women$COUNTRY_FINAL=="Macedonia" & women$YEAR > 1991] <- "MAC"
-
 women$COUNTRY_CODE[women$COUNTRY_FINAL=="Yugoslavia" & women$YEAR < 2003] <- "MKD"
 women$COUNTRY_CODE[women$COUNTRY_FINAL=="Yugoslavia" & women$YEAR > 2002] <- "YUG"
 women$COUNTRY_CODE[women$COUNTRY_FINAL=="Yugoslavia" & women$YEAR > 2005] <- "SRB"
-
 women$COUNTRY_CODE[women$COUNTRY_FINAL=="Serbia" & women$YEAR < 2003] <- "MKD"
 women$COUNTRY_CODE[women$COUNTRY_FINAL=="Serbia" & women$YEAR > 2002] <- "YUG"
 women$COUNTRY_CODE[women$COUNTRY_FINAL=="Serbia" & women$YEAR > 2005] <- "SRB"
-
 women$COUNTRY_CODE[women$COUNTRY_FINAL=="Kosovo" & women$YEAR > 2007] <- "MNE"
 
 
@@ -169,7 +171,11 @@ women$REGION[women$COUNTRY_CODE=="SRB"] <- "EECA"
 women$REGION[women$COUNTRY_CODE=="MAC"] <- "EECA"
 women$REGION[women$COUNTRY_CODE=="YUG"] <- "EECA"
 
-### basic analysis / summary stats
+#######################################
+###### Subsetting and WRiting #########
+#######################################
+
+### Subsetting Data
 
 women.foreign <- women[!women$COUNTRY_CODE=="USA",]
 women.foreign <- women.foreign[!is.na(women.foreign$COUNTRY_CODE),]
@@ -177,12 +183,10 @@ women.foreign <- women.foreign[!is.na(women.foreign$COUNTRY_CODE),]
 women.foreign$REGION <- as.factor(women.foreign$REGION)
 women.foreign$COUNTRY_FINAL <- as.factor(women.foreign$COUNTRY_FINAL)
 
-barplot(summary(women.foreign$REGION))
-summary(women.foreign$COUNTRY_FINAL)
-
 #### WRITE FILES #####
 
 write.csv(women,"Data/women-all.csv") # write all
 
 con<-file('Data/women-foreign.csv',encoding="utf8")
 write.csv(women.foreign,file=con,fileEncoding="UTF8")
+

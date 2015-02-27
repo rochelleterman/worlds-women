@@ -70,7 +70,7 @@ labelTopics(mod.13.content)
 ######### Explore Topics ###########
 ####################################
 
-model <- mod.5
+model <- mod.20
 
 # Labels
 labelTopics(model)
@@ -110,7 +110,7 @@ plotQuote(thoughts8, width=40, main="Topic 8") # medicine
 plotQuote(thoughts9, width=40, main="Topic 9") # sports
 plotQuote(thoughts10, width=40, main="Topic 10") #maternal health
 plotQuote(thoughts11, width=40, main="Topic 11") #war ???
-plotQuote(thoughts12, width=40, main="Topic 12") #buxiness
+plotQuote(thoughts12, width=40, main="Topic 12") #business
 plotQuote(thoughts13, width=40, main="Topic 13") #political violence
 plotQuote(thoughts14, width=40, main="Topic 14") # art, theater
 plotQuote(thoughts15, width=40, main="Topic 15") # sex tourism
@@ -120,15 +120,16 @@ plotQuote(thoughts18, width=40, main="Topic 18") # travel
 plotQuote(thoughts19, width=40, main="Topic 19") # fashion
 plotQuote(thoughts20, width=40, main="Topic 20") # education
 
-labels = c("Personal stories","FGM","Rights","Politics","Law","Religion","Sexual Assault","Medicine","Sports","Reproductive Health","War","Business","Political Violence","Art, Theater","Prostitution","Literature","Marriage + Family","Travel","Fashion","Education")
+labels = c("1. Personal stories","2. FGM","3. Rights","4. Politics","5. Law","6. Religion","7. Sexual Assault","8. Medicine","9. Sports","10. Reproductive Health","11. War","12. Business","13. Political Violence","14. Art, Theater","15. Prostitution","16. Literature","17. Marriage + Family","18. Travel","19. Fashion","20. Education")
 
 #### Corpus level summaries
-
-plot.STM(model,type="summary",custom.labels=labels,covarlevels=regions)
+regions = c("Asia","EECA","MENA","Africa","LA","West")
+plot.STM(model,type="summary",custom.labels=labels)
 
 plot.STM(model,type="hist")
 
-plot.STM(model,type="labels")
+plot.STM(model,type="labels",topic.names=labels[1:10],topics=1:10,width=75)
+plot.STM(model,type="labels",topic.names=labels[11:20],topics=11:20,width=75)
 
 
 # Topic Correlation
@@ -143,13 +144,18 @@ prep2 <- estimateEffect(1:5 ~ REGION,model,meta=meta,uncertainty="Global")
 
 
 # topics over time
-plot.estimateEffect(prep,covariate="YEAR",method="continuous",topics=6,printlegend=TRUE,xlab="Year",xlim=c(1990,2014))
-
-plot.estimateEffect(prep,covariate="REGION",topics=c(2,),model=mod.20,method="difference",cov.value1="MENA",cov.value2="LA")
+plot.estimateEffect(prep,covariate="YEAR",method="continuous",topics=c(2,7),printlegend=TRUE,xlab="Year",xlim=c(1990,2014),main = "Comparing Topics over Time",labeltype="custom",custom.labels=c("FGM","Rape"),ylim=c(0,.2))
 
 # topics over region
 regions = c("Asia","EECA","MENA","Africa","LA","West")
-plot.estimateEffect(prep,"REGION",method="pointestimate",topics=5,printlegend=TRUE,labeltype="custom",custom.labels=regions,main="Topic 6: Religion",xlab="topic proportions")
+plot.estimateEffect(prep,"REGION",method="pointestimate",topics=6,printlegend=TRUE,labeltype="custom",custom.labels=regions,main="Topic 6: Religion",xlab="topic proportions")
+
+plot.estimateEffect(prep,"REGION",method="pointestimate",topics=10,printlegend=TRUE,labeltype="custom",custom.labels=regions,main="Topic 10: Reproductive Health",xlab="topic proportions")
+
+plot.estimateEffect(prep,"REGION",method="pointestimate",topics=12,printlegend=TRUE,labeltype="custom",custom.labels=regions,main="Topic 12: Business",xlab="topic proportions")
+
+plot.estimateEffect(prep,"REGION",method="pointestimate",topics=4,printlegend=TRUE,labeltype="custom",custom.labels=regions,main="Topic 4: Electoral Politics",xlab="topic proportions")
+
 
 # difference
 plot.estimateEffect(prep,"REGION",method="difference",topics=c(1,2,4),cov.value1="MENA",cov.value="LA",printlegend=TRUE,main="Topic 2")
@@ -164,9 +170,11 @@ topicQuality(model=mod.20.int, documents=docs)
 prep.int <- estimateEffect(1:20 ~ REGION * YEAR,mod.20.int,meta=meta,uncertainty="Global")
 
 # topics over time by region
-plot.estimateEffect(prep.int,covariate="YEAR",method="continuous",topics=6,moderator="REGION",moderator.value="West",linecol="red", add=F,ylim=c(0,.25))
+plot.estimateEffect(prep.int,covariate="YEAR",method="continuous",topics=6,moderator="REGION",moderator.value="West",linecol="red", add=F,ylim=c(0,.25),printlegend=F,main="Religion over Time by Region")
 
-plot.estimateEffect(prep.int,covariate="YEAR",method="continuous",topics=6,moderator="REGION",moderator.value="MENA",linecol="blue", add=T, ylim=c(0,.25))
+plot.estimateEffect(prep.int,covariate="YEAR",method="continuous",topics=6,moderator="REGION",moderator.value="MENA",linecol="blue", add=T, ylim=c(0,.25),printlegend=F)
 
 
+
+legend("topleft","(x,y)",legend=c("West","Mena"),fill=c("red","blue"))
 

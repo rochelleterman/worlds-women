@@ -33,7 +33,7 @@ names(melted) <- c("year","region","count")
 melted
 
 # regions over time.
-ggplot(data=melted, aes(x=year,y=count,group=region,color=region)) + geom_line()
+ggplot(data=melted, aes(x=year,y=count,group=region,color=region)) + geom_line() + ggtitle("Number of article per region over time")
 
 write.csv(n.region,"Results/region_year.csv")
 

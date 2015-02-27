@@ -39,7 +39,7 @@ sent$neg <- as.numeric(sent$neg)
 melted <- melt(sent,id.vars="regions",measure.vars=c("pos","neg"))
 melted
 
-ggplot(data=melted, aes(x=regions,y=value,group=variable,fill=variable)) + geom_bar(stat="identity",position=position_dodge())
+ggplot(data=melted, aes(x=regions,y=value,group=variable,fill=variable)) + geom_bar(stat="identity",position=position_dodge()) + ylab("word distribution") + ggtitle("Sentiments Per Region")
 
 
 ### Linear Modeling

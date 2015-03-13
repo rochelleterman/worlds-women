@@ -8,15 +8,21 @@
 
 rm(list=ls())
 library("foreign")
-setwd("/Users/rterman/Dropbox/berkeley/Dissertation/Data\ and\ Analyais/Git\ Repos/women")
+setwd("/Users/rterman/Dropbox/berkeley/Dissertation/Data\ and\ Analyais/Git\ Repos/worlds-women")
 
 # load data
-women <- read.csv('data/raw-all.csv')
+nyt <- read.csv('data/raw-nyt.csv')
+wp <- read.csv('data/raw-wp.csv')
+
+# subset 
+
+nyt <- subset(nyt,select=c(PUBLICATION,DATE,TITLE,BYLINE,COUNTRY,GEOGRAPHIC,LENGTH,TYPE,TEXT))
+wp <- subset(wp,select=c(PUBLICATION,DATE,TITLE,BYLINE,COUNTRY,GEOGRAPHIC,LENGTH,TYPE,TEXT))
+
+women <- rbind(nyt,wp)
 names(women)
 
-names(women)
-women$GEOGRAPHIC <- NULL
-
+which(duplicated(women$TITLE))
 
 ###############################
 ########## Year ###############
@@ -62,7 +68,7 @@ for(i in 1:n){
   women$COUNTRY_TITLE <- country.title(countries$Key[i],countries$Value[i],women)
 }
 
-sum(is.na(women$COUNTRY_TITLE)) # 18462
+sum(is.na(women$COUNTRY_TITLE)) # 33222
 
 ############################################
 ### Countries by LexisNexis COUNTRY term ###
@@ -103,7 +109,7 @@ for(i in seq(1,n)){
   women$COUNTRY_PERCENT_ST <- country.percent(countries$Key[i],countries$Value[i],women)
 }
 
-sum(is.na(women$COUNTRY_PERCENT_ST)) # 4576
+sum(is.na(women$COUNTRY_PERCENT_ST)) # 9356
 
 #######################
 ### Final Countries ###
@@ -115,7 +121,7 @@ women$COUNTRY_FINAL <- women$COUNTRY_TITLE
 na.index <- which(is.na(women$COUNTRY_FINAL))
 women$COUNTRY_FINAL[na.index] <- women$COUNTRY_PERCENT_ST[na.index]
 
-nrow(women[women$COUNTRY_FINAL=="United States of America",]) #16728
+nrow(women[women$COUNTRY_FINAL=="United States of America",]) #30516
 
 #####################
 ### Country Codes ###

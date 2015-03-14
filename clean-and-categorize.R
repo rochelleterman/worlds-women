@@ -12,17 +12,29 @@ setwd("/Users/rterman/Dropbox/berkeley/Dissertation/Data\ and\ Analyais/Git\ Rep
 
 # load data
 nyt <- read.csv('data/raw-nyt.csv')
-wp <- read.csv('data/raw-wp.csv')
+wp1 <- read.csv('data/raw-wp1.csv')
+wp2 <- read.csv('data/raw-wp2.csv')
 
 # subset 
 
-nyt <- subset(nyt,select=c(PUBLICATION,DATE,TITLE,BYLINE,COUNTRY,GEOGRAPHIC,LENGTH,TYPE,TEXT))
-wp <- subset(wp,select=c(PUBLICATION,DATE,TITLE,BYLINE,COUNTRY,GEOGRAPHIC,LENGTH,TYPE,TEXT))
+nyt <- subset(nyt,select=c(PUBLICATION,DATE,TITLE,BYLINE,COUNTRY,LENGTH,TYPE,TEXT))
+wp1 <- subset(wp1,select=c(PUBLICATION,DATE,TITLE,BYLINE,COUNTRY,LENGTH,TYPE,TEXT))
+wp2 <- subset(wp2,select=c(PUBLICATION,DATE,TITLE,BYLINE,COUNTRY,LENGTH,TYPE,TEXT))
+women <- rbind(nyt,wp1,wp2)
 
-women <- rbind(nyt,wp)
-names(women)
+# get rid of fake records
 
-which(duplicated(women$TITLE))
+levels(women$PUBLICATION)
+women$PUBLICATION <- as.character(women$PUBLICATION)
+
+nyt.index <- grep("New York Times",women$PUBLICATION,ignore.case=T)
+women$PUBLICATION[nyt.index] <- "NYT"
+wp.index <- grep("Washington",women$PUBLICATION,ignore.case=T)
+women$PUBLICATION[wp.index] <- "WP"
+u <- union(nyt.index,wp.index)
+
+women <- women[u,]
+
 
 ###############################
 ########## Year ###############
@@ -135,15 +147,16 @@ country.code <- function(x,y,z){
   country.index <- (grepl(x, z$COUNTRY_FINAL,ignore.case=T))
   z$COUNTRY_CODE[country.index] <- as.character(y)
   return(z$COUNTRY_CODE)
-}
+ }
 
 # Apply function to all countries in the key-value list
-n <- nrow(countries)
-for(i in 1:n){
+ n <- nrow(countries)
+ for(i in 1:n){
   women$COUNTRY_CODE <- country.code(countries$Key[i],countries$iso3c[i],women)
-}
+ }
 
 # Fix problematic codes
+
 unique(women$COUNTRY_FINAL[is.na(women$COUNTRY_CODE)])
 
 women$COUNTRY_CODE[women$COUNTRY_FINAL=="DRC"] <- "COD"
@@ -162,20 +175,20 @@ women$COUNTRY_CODE[women$COUNTRY_FINAL=="Kosovo" & women$YEAR > 2007] <- "MNE"
 ### Apply Regions ###
 #####################
 
-### This method is from my country_codes.csv file. It only applies a region from ISO3c code, i.e. "COUNTRY_CODE".
-
+### This method is from my country_codes.csv file. It only applies a region from key, i.e. "FINAL COUNTRY".
+names(countries)
 women$REGION <- NA
 for (i in 1:n){
-  country <- as.character(countries$iso3c[i])
-  women$REGION[women$COUNTRY_CODE==country]<-as.character(countries$Region[i])
+  country <- as.character(countries$Key[i])
+  women$REGION[women$COUNTRY_FINAL==country]<-as.character(countries$Region[i])
 }
 
 unique(women$COUNTRY_FINAL[is.na(women$REGION)])
 
 # Fixing problematic Regions
-women$REGION[women$COUNTRY_CODE=="SRB"] <- "EECA"
-women$REGION[women$COUNTRY_CODE=="MAC"] <- "EECA"
-women$REGION[women$COUNTRY_CODE=="YUG"] <- "EECA"
+women$REGION[women$COUNTRY_FINAL=="lebanon"] <- "MENA"
+women$REGION[women$COUNTRY_FINAL=="Myanmar (Burma)"] <- "Asia"
+
 
 #######################################
 ###### Subsetting and WRiting #########
@@ -195,4 +208,5 @@ write.csv(women,"Data/women-all.csv") # write all
 
 con<-file('Data/women-foreign.csv',encoding="utf8")
 write.csv(women.foreign,file=con,fileEncoding="UTF8")
+
 

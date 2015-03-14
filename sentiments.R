@@ -45,5 +45,5 @@ ggplot(data=melted, aes(x=regions,y=value,group=variable,fill=variable)) + geom_
 ### Linear Modeling
 pos.model <- glm(pos.rate ~ (relevel(REGION,6)), data = women, na.action=na.omit) 
 summary(pos.model)
-neg.model <- glm(neg.rate) ~ (relevel(REGION,6)), data = women, na.action=na.omit) 
+neg.model <- glm(neg.rate ~ (relevel(REGION,6)), data = women, na.action=na.omit) 
 summary(neg.model)

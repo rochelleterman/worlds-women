@@ -19,7 +19,7 @@ out <- prepDocuments(docs, vocab, meta)
 docs<-out$documents
 vocab<-out$vocab
 meta <-out$meta
-meta$TITLE <- as.character(meta$TITLE)
+
 
 set.seed(02138)
 
@@ -54,10 +54,20 @@ mod.20.fit <- mod.20.select$runout[[1]]
 topicQuality(model=mod.20.fit, documents=docs)
 labelTopics(mod.20.fit)
 
-# straight STM
-mod.20 <- stm(docs,vocab, 20, prevalence=~REGION+s(YEAR), data=meta, seed = 22222)
+# straight STM - 20
+mod.20 <- stm(docs,vocab, 20, prevalence=~REGION+s(YEAR)+PUBLICATION, data=meta, seed = 22222)
 labelTopics(mod.20)
 topicQuality(model=mod.20, documents=docs)
+
+# straight STM = 15
+mod.15 <- stm(docs,vocab, 15, prevalence=~REGION+s(YEAR)+PUBLICATION, data=meta, seed = 11111)
+labelTopics(mod.15)
+topicQuality(model=mod.15, documents=docs)
+
+# 18
+mod.18 <- stm(docs,vocab, 18, prevalence=~REGION+s(YEAR)+PUBLICATION, data=meta, seed = 11111)
+labelTopics(mod.18)
+topicQuality(model=mod.18, documents=docs)
 
 ### Content covariate
 

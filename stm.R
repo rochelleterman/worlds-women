@@ -55,7 +55,7 @@ topicQuality(model=mod.20.fit, documents=docs)
 labelTopics(mod.20.fit)
 
 # straight STM - 20
-mod.20 <- stm(docs,vocab, 20, prevalence=~REGION+s(YEAR)+PUBLICATION, data=meta, seed = 22222)
+mod.20 <- stm(docs,vocab, 20, prevalence=~REGION+s(YEAR)+PUBLICATION, data=meta, seed = 11111)
 labelTopics(mod.20)
 topicQuality(model=mod.20, documents=docs)
 
@@ -64,10 +64,12 @@ mod.15 <- stm(docs,vocab, 15, prevalence=~REGION+s(YEAR)+PUBLICATION, data=meta,
 labelTopics(mod.15)
 topicQuality(model=mod.15, documents=docs)
 
-# 18
-mod.18 <- stm(docs,vocab, 18, prevalence=~REGION+s(YEAR)+PUBLICATION, data=meta, seed = 11111)
-labelTopics(mod.18)
-topicQuality(model=mod.18, documents=docs)
+# 25
+mod.25 <- stm(docs,vocab, 25, prevalence=~REGION+s(YEAR)+PUBLICATION, data=meta, seed = 11111)
+labelTopics(mod.25)
+topicQuality(model=mod.25, documents=docs)
+
+
 
 ### Content covariate
 
@@ -149,16 +151,17 @@ plot.topicCorr(mod.out.corr)
 ### Topics, meta data relationships
 
 #prep
-prep <- estimateEffect(1:20 ~ REGION + s(YEAR),model,meta=meta,uncertainty="Global")
+model <- mod.25
+prep <- estimateEffect(1:25 ~ REGION + s(YEAR),model,meta=meta,uncertainty="Global")
 prep2 <- estimateEffect(1:5 ~ REGION,model,meta=meta,uncertainty="Global")
 
 
 # topics over time
-plot.estimateEffect(prep,covariate="YEAR",method="continuous",topics=c(2,7),printlegend=TRUE,xlab="Year",xlim=c(1990,2014),main = "Comparing Topics over Time",labeltype="custom",custom.labels=c("FGM","Rape"),ylim=c(0,.2))
+plot.estimateEffect(prep,covariate="YEAR",method="continuous",topics=c(1,15),printlegend=TRUE,xlab="Year",xlim=c(1990,2014),main = "Comparing Topics over Time",labeltype="custom",custom.labels=c("FGM","Rape"),ylim=c(0,.2))
 
 # topics over region
 regions = c("Asia","EECA","MENA","Africa","LA","West")
-plot.estimateEffect(prep,"REGION",method="pointestimate",topics=6,printlegend=TRUE,labeltype="custom",custom.labels=regions,main="Topic 6: Religion",xlab="topic proportions")
+plot.estimateEffect(prep,"REGION",method="pointestimate",topics=7,printlegend=TRUE,labeltype="custom",custom.labels=regions,main="Topic 7: Rape",xlab="topic proportions")
 
 plot.estimateEffect(prep,"REGION",method="pointestimate",topics=10,printlegend=TRUE,labeltype="custom",custom.labels=regions,main="Topic 10: Reproductive Health",xlab="topic proportions")
 
@@ -184,7 +187,17 @@ plot.estimateEffect(prep.int,covariate="YEAR",method="continuous",topics=6,moder
 
 plot.estimateEffect(prep.int,covariate="YEAR",method="continuous",topics=6,moderator="REGION",moderator.value="MENA",linecol="blue", add=T, ylim=c(0,.25),printlegend=F)
 
-
-
 legend("topleft","(x,y)",legend=c("West","Mena"),fill=c("red","blue"))
 
+# find documents in a particular topic
+
+library(plyr)
+topic.docs <- as.data.frame(mod.25$theta) #Number of Documents by Number of Topics matrix of topic proportions
+colnames(topic.docs)
+topic.docs$docs <- rownames(topic.docs)
+
+topic.docs <- arrange(topic.docs,desc(V7))
+docs.rape.index <- as.integer(topic.docs$docs[1:200])
+docs.rape.index
+
+meta.rape <- meta[docs.rape.index,]

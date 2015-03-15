@@ -2,13 +2,13 @@
 
 # read in data
 
-women <- women <- read.csv('Data/women-no-nouns.csv')
+women <- read.csv('Data/women-no-nouns.csv')
 
 
 library(RTextTools)
 library(tm)
 
-a <- Corpus(VectorSource(women$TEXT.NO.NOUN))
+a <- Corpus(VectorSource(meta.rape$TEXT.NO.NOUN))
 a <- tm_map(a, function(x) iconv(x, to='UTF-8-MAC', sub='byte'))
 a <- tm_map(a, tolower) # convert all text to lower case
 a <- tm_map(a, removePunctuation) 
@@ -29,8 +29,10 @@ nrow(a.dtm.sp.df) # check to see how many words are left
 a.dtm.sp.df <- t(a.dtm.sp.df) #transpose matrix
 a.dtm.sp.df <- as.data.frame(a.dtm.sp.df) # convert back to dataframe
 nrow(a.dtm.sp.df) # check
-women$REGION[1]
-a.dtm.sp.df$region <- women$REGION # add col for region
+meta.rape$REGION[1]
+a.dtm.sp.df$region <- meta.rape$REGION # add col for region
 a.dtm.sp.df$region[2] # checking
+
+uni.dtm <- a.dtm.sp.df
 
 # write.csv(a.dtm.sp.df,"dtm-r.csv")

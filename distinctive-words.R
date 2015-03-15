@@ -5,6 +5,7 @@ rm(list=ls())
 setwd("/Users/rterman/Dropbox/berkeley/Dissertation/Data\ and\ Analyais/Git\ Repos/worlds-women")
 library("matrixStats")
 
+
 # read in data
 uni.dtm<- read.csv("Data/dtm-python.csv")
 
@@ -16,6 +17,17 @@ distinctive.words <- function(region){
   corp.2.uni <- uni.dtm[-(grep(region,uni.dtm$region)),]
   corp.2.uni$region <- NULL
   
+  # calculate means and vars
+  means.corp.1 <- colSums(corp.1.uni) / sum(colSums(corp.1.uni))
+  var.corp.1 <- colVars(as.matrix(corp.1.uni))
+  means.corp.2 <- colSums(corp.2.uni) / sum(colSums(corp.2.uni))
+  var.corp.2 <- colVars(as.matrix(corp.2.uni))
+  
+  n.corp.1 <- sum(colSums(corp.1.uni))
+  n.corp.2 <- sum(colSums(corp.2.uni))
+  x.corp.1 <- colSums(corp.1.uni)
+  x.corp.2 <- colSums(corp.2.uni)
+  
   #################################################
   #### Independent linear discriminant measure ####
   #### used in Mosteller and Wallace (1963) #######
@@ -24,11 +36,6 @@ distinctive.words <- function(region){
   # This function takes in the corp.1 and corp.2 document term matricizes and outputs the independent linear discriminant score to each word.
   
   l.d.scores <- function(corp.1,corp.2){ # where x,y args are dtm dataframes for the two authors
-    # calculate means and vars
-    means.corp.1 <- colSums(corp.1) / sum(colSums(corp.1))
-    var.corp.1 <- colVars(as.matrix(corp.1))
-    means.corp.2 <- colSums(corp.2) / sum(colSums(corp.2))
-    var.corp.2 <- colVars(as.matrix(corp.2))
     #calculate overall score
     scores <- (means.corp.1 - means.corp.2) / (var.corp.1 + var.corp.2)
     
@@ -60,10 +67,6 @@ distinctive.words <- function(region){
   # A function to find Standardized Log Odds scores
   s.l.o.scores <- function(corp.1,corp.2){ # where x,y args are dtm dataframes for the two authors
     # calculate means and vars
-    n.corp.1 <- sum(colSums(corp.1))
-    n.corp.2 <- sum(colSums(corp.2))
-    x.corp.1 <- colSums(corp.1)
-    x.corp.2 <- colSums(corp.2)
     pi.corp.1 <- (x.corp.1 + 1) / (n.corp.1 + ncol(corp.1)-1)
     pi.corp.2 <- (x.corp.2 + 1) / (n.corp.2 + ncol(corp.2)-1)  
     log.odds.ratio <- log(pi.corp.1/(1-pi.corp.1)) - log(pi.corp.2 / (1-pi.corp.2))
@@ -108,5 +111,5 @@ write.order(africa.uni,"africa.txt")
 top.200 <- function(data,score){
   return(rownames(data[order(score,decreasing=TRUE),])[1:200])
 }
-top.200(west.uni,west.uni$stlogoddse)
+top.200(la.uni,la.uni$smd)
 head(sort(mena.uni$smd),10)

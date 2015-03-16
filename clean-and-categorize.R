@@ -17,9 +17,9 @@ wp2 <- read.csv('data/raw-wp2.csv')
 
 # subset 
 
-nyt <- subset(nyt,select=c(PUBLICATION,DATE,TITLE,BYLINE,COUNTRY,LENGTH,TYPE,TEXT))
-wp1 <- subset(wp1,select=c(PUBLICATION,DATE,TITLE,BYLINE,COUNTRY,LENGTH,TYPE,TEXT))
-wp2 <- subset(wp2,select=c(PUBLICATION,DATE,TITLE,BYLINE,COUNTRY,LENGTH,TYPE,TEXT))
+nyt <- subset(nyt,select=c(PUBLICATION,DATE,TITLE,BYLINE,COUNTRY,LENGTH,TYPE,SUBJECT,TEXT))
+wp1 <- subset(wp1,select=c(PUBLICATION,DATE,TITLE,BYLINE,COUNTRY,LENGTH,TYPE,SUBJECT,TEXT))
+wp2 <- subset(wp2,select=c(PUBLICATION,DATE,TITLE,BYLINE,COUNTRY,LENGTH,TYPE,SUBJECT,TEXT))
 women <- rbind(nyt,wp1,wp2)
 
 # get rid of fake records
@@ -64,23 +64,23 @@ countries <- countries[!countries$Value=="Oman",]
 ##########################
 
 # initialize columns
-women$COUNTRY_TITLE <- NA
-women$COUNTRY_TITLE <- as.character(women$COUNTRY_TITLE)
+#women$COUNTRY_TITLE <- NA
+#women$COUNTRY_TITLE <- as.character(women$COUNTRY_TITLE)
 
 # Define function for taking country in title
-country.title <- function(x,y,z){
-  country.index <- (grepl(x, z$TITLE,ignore.case=T))
-  z$COUNTRY_TITLE[country.index] <-as.character(y)
-  return(z$COUNTRY_TITLE)
-}
+#country.title <- function(x,y,z){
+#  country.index <- (grepl(x, z$TITLE,ignore.case=T))
+#  z$COUNTRY_TITLE[country.index] <-as.character(y)
+#  return(z$COUNTRY_TITLE)
+#}
 
-# Apply function to all countries in the key-value list
-n <- nrow(countries)
-for(i in 1:n){
-  women$COUNTRY_TITLE <- country.title(countries$Key[i],countries$Value[i],women)
-}
+## Apply function to all countries in the key-value list
+#n <- nrow(countries)
+#for(i in 1:n){
+#  women$COUNTRY_TITLE <- country.title(countries$Key[i],countries$Value[i],women)
+#}
 
-sum(is.na(women$COUNTRY_TITLE)) # 33222
+#sum(is.na(women$COUNTRY_TITLE)) # 33222
 
 ############################################
 ### Countries by LexisNexis COUNTRY term ###
@@ -92,11 +92,12 @@ women$COUNTRY_PERCENT_ST <- NA # This column will display the country in COUNTRY
 
 # Define function to take top-percentage country
 country.percentages <- function(x){
-  geo <- as.character(women$COUNTRY[x])
-  countries <- unlist(strsplit(geo, ';\\s*'))
-  country.percents <- sub('.*\\((\\d+)%.*', '\\1', countries)
-  country.percents <- as.list(country.percents)
-  country.percents[(nchar(country.percents) > 2)] <- NULL
+  geo <- as.character(women$COUNTRY[x]) # take one row
+  countries <- unlist(strsplit(geo, ';\\s*')) # split on ';'
+  country.percents <- sub('.*\\((\\d+)%.*', '\\1', countries) # list of just the percentages
+  country.percents <- as.list(country.percents) # make a list
+  country.percents[(nchar(country.percents) > 2)] <- NULL # take out weirdo-s
+  country.percents[country.percents < 85] <- NULL
   country.percents <- unlist(country.percents)
   country <- grep(max(country.percents), countries, value=T)[1]
   return(country)
@@ -111,29 +112,29 @@ women$COUNTRY_TOP_PERCENT <- as.character(women$COUNTRY_TOP_PERCENT)
 # Define function for turning value in COUNTRY_TOP_PERCENT into standardized format and putting it into COUNTRY_PERCENT_ST
 country.percent <- function(x,y,z){
   country.index <- (grepl(x, z$COUNTRY_TOP_PERCENT,ignore.case=T))
-  z$COUNTRY_PERCENT_ST[country.index] <- as.character(y)
-  return(z$COUNTRY_PERCENT_ST)
+  z$COUNTRY_FINAL[country.index] <- as.character(y)
+  return(z$COUNTRY_FINAL)
 }
 
 # Apply function to all countries in the key-value list
 n <- nrow(countries)
-for(i in seq(1,n)){
-  women$COUNTRY_PERCENT_ST <- country.percent(countries$Key[i],countries$Value[i],women)
+for(i in 1:n){
+  women$COUNTRY_FINAL <- country.percent(countries$Key[i],countries$Value[i],women)
 }
 
-sum(is.na(women$COUNTRY_PERCENT_ST)) # 9356
+sum(is.na(women$COUNTRY_FINAL)) # 17663
 
 #######################
 ### Final Countries ###
 #######################
 
 # Takes COUNTRY_TITLE as priority, and then COUNTRY_PERCENT_ST
-women$COUNTRY_FINAL <- NA
-women$COUNTRY_FINAL <- women$COUNTRY_TITLE
-na.index <- which(is.na(women$COUNTRY_FINAL))
-women$COUNTRY_FINAL[na.index] <- women$COUNTRY_PERCENT_ST[na.index]
+#women$COUNTRY_FINAL <- NA
+#women$COUNTRY_FINAL <- women$COUNTRY_TITLE
+#na.index <- which(is.na(women$COUNTRY_FINAL))
+#women$COUNTRY_FINAL[na.index] <- women$COUNTRY_PERCENT_ST[na.index]
 
-nrow(women[women$COUNTRY_FINAL=="United States of America",]) #30516
+#nrow(women[women$COUNTRY_FINAL=="United States of America",]) #30516
 
 #####################
 ### Country Codes ###

@@ -12,6 +12,9 @@ names(women)
 ######## Quick Sum and Barplots #######
 ########################################
 
+# number of articles per paper
+n.paper<- ddply(.data=women, .variables=.(PUBLICATION), .fun=nrow)
+n.paper
 # number of articles per region
 
 n.region <- ddply(.data=women, .variables=.(REGION), .fun=nrow)

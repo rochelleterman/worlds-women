@@ -10,66 +10,77 @@ names(women)
 ######### Pre-processing ###########
 ####################################
 
+# custom stopwords
 
-temp<-textProcessor(documents=women$TEXT.NO.NOUN,metadata=women)
+countries <- read.csv("country_codes.csv")
+stopwords.country <- c(as.character(countries$Key), "saudi", "german")
+stopwords.country <- tolower(stopwords.country)
+
+
+# process
+temp<-textProcessor(documents=women$TEXT.NO.NOUN,metadata=women,customstopwords=stopwords.country)
 meta<-temp$meta
 vocab<-temp$vocab
 docs<-temp$documents
-out <- prepDocuments(docs, vocab, meta)
+out <- prepDocuments(docs, vocab, meta, lower.thresh=2)
 docs<-out$documents
 vocab<-out$vocab
 meta <-out$meta
 
+#Removing 20989 of 35946 terms (25007 of 1047373 tokens) due to frequency 
+#Your corpus now has 4438 documents, 14957 terms and 1022366 tokens.
 
-set.seed(02138)
-
-plotRemoved(out$documents,lower.thresh=seq(1,200,by=100))
 
 ##################################
 ######### Choose Model ###########
 ##################################
 
-
-### Model search across numbers of topics
-
-storage <- manyTopics(docs,vocab,K=c(10,15,20),prevalence=~REGION+s(YEAR),data=meta,runs=10,max.em.its=50)
-
-mean(storage$exclusivity[[3]])
-
-mod.10 <- storage$out[[1]] # most coherent
-mod.15 <- storage$out[[2]] 
-mod.20 <- storage$out[[3]] # most exclusive 
-
-## Set K = 5, just REGION covariate
-
-mod.5 <- stm(docs,vocab, 5, prevalence=~REGION, data=meta, seed = 22222)
-topicQuality(model=mod.5, documents=docs)
-
 ### Set K = 20
 
 # selectModel
-mod.20.select <- selectModel(docs,vocab,K=20,prevalence=~REGION+s(YEAR),data=meta,runs=15,seed=33333)
-plotModels(mod.20)
+mod.20.select <- selectModel(docs,vocab,K=20,prevalence=~REGION+s(YEAR)+PUBLICATION,data=meta,runs=15,seed=33333)
+plotModels(mod.20.select)
 mod.20.fit <- mod.20.select$runout[[1]]
 topicQuality(model=mod.20.fit, documents=docs)
 labelTopics(mod.20.fit)
 
-# straight STM - 20
-mod.20 <- stm(docs,vocab, 20, prevalence=~REGION+s(YEAR)+PUBLICATION, data=meta, seed = 11111)
-labelTopics(mod.20)
-topicQuality(model=mod.20, documents=docs)
 
 # straight STM = 15
 mod.15 <- stm(docs,vocab, 15, prevalence=~REGION+s(YEAR)+PUBLICATION, data=meta, seed = 11111)
 labelTopics(mod.15)
 topicQuality(model=mod.15, documents=docs)
 
-# 25
-mod.25 <- stm(docs,vocab, 25, prevalence=~REGION+s(YEAR)+PUBLICATION, data=meta, seed = 11111)
-labelTopics(mod.25)
-topicQuality(model=mod.25, documents=docs)
 
+# straight STM - 20
+mod.20 <- stm(docs,vocab, 20, prevalence=~REGION+s(YEAR)+PUBLICATION, data=meta, seed = 11111)
+labelTopics(mod.20)
+topicQuality(model=mod.20, documents=docs)
 
+mod.20.1 <- stm(docs,vocab, 20, prevalence=~REGION+s(YEAR)+PUBLICATION, data=meta, seed = 12345)
+labelTopics(mod.20.1)
+topicQuality(model=mod.20.1, documents=docs)
+
+mod.20.2 <- stm(docs,vocab, 20, prevalence=~REGION+s(YEAR)+PUBLICATION, data=meta, seed = 44444)
+labelTopics(mod.20.2)
+topicQuality(model=mod.20.2, documents=docs)
+
+mod.20.3 <- stm(docs,vocab, 20, prevalence=~REGION+s(YEAR)+PUBLICATION, data=meta, seed = 000001)
+labelTopics(mod.20.3)
+topicQuality(model=mod.20.3, documents=docs)
+
+# 19
+
+mod.19 <- stm(docs,vocab, 19, prevalence=~REGION+s(YEAR)+PUBLICATION, data=meta, seed = 000001)
+labelTopics(mod.19)
+topicQuality(model=mod.19, documents=docs)
+
+mod.19.1 <- stm(docs,vocab, 19, prevalence=~REGION+s(YEAR)+PUBLICATION, data=meta, seed = 12345)
+labelTopics(mod.19.1)
+topicQuality(model=mod.19.1, documents=docs)
+
+mod.19.2 <- stm(docs,vocab, 19, prevalence=~REGION+s(YEAR)+PUBLICATION, data=meta, seed = 11111)
+labelTopics(mod.19.2)
+topicQuality(model=mod.19.2, documents=docs)
 
 ### Content covariate
 
@@ -82,7 +93,7 @@ labelTopics(mod.13.content)
 ######### Explore Topics ###########
 ####################################
 
-model <- mod.20
+model <- mod.20.1
 
 # Labels
 labelTopics(model)
@@ -151,8 +162,8 @@ plot.topicCorr(mod.out.corr)
 ### Topics, meta data relationships
 
 #prep
-model <- mod.25
-prep <- estimateEffect(1:25 ~ REGION + s(YEAR),model,meta=meta,uncertainty="Global")
+model <- mod.20
+prep <- estimateEffect(1:20 ~ REGION + s(YEAR),model,meta=meta,uncertainty="Global")
 prep2 <- estimateEffect(1:5 ~ REGION,model,meta=meta,uncertainty="Global")
 
 
@@ -163,9 +174,10 @@ plot.estimateEffect(prep,covariate="YEAR",method="continuous",topics=c(1,15),pri
 regions = c("Asia","EECA","MENA","Africa","LA","West")
 plot.estimateEffect(prep,"REGION",method="pointestimate",topics=7,printlegend=TRUE,labeltype="custom",custom.labels=regions,main="Topic 7: Rape",xlab="topic proportions")
 
-plot.estimateEffect(prep,"REGION",method="pointestimate",topics=10,printlegend=TRUE,labeltype="custom",custom.labels=regions,main="Topic 10: Reproductive Health",xlab="topic proportions")
+plot.estimateEffect(prep,"REGION",method="pointestimate",topics=13,printlegend=TRUE,labeltype="custom",custom.labels=regions,main="Topic 10: Reproductive Health",xlab="topic proportions")
 
-plot.estimateEffect(prep,"REGION",method="pointestimate",topics=12,printlegend=TRUE,labeltype="custom",custom.labels=regions,main="Topic 12: Business",xlab="topic proportions")
+
+plot.estimateEffect(prep,"REGION",method="pointestimate",topics=20,printlegend=TRUE,labeltype="custom",custom.labels=regions,main="Topic 12: Business",xlab="topic proportions")
 
 plot.estimateEffect(prep,"REGION",method="pointestimate",topics=4,printlegend=TRUE,labeltype="custom",custom.labels=regions,main="Topic 4: Electoral Politics",xlab="topic proportions")
 
@@ -192,11 +204,11 @@ legend("topleft","(x,y)",legend=c("West","Mena"),fill=c("red","blue"))
 # find documents in a particular topic
 
 library(plyr)
-topic.docs <- as.data.frame(mod.25$theta) #Number of Documents by Number of Topics matrix of topic proportions
+topic.docs <- as.data.frame(mod.20$theta) #Number of Documents by Number of Topics matrix of topic proportions
 colnames(topic.docs)
 topic.docs$docs <- rownames(topic.docs)
 
-topic.docs <- arrange(topic.docs,desc(V7))
+topic.docs <- arrange(topic.docs,desc(V13))
 docs.rape.index <- as.integer(topic.docs$docs[1:200])
 docs.rape.index
 

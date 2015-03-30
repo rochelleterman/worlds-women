@@ -154,7 +154,6 @@ plot.STM(model,type="hist")
 plot.STM(model,type="labels",topic.names=labels[1:10],topics=1:10,width=75)
 plot.STM(model,type="labels",topic.names=labels[11:20],topics=11:20,width=75)
 
-
 # Topic Correlation
 mod.out.corr<-topicCorr(model)
 plot.topicCorr(mod.out.corr)
@@ -176,25 +175,24 @@ plot.estimateEffect(prep,"REGION",method="pointestimate",topics=7,printlegend=TR
 
 plot.estimateEffect(prep,"REGION",method="pointestimate",topics=13,printlegend=TRUE,labeltype="custom",custom.labels=regions,main="Topic 10: Reproductive Health",xlab="topic proportions")
 
-
 plot.estimateEffect(prep,"REGION",method="pointestimate",topics=20,printlegend=TRUE,labeltype="custom",custom.labels=regions,main="Topic 12: Business",xlab="topic proportions")
 
 plot.estimateEffect(prep,"REGION",method="pointestimate",topics=4,printlegend=TRUE,labeltype="custom",custom.labels=regions,main="Topic 4: Electoral Politics",xlab="topic proportions")
 
-
 # difference
 plot.estimateEffect(prep,"REGION",method="difference",topics=c(1,2,4),cov.value1="MENA",cov.value="LA",printlegend=TRUE,main="Topic 2")
 
-
 #### Interactions
 
+# fit model
 mod.20.int <- stm(docs,vocab, 20, prevalence=~REGION*s(YEAR), data=meta, seed = 22222 )
 labelTopics(mod.20.int)
 topicQuality(model=mod.20.int, documents=docs)
 
-prep.int <- estimateEffect(1:20 ~ REGION * YEAR,mod.20.int,meta=meta,uncertainty="Global")
+# estimate effect
+prep.int <- estimateEffect(1:20 ~ REGION * YEAR,mod.20.int,meta=meta,uncertainty="Global") 
 
-# topics over time by region
+# plot topics over time by region
 plot.estimateEffect(prep.int,covariate="YEAR",method="continuous",topics=6,moderator="REGION",moderator.value="West",linecol="red", add=F,ylim=c(0,.25),printlegend=F,main="Religion over Time by Region")
 
 plot.estimateEffect(prep.int,covariate="YEAR",method="continuous",topics=6,moderator="REGION",moderator.value="MENA",linecol="blue", add=T, ylim=c(0,.25),printlegend=F)
@@ -208,8 +206,10 @@ topic.docs <- as.data.frame(mod.20$theta) #Number of Documents by Number of Topi
 colnames(topic.docs)
 topic.docs$docs <- rownames(topic.docs)
 
+# get 200 docs with highest distributions
 topic.docs <- arrange(topic.docs,desc(V13))
-docs.rape.index <- as.integer(topic.docs$docs[1:200])
+docs.rape.index <- as.integer(topic.docs$docs[1:200]) 
 docs.rape.index
 
+# get the metadata for those 200 docs  s
 meta.rape <- meta[docs.rape.index,]

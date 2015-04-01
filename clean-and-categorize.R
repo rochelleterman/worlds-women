@@ -26,15 +26,17 @@ women <- rbind(nyt,wp1,wp2)
 
 levels(women$PUBLICATION)
 women$PUBLICATION <- as.character(women$PUBLICATION)
-
 nyt.index <- grep("New York Times",women$PUBLICATION,ignore.case=T)
 women$PUBLICATION[nyt.index] <- "NYT"
 wp.index <- grep("Washington",women$PUBLICATION,ignore.case=T)
 women$PUBLICATION[wp.index] <- "WP"
 u <- union(nyt.index,wp.index)
-
 women <- women[u,]
 
+# get rid of paid death notices records
+
+paid <- grep("Paid Notice",women$TITLE,ignore.case=T)
+women <- women[-paid,]
 
 ###############################
 ########## Year ###############
@@ -122,7 +124,7 @@ for(i in 1:n){
   women$COUNTRY_FINAL <- country.percent(countries$Key[i],countries$Value[i],women)
 }
 
-sum(is.na(women$COUNTRY_FINAL)) # 17663
+sum(is.na(women$COUNTRY_FINAL)) # 17136
 
 #######################
 ### Final Countries ###

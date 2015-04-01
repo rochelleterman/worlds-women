@@ -1,5 +1,7 @@
 setwd("/Users/rterman/Dropbox/berkeley/Dissertation/Data\ and\ Analyais/Git\ Repos/worlds-women")
+
 library(stm)
+#rm(list=ls())
 
 ### Load Data
 
@@ -50,7 +52,6 @@ mod.15 <- stm(docs,vocab, 15, prevalence=~REGION+s(YEAR)+PUBLICATION, data=meta,
 labelTopics(mod.15)
 topicQuality(model=mod.15, documents=docs)
 
-
 # straight STM - 20
 mod.20 <- stm(docs,vocab, 20, prevalence=~REGION+s(YEAR)+PUBLICATION, data=meta, seed = 11111)
 labelTopics(mod.20)
@@ -67,6 +68,10 @@ topicQuality(model=mod.20.2, documents=docs)
 mod.20.3 <- stm(docs,vocab, 20, prevalence=~REGION+s(YEAR)+PUBLICATION, data=meta, seed = 000001)
 labelTopics(mod.20.3)
 topicQuality(model=mod.20.3, documents=docs)
+
+mod.20.4 <- stm(docs,vocab, 20, prevalence=~REGION+s(YEAR)+PUBLICATION, data=meta, seed = 222222)
+labelTopics(mod.20.4)
+topicQuality(model=mod.20.4, documents=docs)
 
 # 19
 
@@ -93,10 +98,7 @@ labelTopics(mod.13.content)
 ######### Explore Topics ###########
 ####################################
 
-model <- mod.20.1
-
-# Labels
-labelTopics(model)
+model <- mod.20.4
 
 # Example Docs
 
@@ -121,6 +123,8 @@ thoughts18 <- findThoughts(model,texts=meta$TITLE,n=2,topics=18)$docs[[1]]
 thoughts19 <- findThoughts(model,texts=meta$TITLE,n=2,topics=19)$docs[[1]]
 thoughts20 <- findThoughts(model,texts=meta$TITLE,n=2,topics=20)$docs[[1]]
 
+# Labels
+labelTopics(model)
 
 plotQuote(thoughts1, width=40, main="Topic 1")# per. stories
 plotQuote(thoughts2, width=40, main="Topic 2") # fgm

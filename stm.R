@@ -153,7 +153,7 @@ topicQuality(model=mod.18.2, documents=docs)
 
 ### Content covariate
 
-mod.13.content <- stm(docs, vocab, 13, prevalence=~REGION+s(YEAR), content=~REGION, data=meta, max.em.its=75, seed=12345)
+mod.15.content <- stm(docs, vocab, 15, prevalence=~REGION+s(YEAR), content=~REGION, data=meta, max.em.its=75, model=mod.15.1,)
 topicQuality(model=mod.13.content, documents=docs)
 labelTopics(mod.13.content)
 
@@ -213,35 +213,34 @@ plotQuote(thoughts15, width=40, main="Topic 15") # obit / family
 
 labels = c("Business & Work","Women's Rights & Gender Equality","Marriage & Family","Religion","Human Interest","Literature","Cancer","Maternal Health & Population","Tourism","Rape & Sexual Assault","Arts","Sports","Combat","Fashion","Politics")
 
-#### Corpus level summaries
+##################################
+######### Plot Topics  ###########
+##################################
+
+# Corpus summary
 regions = c("Asia","EECA","MENA","Africa","LA","West")
 plot.STM(model,type="summary",custom.labels=labels,main="")
-
-plot.STM(model,type="hist")
-
 
 # Topic Correlation
 mod.out.corr<-topicCorr(model)
 plot.topicCorr(mod.out.corr)
 
-### Topics, meta data relationships
+###########################################
+######### MetaData Relatioships  ##########
+###########################################
 
 #prep
 model <- mod.15.1
 prep <- estimateEffect(1:15 ~ REGION + s(YEAR),model,meta=meta,uncertainty="Global")
 
-
 # topics over time
 plot.estimateEffect(prep,covariate="YEAR",method="continuous",topics=c(15),printlegend=TRUE,xlab="Year",xlim=c(1980,2014),main = "Comparing Topics over Time",labeltype="custom",custom.labels=c("Politics"),ylim=c(0,.25))
-
 
 # topics over region
 regions = c("Asia","EECA","MENA","Africa","LA","West")
 set.seed(11)
-plot.estimateEffect(prep,"REGION",method="pointestimate",topics=3,printlegend=TRUE,labeltype="custom",custom.labels=regions,main="Politics")
+plot.estimateEffect(prep,"REGION",method="pointestimate",topics=10,printlegend=TRUE,labeltype="custom",custom.labels=regions,main="Sexual Assault",ci.level=.9)
 
-# difference
-plot.estimateEffect(prep,"REGION",method="difference",topics=c(1,2,4),cov.value1="MENA",cov.value="LA",printlegend=TRUE,main="Topic 2")
 
 #### Interactions
 
@@ -254,29 +253,60 @@ topicQuality(model=mod.15.1, documents=docs)
 prep.int <- estimateEffect(1:15 ~ REGION * YEAR,mod.15.int,meta=meta,uncertainty="Global") 
 
 # plot topics over time by region
-plot.estimateEffect(prep.int,covariate="YEAR",method="continuous",topics=15,moderator="REGION",moderator.value="West",linecol="red", add=F,ylim=c(0,.25),printlegend=F,main="Sexual Assault over Time by Region")
+plot.estimateEffect(prep.int,covariate="YEAR",method="continuous",topics=4,moderator="REGION",moderator.value="MENA",linecol="red", add=F,ylim=c(0,.2),printlegend=F)
 
-plot.estimateEffect(prep.int,covariate="YEAR",method="continuous",topics=15,moderator="REGION",moderator.value="Africa",linecol="blue", add=T, ylim=c(0,.25),printlegend=F)
+plot.estimateEffect(prep.int,covariate="YEAR",method="continuous",topics=4,moderator="REGION",moderator.value="EECA",linecol="blue", add=T, ylim=c(0,.2),printlegend=F)
 
-legend("topleft","(x,y)",legend=c("Asia","West"),fill=c("red","blue"))
+legend("topleft","(x,y)",legend=c("MENA","EECA"),fill=c("red","blue"))
 
-# find documents in a particular topic
+
+#########################################
+######### Find Documents for Topics #####
+#########################################
 
 library(plyr)
 topic.docs <- as.data.frame(mod.15.1$theta) #Number of Documents by Number of Topics matrix of topic proportions
 colnames(topic.docs)
 topic.docs$docs <- rownames(topic.docs)
+topic.docs$region <- meta$REGION
 
-# get 200 docs with highest distributions
+# get docs with highest distributions
 topic.docs <- arrange(topic.docs,desc(V2))
-proportions <- topic.docs[1:200,"V2"]
-docs.index <- as.integer(topic.docs$docs[1:200]) 
+proportions <- topic.docs[,"V2"]
+docs.index <- as.integer(topic.docs$docs) 
 
-# get the metadata for those 200 docs  s
+# get the metadata for those docs
 meta.topic <- meta[docs.index,]
 meta.topic$proportions <- proportions
 
-#### regional mean topic distributions
+meta.rights <- meta.topic[meta.topic$proportions>.5,]
+
+summary(meta.rights$REGION)
+
+
+##############################################
+####### Topic-Document Proportion Tables #####
+##############################################
+
+# Proportion of topics represented by each region
+topic.docs$docs <- NULL
+topic.distr <- ddply(.data=topic.docs, .variables=.(region), numcolwise(sum,na.rm = TRUE))
+rownames(topic.distr) <- topic.distr$region
+topic.distr$region <- NULL
+topic.distr
+norm<-function(x){
+  return (x/sum(x) * 100)
+}
+topic.distr <- apply(topic.distr,2,norm)
+colnames(topic.distr) <- labels
+topic.distr <- t(topic.distr)
+topic.distr <- as.data.frame(topic.distr)
+topic.distr$total <- 100
+topic.distr <- round(topic.distr,2)
+write.csv(topic.distr,"Results/region-distributions-per-topic.csv")
+
+
+#Proportion of region represented by each topic
 names(meta)
 topic.docs$region <- meta$REGION
 names(topic.docs)
@@ -287,6 +317,9 @@ mean.regions <- as.data.frame(mean.regions)
 rownames(mean.regions) <- mean.regions$region
 mean.regions$region <- NULL
 mean.regions <- t(mean.regions)
-mean.regions
-mean.regions <- round(mean.regions,4)
+mean.regions <- mean.regions*100
+colSums(mean.regions)
+mean.regions <- rbind(mean.regions,colSums(mean.regions))
+rownames(mean.regions)[16] <- "Total"
+mean.regions <- round(mean.regions,2)
 write.csv(mean.regions,"Results/mean.regions.csv")

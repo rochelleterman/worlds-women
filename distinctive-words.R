@@ -7,7 +7,9 @@ library("matrixStats")
 
 
 # read in data
-uni.dtm<- read.csv("Data/dtm-python.csv")
+#uni.dtm<- read.csv("Data/dtm-python.csv")
+
+uni.dtm <- uni.dtm.marriage
 
 # The following function inputs a region and returns the scores of three word separating algorithsms - Linear Discriminant analysis, Standardized Mean Difference and Standardized Log Odds
 
@@ -90,11 +92,11 @@ la.uni <- distinctive.words("LA")
 asia.uni <- distinctive.words("Asia")
 
 # write CSVs
-setwd("Results/distinctive-words")
+setwd("Results/distinctive-words/Marriage")
 
 write.order <- function(data,filename){
   order <- data[order(data[,"smd"],decreasing=TRUE)[1:200],]
-  order <- subset(order,select=3)
+  order <- subset(order,select="smd")
   write.table(order,file = filename,col.names = FALSE,sep = ":")
 }
 
@@ -111,5 +113,5 @@ write.order(africa.uni,"africa.txt")
 top.200 <- function(data,score){
   return(rownames(data[order(score,decreasing=TRUE),])[1:200])
 }
-top.200(la.uni,la.uni$smd)
+top.200(mena.uni,mena.uni$smd)
 head(sort(mena.uni$smd),10)

@@ -259,7 +259,6 @@ plot.estimateEffect(prep.int,covariate="YEAR",method="continuous",topics=4,moder
 
 legend("topleft","(x,y)",legend=c("MENA","EECA"),fill=c("red","blue"))
 
-
 #######################################################
 ######### Combine Meta Data + Topic Distributions #####
 #######################################################
@@ -268,19 +267,21 @@ library(plyr)
 topic.docs <- as.data.frame(mod.15.1$theta) #Number of Documents by Number of Topics matrix of topic proportions
 colnames(topic.docs) <- c("business","rights","marriage","religion","human","literature","cancer","health","tourism","rape","arts","sports","combat","fashion","politics")
 topic.docs$docs <- rownames(topic.docs)
-topic.docs <- cbind(topic.docs,meta)
-names(topic.docs)
+meta.topics <- cbind(topic.docs,meta)
+names(meta.topics)
 
-# get docs with highest distributions
-topic.docs.business <- arrange(topic.docs,desc(business))
+# get docs with highest distributions - used for other scripts
 
 get.highest.docs <- function(x){
-  docs <- subset(topic.docs,topic.docs[[x]]>.5,select=c(x,"PUBLICATION","TITLE","YEAR","COUNTRY_FINAL","REGION","SUBJECT","TEXT"))
+  docs <- subset(meta.topics,topic.docs[[x]]>.5,select=c(x,"PUBLICATION","TITLE","YEAR","COUNTRY_FINAL","REGION","SUBJECT","TEXT","TEXT.NO.NOUN"))
   docs <- docs[order(docs[[x]],decreasing = TRUE),]
   return(docs)
 }
-
 business <- get.highest.docs("business")
+
+business[["TEXT.NO.NOUN"]]
+
+
 
 ##############################################
 ####### Topic-Document Proportion Tables #####
@@ -288,6 +289,7 @@ business <- get.highest.docs("business")
 
 # Proportion of topics represented by each region
 topic.docs$docs <- NULL
+topic.docs$region <- meta$REGION
 topic.distr <- ddply(.data=topic.docs, .variables=.(region), numcolwise(sum,na.rm = TRUE))
 rownames(topic.distr) <- topic.distr$region
 topic.distr$region <- NULL
@@ -309,7 +311,6 @@ names(meta)
 topic.docs$region <- meta$REGION
 names(topic.docs)
 mean.regions <- ddply(.data=topic.docs, .variables=.(region), numcolwise(mean,na.rm = TRUE))
-names(mean.regions)[2:16] <- labels
 mean.regions
 mean.regions <- as.data.frame(mean.regions)
 rownames(mean.regions) <- mean.regions$region

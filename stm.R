@@ -260,29 +260,27 @@ plot.estimateEffect(prep.int,covariate="YEAR",method="continuous",topics=4,moder
 legend("topleft","(x,y)",legend=c("MENA","EECA"),fill=c("red","blue"))
 
 
-#########################################
-######### Find Documents for Topics #####
-#########################################
+#######################################################
+######### Combine Meta Data + Topic Distributions #####
+#######################################################
 
 library(plyr)
 topic.docs <- as.data.frame(mod.15.1$theta) #Number of Documents by Number of Topics matrix of topic proportions
-colnames(topic.docs)
+colnames(topic.docs) <- c("business","rights","marriage","religion","human","literature","cancer","health","tourism","rape","arts","sports","combat","fashion","politics")
 topic.docs$docs <- rownames(topic.docs)
-topic.docs$region <- meta$REGION
+topic.docs <- cbind(topic.docs,meta)
+names(topic.docs)
 
 # get docs with highest distributions
-topic.docs <- arrange(topic.docs,desc(V2))
-proportions <- topic.docs[,"V2"]
-docs.index <- as.integer(topic.docs$docs) 
+topic.docs.business <- arrange(topic.docs,desc(business))
 
-# get the metadata for those docs
-meta.topic <- meta[docs.index,]
-meta.topic$proportions <- proportions
+get.highest.docs <- function(x){
+  docs <- subset(topic.docs,topic.docs[[x]]>.5,select=c(x,"PUBLICATION","TITLE","YEAR","COUNTRY_FINAL","REGION","SUBJECT","TEXT"))
+  docs <- docs[order(docs[[x]],decreasing = TRUE),]
+  return(docs)
+}
 
-meta.rights <- meta.topic[meta.topic$proportions>.5,]
-
-summary(meta.rights$REGION)
-
+business <- get.highest.docs("business")
 
 ##############################################
 ####### Topic-Document Proportion Tables #####

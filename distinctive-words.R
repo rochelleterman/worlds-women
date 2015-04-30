@@ -5,8 +5,6 @@ rm(list=ls())
 setwd("/Users/rterman/Dropbox/berkeley/Dissertation/Data\ and\ Analyais/Git\ Repos/worlds-women")
 library("matrixStats")
 
-# read in data
-#uni.dtm<- read.csv("Data/dtm-python.csv")
 
 # The following function inputs a region and returns the scores of three word separating algorithsms - Linear Discriminant analysis, Standardized Mean Difference and Standardized Log Odds
 
@@ -80,7 +78,7 @@ distinctive.words <- function(region){
   return(uni)
 }
 
-# assign topic
+# assign topic dtm (using the dtm.R script)
 
 uni.dtm <- rape.dtm
 

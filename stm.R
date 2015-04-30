@@ -1,4 +1,3 @@
-rm
 
 library(stm)
 rm(list=ls())
@@ -60,6 +59,10 @@ topicQuality(model=mod.15, documents=docs)
 mod.15.1 <- stm(docs,vocab, 15, prevalence=~REGION+s(YEAR)+PUBLICATION, data=meta, seed = 00001)
 labelTopics(mod.15.1)
 topicQuality(model=mod.15.1, documents=docs)
+
+mod.15.1.a <- stm(docs,vocab, 15, data=meta, seed = 00001, model=mod.15.1)
+labelTopics(mod.15.1.a)
+topicQuality(model=mod.15.1.a, documents=docs)
 
 jpeg("Results/stms/15.1-1.jpeg",width=700,height=1000,type="quartz")
 plot.STM(mod.15.1,type="labels",topics=1:10,width=75)
@@ -270,24 +273,11 @@ topic.docs$docs <- rownames(topic.docs)
 meta.topics <- cbind(topic.docs,meta)
 names(meta.topics)
 
-# find the top topic for each article
+# add column for top topic for each article
 meta.topics$top.topic <- names(topic.docs)[apply(topic.docs, 1, which.max)] 
-religion <- meta.topics[meta.topics$top.topic == "religion",]
-marriage <- meta.topics[meta.topics$top.topic == "marriage",]
-rape <- meta.topics[meta.topics$top.topic == "rape",]
 
-# get docs with distribution of topics >.5 - used for other scripts
-
-get.highest.docs <- function(x){
-  docs <- subset(meta.topics,topic.docs[[x]]>.5,select=c(x,"PUBLICATION","TITLE","YEAR","COUNTRY_FINAL","REGION","SUBJECT","TEXT","TEXT.NO.NOUN"))
-  docs <- docs[order(docs[[x]],decreasing = TRUE),]
-  return(docs)
-}
-
-
-sbusiness[["TEXT.NO.NOUN"]]
-
-
+#write csv for later
+write.csv(meta.topics,"Data/meta-topics.csv")
 
 ##############################################
 ####### Topic-Document Proportion Tables #####

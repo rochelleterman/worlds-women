@@ -1,15 +1,15 @@
 ####### makes a dtm of a set of documents
 
-# read in data
-
-#women <- read.csv('Data/women-no-nouns.csv')
-
 library(RTextTools)
 library(tm)
 require(rJava) # needed for stemming function 
 library(Snowball) # also needed for stemming function
 
-# write a fuction that passes a vector from my meta 
+##############################
+######## DTM function ########
+##############################
+
+# this function passes data derived from the meta-topics data
 
 make.dtm <- function(data){
   a <- Corpus(VectorSource(data[["TEXT.NO.NOUN"]]))
@@ -30,6 +30,17 @@ make.dtm <- function(data){
 
 #test
 dtm <- make.dtm(meta)
+
+##############################
+######## make dtms ###########
+##############################
+
+# find documents for each topic
+religion <- meta.topics[meta.topics$top.topic == "religion",]
+marriage <- meta.topics[meta.topics$top.topic == "marriage",]
+rape <- meta.topics[meta.topics$top.topic == "rape",]
+
+# call function
 religion.dtm <- make.dtm(religion)
 marriage.dtm <- make.dtm(marriage)
 rape.dtm <- make.dtm(rape)

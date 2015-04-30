@@ -5,11 +5,8 @@ rm(list=ls())
 setwd("/Users/rterman/Dropbox/berkeley/Dissertation/Data\ and\ Analyais/Git\ Repos/worlds-women")
 library("matrixStats")
 
-
 # read in data
 #uni.dtm<- read.csv("Data/dtm-python.csv")
-
-uni.dtm <- uni.dtm.marriage
 
 # The following function inputs a region and returns the scores of three word separating algorithsms - Linear Discriminant analysis, Standardized Mean Difference and Standardized Log Odds
 
@@ -83,6 +80,10 @@ distinctive.words <- function(region){
   return(uni)
 }
 
+# assign topic
+
+uni.dtm <- rape.dtm
+
 # apply function
 mena.uni <- distinctive.words("MENA")
 eeca.uni <- distinctive.words("EECA")
@@ -92,7 +93,7 @@ la.uni <- distinctive.words("LA")
 asia.uni <- distinctive.words("Asia")
 
 # write CSVs
-setwd("Results/distinctive-words/Marriage")
+setwd("Results/distinctive-words/Rape")
 
 write.order <- function(data,filename){
   order <- data[order(data[,"smd"],decreasing=TRUE)[1:200],]
@@ -113,5 +114,5 @@ write.order(africa.uni,"africa.txt")
 top.200 <- function(data,score){
   return(rownames(data[order(score,decreasing=TRUE),])[1:200])
 }
-top.200(mena.uni,mena.uni$smd)
+top.200(asia.uni,asia.uni$smd)
 head(sort(mena.uni$smd),10)

@@ -1,4 +1,4 @@
-setwd("/Users/rterman/Dropbox/berkeley/Dissertation/Data\ and\ Analyais/Git\ Repos/worlds-women")
+rm
 
 library(stm)
 rm(list=ls())
@@ -272,8 +272,9 @@ names(meta.topics)
 
 # find the top topic for each article
 meta.topics$top.topic <- names(topic.docs)[apply(topic.docs, 1, which.max)] 
-
 religion <- meta.topics[meta.topics$top.topic == "religion",]
+marriage <- meta.topics[meta.topics$top.topic == "marriage",]
+rape <- meta.topics[meta.topics$top.topic == "rape",]
 
 # get docs with distribution of topics >.5 - used for other scripts
 
@@ -282,10 +283,7 @@ get.highest.docs <- function(x){
   docs <- docs[order(docs[[x]],decreasing = TRUE),]
   return(docs)
 }
-business <- get.highest.docs("business")
-religion <- get.highest.docs("religion")
-human<- get.highest.docs("human")
-rights <- get.highest.docs("rights")
+
 
 sbusiness[["TEXT.NO.NOUN"]]
 

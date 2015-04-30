@@ -29,5 +29,8 @@ make.dtm <- function(data){
 }
 
 #test
-x <- make.dtm(business)
+dtm <- make.dtm(meta)
+religion.dtm <- make.dtm(religion)
+marriage.dtm <- make.dtm(marriage)
+rape.dtm <- make.dtm(rape)
 

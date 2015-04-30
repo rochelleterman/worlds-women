@@ -270,7 +270,12 @@ topic.docs$docs <- rownames(topic.docs)
 meta.topics <- cbind(topic.docs,meta)
 names(meta.topics)
 
-# get docs with highest distributions - used for other scripts
+# find the top topic for each article
+meta.topics$top.topic <- names(topic.docs)[apply(topic.docs, 1, which.max)] 
+
+religion <- meta.topics[meta.topics$top.topic == "religion",]
+
+# get docs with distribution of topics >.5 - used for other scripts
 
 get.highest.docs <- function(x){
   docs <- subset(meta.topics,topic.docs[[x]]>.5,select=c(x,"PUBLICATION","TITLE","YEAR","COUNTRY_FINAL","REGION","SUBJECT","TEXT","TEXT.NO.NOUN"))
@@ -278,8 +283,11 @@ get.highest.docs <- function(x){
   return(docs)
 }
 business <- get.highest.docs("business")
+religion <- get.highest.docs("religion")
+human<- get.highest.docs("human")
+rights <- get.highest.docs("rights")
 
-business[["TEXT.NO.NOUN"]]
+sbusiness[["TEXT.NO.NOUN"]]
 
 
 

@@ -119,22 +119,31 @@ distinctive.words <- function(region){
 ######## make dtms ###########
 ##############################
 
-# find documents for each topic
+# get docs with distribution of topics >.5 - used for other scripts
+get.highest.docs <- function(x){
+  docs <- subset(meta.topics,topic.docs[[x]]>.5,select=c(x,"PUBLICATION","TITLE","YEAR","COUNTRY_FINAL","REGION","SUBJECT","TEXT","TEXT.NO.NOUN"))
+  docs <- docs[order(docs[[x]],decreasing = TRUE),]
+  return(docs)
+}
+
+rights <- get.highest.docs("rights")
+
+# find documents for each topic using top topic
 religion <- meta.topics[meta.topics$top.topic == "religion",]
 marriage <- meta.topics[meta.topics$top.topic == "marriage",]
 rape <- meta.topics[meta.topics$top.topic == "rape",]
 rights <- meta.topics[meta.topics$top.topic == "rights",]
 
 # call function
-religion.dtm <- make.dtm(religion)
-marriage.dtm <- make.dtm(marriage)
-rape.dtm <- make.dtm(rape)
-rights.dtm <- make.dtm(rights)
+religion <- make.dtm(religion)
+marriage<- make.dtm(marriage)
+rape <- make.dtm(rape)
+rights <- make.dtm(rights)
 
 
 # Get Discrimianting Words
 
-uni.dtm <- rights.dtm
+uni.dtm <- rights
 
 # apply function
 mena.uni <- distinctive.words("MENA")
@@ -144,7 +153,7 @@ africa.uni <- distinctive.words("Africa")
 la.uni <- distinctive.words("LA")
 asia.uni <- distinctive.words("Asia")
 
-# write CSVs
+# write CSVs of individual regions with their 3 scores
 setwd("Results/distinctive-words/Rape")
 
 write.order <- function(data,filename){
@@ -160,14 +169,16 @@ write.order(west.uni,"west.txt")
 write.order(asia.uni,"asia.txt")
 write.order(africa.uni,"africa.txt")
 
-### write csv of all region top words
+### write csv of all regions' top words
 
 top.200.smd <- function(data){
   return(rownames(data[order(data[,"smd"],decreasing=TRUE)[1:200],]))
 }
-rights.dist <- data.frame(top.200.smd(africa.uni),top.200.smd(asia.uni),top.200.smd(eeca.uni),top.200.smd(mena.uni),top.200.smd(la.uni),top.200.smd(west.uni))
+topic.dist <- data.frame(top.200.smd(africa.uni),top.200.smd(asia.uni),top.200.smd(eeca.uni),top.200.smd(la.uni),top.200.smd(mena.uni),top.200.smd(west.uni))
 
-write.csv(rights.dist,"Results/distinctive-words/rights-dist.csv")
+names(topic.dist) <- c("Africa","Asia","EECA","LA","MENA","West")
+
+write.csv(topic.dist,"Results/distinctive-words/rights-dist.csv")
 
 # write function to get top 200 words for a particular score
 
@@ -186,19 +197,12 @@ summary(rape$REGION)
 ######### Find docs per Region/topic #########
 ##############################################
 
-# get docs with distribution of topics >.5 - used for other scripts
-get.highest.docs <- function(x){
-  docs <- subset(meta.topics,topic.docs[[x]]>.5,select=c(x,"PUBLICATION","TITLE","YEAR","COUNTRY_FINAL","REGION","SUBJECT","TEXT","TEXT.NO.NOUN"))
-  docs <- docs[order(docs[[x]],decreasing = TRUE),]
-  return(docs)
-}
-
 # find most representative titles for topic by region (i.e. marriage)
 
-marriage.highest <- arrange(meta.topics,REGION,desc(marriage)) 
+highest <- arrange(meta.topics,REGION,desc(rights)) 
 
-marriage.highest <- data.frame(head(marriage.highest[marriage.highest$REGION=="Africa","TITLE"],10),head(marriage.highest[marriage.highest$REGION=="Asia","TITLE"],10),head(marriage.highest[marriage.highest$REGION=="MENA","TITLE"],10))
+highest <- data.frame(head(highest[highest$REGION=="Africa","TITLE"],10),head(highest[highest$REGION=="Asia","TITLE"],10),head(highest[highest$REGION=="EECA","TITLE"],10),head(highest[highest$REGION=="LA","TITLE"],10),head(highest[highest$REGION=="MENA","TITLE"],10),head(highest[highest$REGION=="West","TITLE"],10))
 
-names(marriage.highest) <- c("Africa","Asia","MENA")
+names(highest) <- c("Africa","Asia","EECA","LA","MENA","West")
 
-write.csv(marriage.highest,"Results/titles/marriage-highest.csv")
+write.csv(highest,"Results/titles/rights-highest.csv")

@@ -214,7 +214,7 @@ plotQuote(thoughts15, width=40, main="Topic 15") # obit / family
 #plotQuote(thoughts19, width=40, main="Topic 19") # politics
 #plotQuote(thoughts20, width=40, main="Topic 20") # Obit
 
-labels = c("Business & Work","Women's Rights & Gender Equality","Marriage & Family","Religion","Human Interest","Literature","Cancer","Maternal Health & Population","Tourism","Rape & Sexual Assault","Arts","Sports","Combat","Fashion","Politics")
+labels = c("Business & Work","Women's Rights & Gender Equality","Marriage & Family","Religion","Human Interest","Literature","Cancer","Maternal Health & Population","Tourism","Rape & Violence against Women","Arts","Sports","Combat","Fashion","Politics")
 
 ##################################
 ######### Plot Topics  ###########
@@ -275,6 +275,8 @@ names(meta.topics)
 
 # add column for top topic for each article
 meta.topics$top.topic <- names(topic.docs)[apply(topic.docs, 1, which.max)] 
+
+#subset for the values you care about
 
 #write csv for later
 write.csv(meta.topics,"Data/meta-topics.csv")

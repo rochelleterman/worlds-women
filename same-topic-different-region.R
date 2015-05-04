@@ -119,7 +119,7 @@ distinctive.words <- function(region){
 ######## make dtms ###########
 ##############################
 
-# get docs with distribution of topics >.5 - used for other scripts
+# Option 1) get docs with distribution of topics >.5 - used for other scripts
 get.highest.docs <- function(x){
   docs <- subset(meta.topics,topic.docs[[x]]>.5,select=c(x,"PUBLICATION","TITLE","YEAR","COUNTRY_FINAL","REGION","SUBJECT","TEXT","TEXT.NO.NOUN"))
   docs <- docs[order(docs[[x]],decreasing = TRUE),]
@@ -128,7 +128,7 @@ get.highest.docs <- function(x){
 
 rights <- get.highest.docs("rights")
 
-# find documents for each topic using top topic
+# Option 2) find documents for each topic using top topic
 religion <- meta.topics[meta.topics$top.topic == "religion",]
 marriage <- meta.topics[meta.topics$top.topic == "marriage",]
 rape <- meta.topics[meta.topics$top.topic == "rape",]
@@ -139,7 +139,6 @@ religion <- make.dtm(religion)
 marriage<- make.dtm(marriage)
 rape <- make.dtm(rape)
 rights <- make.dtm(rights)
-
 
 # Get Discrimianting Words
 
@@ -201,7 +200,7 @@ summary(rape$REGION)
 
 highest <- arrange(meta.topics,REGION,desc(rights)) 
 
-highest <- data.frame(head(highest[highest$REGION=="Africa","TITLE"],10),head(highest[highest$REGION=="Asia","TITLE"],10),head(highest[highest$REGION=="EECA","TITLE"],10),head(highest[highest$REGION=="LA","TITLE"],10),head(highest[highest$REGION=="MENA","TITLE"],10),head(highest[highest$REGION=="West","TITLE"],10))
+highest <- data.frame(head(highest[highest$REGION=="Africa","TITLE"],20),head(highest[highest$REGION=="Asia","TITLE"],20),head(highest[highest$REGION=="EECA","TITLE"],20),head(highest[highest$REGION=="LA","TITLE"],20),head(highest[highest$REGION=="MENA","TITLE"],20),head(highest[highest$REGION=="West","TITLE"],20))
 
 names(highest) <- c("Africa","Asia","EECA","LA","MENA","West")
 

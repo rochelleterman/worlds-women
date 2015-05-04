@@ -256,9 +256,9 @@ topicQuality(model=mod.15.1, documents=docs)
 prep.int <- estimateEffect(1:15 ~ REGION * YEAR,mod.15.int,meta=meta,uncertainty="Global") 
 
 # plot topics over time by region
-plot.estimateEffect(prep.int,covariate="YEAR",method="continuous",topics=4,moderator="REGION",moderator.value="MENA",linecol="red", add=F,ylim=c(0,.2),printlegend=F)
+plot.estimateEffect(prep,covariate="YEAR",method="continuous",topics=15,moderator="REGION",moderator.value="MENA",linecol="red", add=F,ylim=c(0,.2),printlegend=F)
 
-plot.estimateEffect(prep.int,covariate="YEAR",method="continuous",topics=4,moderator="REGION",moderator.value="EECA",linecol="blue", add=T, ylim=c(0,.2),printlegend=F)
+plot.estimateEffect(prep.int,covariate="YEAR",method="continuous",topics=15,moderator="REGION",moderator.value="MENA",linecol="blue", add=T, ylim=c(0,.2),printlegend=F)
 
 legend("topleft","(x,y)",legend=c("MENA","EECA"),fill=c("red","blue"))
 

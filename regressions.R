@@ -4,6 +4,8 @@ library(plyr)
 library("MASS")
 library("xtable")
 library(plm)
+library(ggplot2)
+library(reshape2)
 
 #meta.topics <- read.csv("Data/meta-topics.csv")
 
@@ -12,14 +14,39 @@ library(plm)
 ############################################
 
 names(meta.topics)
-x <- subset(meta.topics,select=c(business:politics,COUNTRY_CODE,YEAR))
-names(x)[16:17] <- c("iso3c","year")
+x <- subset(meta.topics,select=c(business:politics,COUNTRY_CODE,YEAR,REGION))
+names(x)[16:18] <- c("iso3c","year","region")
 
+# country-year means
 country.year.means <- ddply(.data=x, .variables=.(iso3c,year), numcolwise(mean,na.rm = TRUE))
 
-y <- ddply(.data=x,.variables=.(iso3c,year), .fun=nrow)
+# add 'n' column
+y <- ddply(.data=x,.variables=.(iso3c,year), .fun=nrow) 
 country.year.means$n <- y$V1
 names(country.year.means)
+write.csv(country.year.means,"Results/15.1/country-year-means.csv")
+
+# region-year means
+
+region.year.means <- ddply(.data=x, .variables=.(year,region), numcolwise(mean,na.rm = TRUE))
+names(region.year.means)
+y <- ddply(.data=x,.variables=.(year,region), .fun=nrow) 
+region.year.means$n <- y$V1
+
+write.csv(region.year.means,"Results/15.1/region-year-means.csv")
+
+# just mena
+
+mena <- region.year.means[region.year.means$region=="MENA",c("year","region","rights","marriage","religion","politics","combat")]
+mena$region <- NULL
+names(mena)
+mena <- melt(mena,id="year")
+names(mena) <- c("year","topic","value")
+mean.sub <- mena[mena$topic=="religion" | mena$topic=="religion" |]
+
+# plotting
+
+ggplot(data=mena, aes(x=year,y=value,group=topic,color=topic)) + geom_line()
 
 #### Load country-year database
 rt <- read.csv("/Users/rterman/Dropbox/berkeley/Dissertation/Data\ and\ Analyais/Git\ Repos/country-year-database/rt.csv")

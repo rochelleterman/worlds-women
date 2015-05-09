@@ -70,9 +70,9 @@ mean.sub <- mena[mena$topic=="religion" | mena$topic=="religion" |]
 
 ggplot(data=region.year.means, aes(x=year,y=rights,group=region,color=region)) + geom_line()
 
-####################################################
-######## Model using Country-level variables #######
-####################################################
+###############################################
+######## Prepare Country-level variables ######
+###############################################
 
 #### Load country-year database
 rt <- read.csv("/Users/rterman/Dropbox/berkeley/Dissertation/Data\ and\ Analyais/Git\ Repos/country-year-database/rt.no.us.csv")
@@ -80,24 +80,19 @@ names(rt)
 rt$X <- NULL
 
 ### merge
-rt <- merge(rt,country.year.topic.top,by=c("year","iso3c"),all.x=T)
+rt <- merge(rt,country.year.means,by=c("year","iso3c"),all.x=T)
 
-###### TODO: 
-###### Fix the data that are in country.year.means but not in rt
-###### 
-
+## Find missing values 
 
 rt.merge <- merge(rt,country.year.means,by=c("year","iso3c"),all.y=T)
 rt.merge <- arrange(rt.merge,year,ccode)
 x<- data.frame(cbind(rt.merge$year,rt.merge$ccode))
 x <- which(duplicated(x))
-unique(rt.merge$iso3c[x])
+unique(rt.merge$iso3c[x]) # iceland, ukraine, malta, barbados, grenada, samoa, Seychelles, Brunei, Monaco
 countries[countries$iso3c=="MCO",]
 country.year.means$year[country.year.means$iso3c=="IRN"] %in% rt$year[rt$iso3c=="IRN"]
 rt[rt$country=="Malt"]
 names(rt)
-
-# iceland, ukraine, malta, barbados, grenada, samoa, Seychelles, Brunei, Monaco
 
 # make dummy variable for mena
 rt$mena <- 0
@@ -124,7 +119,15 @@ rt$muslim <- lag(rt$muslim,1)
 
 summary(rt)
 
-########### model ###########
+# number unique countries
+length(unique(rt$rt_code))
+
+# number of units with articles
+nrow(rt[!is.na(rt$rights)])
+
+###################
+###### Model ######
+##################
 
 # Testing
 lm1 <- lm(rights ~ rights.lagged+wopol+muslim+polity2+physint+new_empinx+log(gdp.pc.wdi)+log(pop.wdi)+domestic9+mena,data = rt) 
@@ -167,15 +170,7 @@ stargazer(x, type = "text", title="Descriptive statistics", digits=4, out="table
 
 # regressing on number of articles total
 
-
-pm4 <- plm(nyt ~ lnreportcount+cinc+muslim+polity2+statedept+log(gdp.pc.wdi)+log(pop.wdi)+domestic9+mena,data = rt,model = "random",index = c("ccode","year"))
+pm4 <- plm(n ~ lnreportcount+cinc+muslim+polity2+statedept+log(gdp.pc.wdi)+log(pop.wdi)+domestic9+mena,data = rt,model = "random",index = c("ccode","year"))
 summary(pm4)
 coeftest(pm4, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))
 
-
-
-# number unique countries
-length(unique(rt$rt_code))
-
-# number of units with articles
-nrow(rt[!is.na(rt$rights)])

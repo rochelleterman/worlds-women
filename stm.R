@@ -36,7 +36,6 @@ meta <-out$meta
 #Removing 21353 of 36515 terms (25506 of 1047553 tokens) due to frequency 
 #Your corpus now has 4411 documents, 15162 terms and 1022047 tokens.
 
-
 ##################################
 ######### Choose Model ###########
 ##################################
@@ -95,7 +94,6 @@ dev.off()
 jpeg("Results/stms/15.3-2.jpeg",width=700,height=1000,type="quartz")
 plot.STM(mod.15.3,type="labels",topics=11:15,width=75)
 dev.off()
-
 
 # straight STM - 20
 mod.20 <- stm(docs,vocab, 20, prevalence=~REGION+s(YEAR)+PUBLICATION, data=meta, seed = 11111)
@@ -166,7 +164,6 @@ labelTopics(mod.13.content)
 ####################################
 
 model <-mod.15.1
-
 
 # Example Docs
 
@@ -302,7 +299,6 @@ topic.distr <- as.data.frame(topic.distr)
 topic.distr$total <- 100
 topic.distr <- round(topic.distr,2)
 write.csv(topic.distr,"Results/region-distributions-per-topic.csv")
-
 
 #Proportion of region represented by each topic
 names(meta)

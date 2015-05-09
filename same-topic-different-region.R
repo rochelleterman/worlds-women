@@ -116,7 +116,7 @@ distinctive.words <- function(region){
 }
 
 ##############################
-######## make dtms ###########
+###### make sub-corpus #######
 ##############################
 
 # Option 1) get docs with distribution of topics >.5 - used for other scripts
@@ -138,6 +138,9 @@ rights <- meta.topics[meta.topics$top.topic == "rights",]
 highest <- arrange(meta.topics,REGION,desc(rights)) 
 rights <- rbind(head(highest[highest$REGION=="Africa",],20),head(highest[highest$REGION=="Asia",],20),head(highest[highest$REGION=="EECA",],20),head(highest[highest$REGION=="LA",],20),head(highest[highest$REGION=="MENA",],20),head(highest[highest$REGION=="West",],20))
 
+##############################
+###### distinctive words ######
+##############################
 
 # call function
 religion <- make.dtm(religion)
@@ -184,14 +187,6 @@ write.order(west.uni,"west.txt")
 write.order(asia.uni,"asia.txt")
 write.order(africa.uni,"africa.txt")
 
-# write function to get top 200 words for a particular score
-
-top.200 <- function(data,score){
-  return(rownames(data[order(score,decreasing=TRUE),])[1:200])
-}
-top.200(asia.uni,asia.uni$smd)
-head(sort(mena.uni$smd),10)
-
 # find n for each region
 
 names(rights)
@@ -203,7 +198,6 @@ rights$TITLE[rights$REGION=="LA"]
 ##############################################
 
 # find most representative titles for topic by region (i.e. marriage)
-
 highest <- arrange(meta.topics,REGION,desc(rights)) 
 
 highest <- data.frame(head(highest[highest$REGION=="Africa","TITLE"],20),head(highest[highest$REGION=="Asia","TITLE"],20),head(highest[highest$REGION=="EECA","TITLE"],20),head(highest[highest$REGION=="LA","TITLE"],20),head(highest[highest$REGION=="MENA","TITLE"],20),head(highest[highest$REGION=="West","TITLE"],20))
@@ -212,15 +206,14 @@ names(highest) <- c("Africa","Asia","EECA","LA","MENA","West")
 
 write.csv(highest,"Results/titles/rights-highest.csv")
 
-# find sample titles for topic by region
-
+# random sample titles by top-topic.
 sample<- meta.topics[meta.topics$top.topic=="rights",]
 names(sample)
 sample <- data.frame(sample(sample[sample$REGION=="Africa","TITLE"],5),sample(sample[sample$REGION=="Asia","TITLE"],5),sample(sample[sample$REGION=="EECA","TITLE"],5),sample(sample[sample$REGION=="LA","TITLE"],5),sample(sample[sample$REGION=="MENA","TITLE"],5),sample(sample[sample$REGION=="West","TITLE"],5))
 sample
 write.csv(sample,"Results/titles/rights-sample.csv")
 
-# find all titles
+# find all titles (and articles) in sub-corpus.
 rights <- subset(meta.topics, top.topic=="rights",select=c(TITLE,REGION,TEXT,YEAR,COUNTRY_FINAL))
 rights <- arrange(rights,REGION)
 write.csv(rights,"Results/Rights-articles.csv")

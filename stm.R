@@ -21,7 +21,7 @@ women$X <- NULL
 countries <- read.csv("country_codes.csv")
 stopwords.country <- c(as.character(countries$Key), "saudi", "german")
 stopwords.country <- tolower(stopwords.country)
-
+names(meta)
 
 # process
 temp<-textProcessor(documents=women$TEXT.NO.NOUN,metadata=women,customstopwords=stopwords.country)

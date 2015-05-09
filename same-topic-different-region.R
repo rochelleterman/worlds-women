@@ -121,7 +121,7 @@ distinctive.words <- function(region){
 
 # Option 1) get docs with distribution of topics >.5 - used for other scripts
 get.highest.docs <- function(x){
-  docs <- subset(meta.topics,topic.docs[[x]]>.5,select=c(x,"PUBLICATION","TITLE","YEAR","COUNTRY_FINAL","REGION","SUBJECT","TEXT","TEXT.NO.NOUN"))
+  docs <- subset(meta.topics,topic.docs[[x]]>.4,select=c(x,"PUBLICATION","TITLE","YEAR","COUNTRY_FINAL","REGION","SUBJECT","TEXT","TEXT.NO.NOUN"))
   docs <- docs[order(docs[[x]],decreasing = TRUE),]
   return(docs)
 }
@@ -134,6 +134,11 @@ marriage <- meta.topics[meta.topics$top.topic == "marriage",]
 rape <- meta.topics[meta.topics$top.topic == "rape",]
 rights <- meta.topics[meta.topics$top.topic == "rights",]
 
+# Option 3) Get 20 highest articles
+highest <- arrange(meta.topics,REGION,desc(rights)) 
+rights <- rbind(head(highest[highest$REGION=="Africa",],20),head(highest[highest$REGION=="Asia",],20),head(highest[highest$REGION=="EECA",],20),head(highest[highest$REGION=="LA",],20),head(highest[highest$REGION=="MENA",],20),head(highest[highest$REGION=="West",],20))
+
+
 # call function
 religion <- make.dtm(religion)
 marriage<- make.dtm(marriage)
@@ -142,7 +147,7 @@ rights <- make.dtm(rights)
 
 # Get Discrimianting Words
 
-uni.dtm <- rights
+uni.dtm <- marriage
 
 # apply function
 mena.uni <- distinctive.words("MENA")
@@ -151,6 +156,17 @@ west.uni <- distinctive.words("West")
 africa.uni <- distinctive.words("Africa")
 la.uni <- distinctive.words("LA")
 asia.uni <- distinctive.words("Asia")
+
+### write csv of all regions' top words
+names(asia.uni)
+top.200.smd <- function(data){
+  return(rownames(data[order(data[,"smd"],decreasing=TRUE)[1:200],]))
+}
+topic.dist <- data.frame(top.200.smd(africa.uni),top.200.smd(asia.uni),top.200.smd(eeca.uni),top.200.smd(la.uni),top.200.smd(mena.uni),top.200.smd(west.uni))
+
+names(topic.dist) <- c("Africa","Asia","EECA","LA","MENA","West")
+
+write.csv(topic.dist,"Results/distinctive-words/rights-dist.csv")
 
 # write CSVs of individual regions with their 3 scores
 setwd("Results/distinctive-words/Rape")
@@ -168,17 +184,6 @@ write.order(west.uni,"west.txt")
 write.order(asia.uni,"asia.txt")
 write.order(africa.uni,"africa.txt")
 
-### write csv of all regions' top words
-
-top.200.smd <- function(data){
-  return(rownames(data[order(data[,"smd"],decreasing=TRUE)[1:200],]))
-}
-topic.dist <- data.frame(top.200.smd(africa.uni),top.200.smd(asia.uni),top.200.smd(eeca.uni),top.200.smd(la.uni),top.200.smd(mena.uni),top.200.smd(west.uni))
-
-names(topic.dist) <- c("Africa","Asia","EECA","LA","MENA","West")
-
-write.csv(topic.dist,"Results/distinctive-words/rights-dist.csv")
-
 # write function to get top 200 words for a particular score
 
 top.200 <- function(data,score){
@@ -189,8 +194,9 @@ head(sort(mena.uni$smd),10)
 
 # find n for each region
 
-names(marriage)
-summary(rape$REGION)
+names(rights)
+summary(rights$REGION)
+rights$TITLE[rights$REGION=="LA"]
 
 ##############################################
 ######### Find docs per Region/topic #########
@@ -205,3 +211,20 @@ highest <- data.frame(head(highest[highest$REGION=="Africa","TITLE"],20),head(hi
 names(highest) <- c("Africa","Asia","EECA","LA","MENA","West")
 
 write.csv(highest,"Results/titles/rights-highest.csv")
+
+# find sample titles for topic by region
+
+sample<- meta.topics[meta.topics$top.topic=="rights",]
+names(sample)
+sample <- data.frame(sample(sample[sample$REGION=="Africa","TITLE"],5),sample(sample[sample$REGION=="Asia","TITLE"],5),sample(sample[sample$REGION=="EECA","TITLE"],5),sample(sample[sample$REGION=="LA","TITLE"],5),sample(sample[sample$REGION=="MENA","TITLE"],5),sample(sample[sample$REGION=="West","TITLE"],5))
+sample
+write.csv(sample,"Results/titles/rights-sample.csv")
+
+# find all titles
+rights <- subset(meta.topics, top.topic=="rights",select=c(TITLE,REGION,TEXT,YEAR,COUNTRY_FINAL))
+rights <- arrange(rights,REGION)
+write.csv(rights,"Results/Rights-articles.csv")
+
+rape <- subset(meta.topics, top.topic=="rape",select=c(TITLE,REGION,TEXT,YEAR,COUNTRY_FINAL))
+rape <- arrange(rape,REGION,YEAR)
+write.csv(rape,"Results/rape-articles.csv")

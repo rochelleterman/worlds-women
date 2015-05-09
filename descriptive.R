@@ -23,7 +23,9 @@ jpeg(filename = "n.region.jpeg")
 
 ### Number of articles per country
 
-ddply(.data=women, .variables=.(COUNTRY_FINAL), .fun=nrow)
+n.country <- ddply(.data=women, .variables=.(COUNTRY_FINAL), .fun=nrow)
+n.country <- arrange(n.country,desc(V1))
+write.csv(n.country,"Results/n-country.csv")
 
 #################################################################
 ##### Plotting women number of articles per year per region #####
@@ -40,4 +42,5 @@ melted
 ggplot(data=melted, aes(x=year,y=count,group=region,color=region)) + geom_line()
 
 write.csv(n.region,"Results/region_year.csv")
+
 

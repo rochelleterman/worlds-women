@@ -178,7 +178,7 @@ topic.distr <- t(topic.distr)
 topic.distr <- as.data.frame(topic.distr)
 topic.distr$total <- 100
 topic.distr <- round(topic.distr,2)
-write.csv(topic.distr,"Results/region-distributions-per-topic.csv")
+write.csv(topic.distr,"Results/15.1/region-distributions-per-topic.csv")
 
 #Proportion of region represented by each topic
 names(meta)
@@ -195,4 +195,4 @@ colSums(mean.regions)
 mean.regions <- rbind(mean.regions,colSums(mean.regions))
 rownames(mean.regions)[16] <- "Total"
 mean.regions <- round(mean.regions,2)
-write.csv(mean.regions,"Results/mean.regions.csv")
+write.csv(mean.regions,"Results/15.1/mean-regions.csv")

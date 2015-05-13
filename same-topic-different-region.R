@@ -1,5 +1,5 @@
 ### This script analyzes how the same topic is discussed differently depending on ### the region it covers. It does this by:
-### 1. Subsets the meta.topics data into topic-specific lists of documents (i.e.)
+### 1. Subsets the meta.topics data into topic-specific lists of documents (i.e. about "Marriage")
 ### documents with that topic as its top topic.
 ### 2. Performs word seaprating algorithms
 ### 3. Gets reprsentative tites
@@ -17,7 +17,7 @@ library(Snowball) # also needed for stemming function
 ######## DTM function ########
 ##############################
 
-# this function passes data derived from the meta-topics data
+# this function passes a subcorpus of the meta-topics.csv data for documents on a specific topic, and makes a DTM out of it. There are many ways one could subset. See below for options.
 
 make.dtm <- function(data){
   a <- Corpus(VectorSource(data[["TEXT.NO.NOUN"]]))
@@ -36,14 +36,11 @@ make.dtm <- function(data){
   return(a)
 }
 
-#test
-dtm <- make.dtm(meta)
+##########################################
+######## Word Separating Function ########
+##########################################
 
-##############################
-######## W-S function ########
-##############################
-
-# The following function inputs a region and returns the scores of three word separating algorithsms - Linear Discriminant analysis, Standardized Mean Difference and Standardized Log Odds
+# The following function inputs a region and returns the scores of three word separating algorithms - Linear Discriminant Analysis, Standardized Mean Difference and Standardized Log Odds. First you have to assign uni.dtm to the topic-specific dtm you made using the function above. See below.
 
 distinctive.words <- function(region){
   corp.1.uni <- uni.dtm[grep(region,uni.dtm$region),]
@@ -119,38 +116,30 @@ distinctive.words <- function(region){
 ###### make sub-corpus #######
 ##############################
 
-# Option 1) get docs with distribution of topics >.5 - used for other scripts
+# Option 1) get docs with distribution of topics >.5
 get.highest.docs <- function(x){
   docs <- subset(meta.topics,topic.docs[[x]]>.4,select=c(x,"PUBLICATION","TITLE","YEAR","COUNTRY_FINAL","REGION","SUBJECT","TEXT","TEXT.NO.NOUN"))
   docs <- docs[order(docs[[x]],decreasing = TRUE),]
   return(docs)
 }
-
 rights <- get.highest.docs("rights")
 
 # Option 2) find documents for each topic using top topic
-religion <- meta.topics[meta.topics$top.topic == "religion",]
-marriage <- meta.topics[meta.topics$top.topic == "marriage",]
-rape <- meta.topics[meta.topics$top.topic == "rape",]
 rights <- meta.topics[meta.topics$top.topic == "rights",]
 
-# Option 3) Get 20 highest articles
+# Option 3) Get 20 most representative articles for each region on the topic
 highest <- arrange(meta.topics,REGION,desc(rights)) 
 rights <- rbind(head(highest[highest$REGION=="Africa",],20),head(highest[highest$REGION=="Asia",],20),head(highest[highest$REGION=="EECA",],20),head(highest[highest$REGION=="LA",],20),head(highest[highest$REGION=="MENA",],20),head(highest[highest$REGION=="West",],20))
 
 ##############################
-###### distinctive words ######
+###### distinctive words #####
 ##############################
 
 # call function
-religion <- make.dtm(religion)
-marriage<- make.dtm(marriage)
-rape <- make.dtm(rape)
 rights <- make.dtm(rights)
 
 # Get Discrimianting Words
-
-uni.dtm <- marriage
+uni.dtm <- rights
 
 # apply function
 mena.uni <- distinctive.words("MENA")
@@ -218,6 +207,3 @@ rights <- subset(meta.topics, top.topic=="rights",select=c(TITLE,REGION,TEXT,YEA
 rights <- arrange(rights,REGION)
 write.csv(rights,"Results/Rights-articles.csv")
 
-rape <- subset(meta.topics, top.topic=="rape",select=c(TITLE,REGION,TEXT,YEAR,COUNTRY_FINAL))
-rape <- arrange(rape,REGION,YEAR)
-write.csv(rape,"Results/rape-articles.csv")

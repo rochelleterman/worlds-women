@@ -18,8 +18,10 @@ n.paper
 # number of articles per region
 
 n.region <- ddply(.data=women, .variables=.(REGION), .fun=nrow)
+write.csv(n.region,"Results/region_year.csv")
+
 barplot(summary(women$REGION))
-jpeg(filename = "n.region.jpeg")
+jpeg(filename = "n-region-barplot.jpeg")
 
 ### Number of articles per country
 
@@ -40,7 +42,6 @@ melted
 
 # regions over time.
 ggplot(data=melted, aes(x=year,y=count,group=region,color=region)) + geom_line()
-
-write.csv(n.region,"Results/region_year.csv")
+jpeg(filename = "n-region-plot.jpeg")
 
 

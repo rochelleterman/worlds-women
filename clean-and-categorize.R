@@ -58,31 +58,7 @@ countries$Key <- as.character(countries$Key)
 countries$iso3c <- as.character(countries$iso3c)
 
 # get rid of OMAN because it will match "women"
-
 countries <- countries[!countries$Value=="Oman",]
-
-##########################
-### Countries By TITLE ###
-##########################
-
-# initialize columns
-#women$COUNTRY_TITLE <- NA
-#women$COUNTRY_TITLE <- as.character(women$COUNTRY_TITLE)
-
-# Define function for taking country in title
-#country.title <- function(x,y,z){
-#  country.index <- (grepl(x, z$TITLE,ignore.case=T))
-#  z$COUNTRY_TITLE[country.index] <-as.character(y)
-#  return(z$COUNTRY_TITLE)
-#}
-
-## Apply function to all countries in the key-value list
-#n <- nrow(countries)
-#for(i in 1:n){
-#  women$COUNTRY_TITLE <- country.title(countries$Key[i],countries$Value[i],women)
-#}
-
-#sum(is.na(women$COUNTRY_TITLE)) # 33222
 
 ############################################
 ### Countries by LexisNexis COUNTRY term ###
@@ -125,18 +101,6 @@ for(i in 1:n){
 }
 
 sum(is.na(women$COUNTRY_FINAL)) # 17136
-
-#######################
-### Final Countries ###
-#######################
-
-# Takes COUNTRY_TITLE as priority, and then COUNTRY_PERCENT_ST
-#women$COUNTRY_FINAL <- NA
-#women$COUNTRY_FINAL <- women$COUNTRY_TITLE
-#na.index <- which(is.na(women$COUNTRY_FINAL))
-#women$COUNTRY_FINAL[na.index] <- women$COUNTRY_PERCENT_ST[na.index]
-
-#nrow(women[women$COUNTRY_FINAL=="United States of America",]) #30516
 
 #####################
 ### Country Codes ###

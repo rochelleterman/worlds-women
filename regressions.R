@@ -1,4 +1,4 @@
-setwd("/Users/rterman/Dropbox/berkeley/Dissertation/Data\ and\ Analyais/Git\ Repos/worlds-women")
+setwd("~/Dropbox/berkeley/Dissertation/Data\ and\ Analyais/Git\ Repos/worlds-women")
 
 library(plyr)
 library("MASS")
@@ -57,15 +57,6 @@ names(country.year.means)
 country.year.topic.top[,3:17] <- country.year.topic.top[,3:17]/country.year.topic.top$n
 head(country.year.topic.top)
 
-# just mena
-
-mena <- region.year.means[region.year.means$region=="MENA",c("year","region","rights","marriage","religion","politics","combat")]
-mena$region <- NULL
-names(mena)
-mena <- melt(mena,id="year")
-names(mena) <- c("year","topic","value")
-mean.sub <- mena[mena$topic=="religion" | mena$topic=="religion" |]
-
 # plotting
 
 ggplot(data=region.year.means, aes(x=year,y=rights,group=region,color=region)) + geom_line()
@@ -75,22 +66,25 @@ ggplot(data=region.year.means, aes(x=year,y=rights,group=region,color=region)) +
 ###############################################
 
 #### Load country-year database
-rt <- read.csv("/Users/rterman/Dropbox/berkeley/Dissertation/Data\ and\ Analyais/Git\ Repos/country-year-database/rt.no.us.csv")
+rt <- read.csv("~/Dropbox/berkeley/Dissertation/Data\ and\ Analyais/Git\ Repos/country-year-database/rt.no.us.csv")
 names(rt)
 rt$X <- NULL
 
 ### merge
+# take only 1980-2013 topic data
+country.year.means <- country.year.means[country.year.means$year<2014,]
+# merge
 rt <- merge(rt,country.year.means,by=c("year","iso3c"),all.x=T)
 
 ## Find missing values 
 
 rt.merge <- merge(rt,country.year.means,by=c("year","iso3c"),all.y=T)
-rt.merge <- arrange(rt.merge,year,ccode)
+rt.merge <- arrange(rt.merge,desc(year),ccode)
 x<- data.frame(cbind(rt.merge$year,rt.merge$ccode))
 x <- which(duplicated(x))
 unique(rt.merge$iso3c[x]) # iceland, ukraine, malta, barbados, grenada, samoa, Seychelles, Brunei, Monaco
 countries[countries$iso3c=="MCO",]
-country.year.means$year[country.year.means$iso3c=="IRN"] %in% rt$year[rt$iso3c=="IRN"]
+country.year.means$year[country.year.means$iso3c=="IRQ"] %in% rt$year[rt$iso3c=="IRQ"]
 rt[rt$country=="Malt"]
 names(rt)
 
@@ -117,13 +111,11 @@ rt$wosoc <- lag(rt$wosoc,1)
 rt$wecon <- lag(rt$wecon,1)
 rt$muslim <- lag(rt$muslim,1)
 
-summary(rt)
-
 # number unique countries
 length(unique(rt$rt_code))
 
-# number of units with articles
-nrow(rt[!is.na(rt$rights)])
+# removing cases with no rights DV
+rt <- rt[!is.na(rt$rights)]
 
 ###################
 ###### Model ######
@@ -142,6 +134,19 @@ phtest(fixed, random)
 coeftest(lm1)
 coeftest(lm1, vcov = vcovHC(lm1, type = "HC1"))
 coeftest(pm1, vcov=function(x) vcovHC(x, cluster="time", type="HC1"))
+
+# Missing Values
+lm1 <- lm(rights ~ gdp.pc.wdi,data = rt) 
+summary(lm1)
+
+rt.na.muslim <- rt[is.na(rt$muslim),]
+rt.na.polity <- rt[is.na(rt$polity2),]
+rt.na.physint <- rt[is.na(rt$physint),]
+rt.na.gdp <- rt[is.na(rt$gdp.pc.un),]
+rt.na.wopol <- rt[is.na(rt$wopol),]
+rt.na.wosoc <- rt[is.na(rt$wosoc),]
+rt.na.wecon <- rt[is.na(rt$wecon),]
+rt.na.domestic9 <- rt[is.na(rt$domestic9),]
 
 # plm - 1
 pm1 <- plm(rights ~ rights.lagged+wopol+muslim+polity2+physint+log(gdp.pc.wdi)+log(pop.wdi)+domestic9+mena,data = rt,model = "pooling",index = c("ccode","year"))

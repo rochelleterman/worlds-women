@@ -25,24 +25,19 @@ names(x)[16:18] <- c("iso3c","year","region")
 
 # country-year means
 country.year.means <- ddply(.data=x, .variables=.(iso3c,year), numcolwise(mean,na.rm = TRUE))
-
 # add 'n' column
 y <- ddply(.data=x,.variables=.(iso3c,year), .fun=nrow) 
 country.year.means$n <- y$V1
-names(country.year.means)
 write.csv(country.year.means,"Results/15.1/country-year-means.csv")
 
 # region-year means
-
 region.year.means <- ddply(.data=x, .variables=.(year,region), numcolwise(mean,na.rm = TRUE))
-names(region.year.means)
 y <- ddply(.data=x,.variables=.(year,region), .fun=nrow) 
 region.year.means$n <- y$V1
-
 write.csv(region.year.means,"Results/15.1/region-year-means.csv")
 
 # country-year number of top topic articles
-names(meta.topics)
+
 x <- subset(meta.topics,select=c(COUNTRY_CODE,YEAR,REGION,top.topic))
 names(x)[1:3] <- c("iso3c","year","region")
 country.year.topic.top <- ddply(.data=x, .variables=.(iso3c,year,top.topic), .fun=nrow)
@@ -50,18 +45,14 @@ head(country.year.topic.top,20)
 sum(country.year.topic.top$V1) # testing
 country.year.topic.top <- dcast(country.year.topic.top,iso3c + year ~ top.topic)
 head(country.year.topic.top)
-
 # add 'n' column
 y <- ddply(.data=x,.variables=.(iso3c,year), .fun=nrow) 
 country.year.topic.top$n <- y$V1
-names(country.year.means)
-
 # take mean
 country.year.topic.top[,3:17] <- country.year.topic.top[,3:17]/country.year.topic.top$n
 head(country.year.topic.top)
 
 # plotting
-
 ggplot(data=region.year.means, aes(x=year,y=rights,group=region,color=region)) + geom_line()
 
 ###############################################
@@ -85,12 +76,13 @@ x<- data.frame(cbind(rt.merge$year,rt.merge$ccode))
 x <- which(duplicated(x))
 unique(rt.merge$iso3c[x]) # iceland, ukraine, malta, barbados, grenada, samoa, Seychelles, Brunei, Monaco
 
-# make dummy variable for mena
+# MENA dummy variable
 rt$mena <- 0
 rt$mena[rt$region=="MENA"] <- 1
 
 # number unique countries
 length(unique(rt$rt_code))
+
 # removing cases with no rights DV
 rt <- rt[!is.na(rt$rights),]
 
@@ -153,16 +145,16 @@ datasets<-a.out$imputations
 lapply(X=datasets, FUN=function(x){
   summary(plm(rights ~ wopol+muslim+polity2+physint+log(gdp.pc.un)+log(pop.wdi)+domestic9+mena,data = x,model = "pooling",index = c("ccode","year")))
 })
-#take 1st imputation
-rt <- a.out$imputations[[1]]
-#map missing values
+# map missing values
 missmap(a.out)
-
+# diagnostics
 overimpute(a.out, var = "polity2")
+# take 1st imputation
+rt <- a.out$imputations[[1]]
 
-####################
-### Getting lags ###
-####################
+########################
+### Lagged Variables ###
+########################
 
 # make panel data
 rt <- pdata.frame(rt, c("ccode","year"))
@@ -181,7 +173,7 @@ rt$muslim <- lag(rt$muslim,1)
 
 ###################
 ###### Model ######
-##################
+###################
 
 # Testing
 lm1 <- lm(rights ~ rights.lagged+wopol+muslim+polity2+physint+log(gdp.pc.un)+log(pop.wdi)+domestic9+mena,

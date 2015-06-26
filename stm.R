@@ -114,15 +114,18 @@ plot.topicCorr(mod.out.corr)
 ###########################################
 
 #prep
+set.seed(11)
 prep <- estimateEffect(1:15 ~ REGION + s(YEAR),model,meta=meta,uncertainty="Global")
+prep
+
 
 # topics over time
-plot.estimateEffect(prep,covariate="YEAR",method="continuous",topics=c(15),printlegend=TRUE,xlab="Year",xlim=c(1980,2014),main = "Comparing Topics over Time",labeltype="custom",custom.labels=c("Politics"),ylim=c(0,.25))
+plot.estimateEffect(prep,covariate="YEAR",method="continuous",topics=c(1),printlegend=TRUE,xlab="Year",xlim=c(1980,2014),main = "Comparing Topics over Time",labeltype="custom",custom.labels=c("Politics"),ylim=c(0,.25),nsims=200)
 
 # topics over region
-regions = c("Asia","EECA","MENA","Africa","LA","West")
+regions = c("Asia","EECA","MENA","Africa","West","LA")
 set.seed(11)
-plot.estimateEffect(prep,"REGION",method="pointestimate",topics=10,printlegend=TRUE,labeltype="custom",custom.labels=regions,main="Sexual Assault",ci.level=.9)
+plot.estimateEffect(prep,"REGION",method="pointestimate",topics=1,printlegend=TRUE,labeltype="custom",custom.labels=regions,main="Sexual Assault",ci.level=.95,nsims=200)
 
 #### Interactions
 
@@ -146,7 +149,8 @@ legend("topleft","(x,y)",legend=c("MENA","EECA"),fill=c("red","blue"))
 #######################################################
 
 library(plyr)
-topic.docs <- as.data.frame(mod.15.1$theta) #Number of Documents by Number of Topics matrix of topic proportions
+#Number of Documents by Number of Topics matrix of topic proportions
+topic.docs <- as.data.frame(mod.15.1$theta) 
 colnames(topic.docs) <- c("business","rights","marriage","religion","human","literature","cancer","health","tourism","rape","arts","sports","combat","fashion","politics")
 topic.docs$docs <- rownames(topic.docs)
 meta.topics <- cbind(topic.docs,meta)
@@ -178,7 +182,10 @@ topic.distr <- t(topic.distr)
 topic.distr <- as.data.frame(topic.distr)
 topic.distr$total <- 100
 topic.distr <- round(topic.distr,2)
+topic.distr
 write.csv(topic.distr,"Results/15.1/region-distributions-per-topic.csv")
+
+#testing mean topic proportion
 
 #Proportion of region represented by each topic
 names(meta)
@@ -195,4 +202,5 @@ colSums(mean.regions)
 mean.regions <- rbind(mean.regions,colSums(mean.regions))
 rownames(mean.regions)[16] <- "Total"
 mean.regions <- round(mean.regions,2)
+mean.regions
 write.csv(mean.regions,"Results/15.1/mean-regions.csv")

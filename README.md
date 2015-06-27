@@ -12,10 +12,9 @@ This project:
 | Task | Input | File | Output |
 | -----| ----- | ---- | ------ |
 | Clean Metadata | Data/all-raw.csv | clean-and-categorize.R | Data/women-foreign.csv, Data/women-all.csv |
-| Describe  | Data/women-foreign.csv | descriptive.R | Results/ |
-| Pre-Process | Data/women-foreign.csv | preprocess.ipynb | Data/women-processed.csv |
-| Sentiment Analysis  | Data/women-processed.csv | sentiments.R | Results/ |
-| Structural Topic Model | Data/women-processed.csv | stm.R | Data/meta-topics,.csv/, Results/ |
-| Comparing topics across Region | Data/meta-topics.csv | same-topic-different-region.R | Results/ |
-| Regress | Data/meta-topics.csv | regressions.R | Results/regression-results |
+| Describe  | Data/women-foreign.csv | descriptive.R | Results/descriptive |
+| Pre-Processing | Data/women-foreign.csv | preprocess.ipynb | Data/women-processed.csv |
+| Structural Topic Model | Data/women-processed.csv | stm.R | Data/meta-topics.csv, Results/15.1 |
+| Comparing Topics across Region | Data/meta-topics.csv | same-topic-different-region.R | Results/ |
+| Regression | Data/meta-topics.csv | regressions.R | Results/regression-results |
 

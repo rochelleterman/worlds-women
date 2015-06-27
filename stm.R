@@ -136,7 +136,7 @@ plot.estimateEffect(prep,"REGION",method="pointestimate",topics=10,printlegend=T
 
 for (i in 1:15){
   file <- file.path("Results/15.1/region-proportion-plots",paste(as.character(i),".png",sep = ""))
-  jpeg(file,width=700,height=400,type="quartz")
+  jpeg(file,width=400,height=300,type="quartz")
   plot.estimateEffect(prep,"REGION",method="pointestimate",topics=i,printlegend=TRUE,labeltype="custom",custom.labels=regions,main=labels[i],ci.level=.95,nsims=100)
   dev.off()
 }

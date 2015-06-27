@@ -15,24 +15,27 @@ names(women)
 # number of articles per paper
 n.paper<- ddply(.data=women, .variables=.(PUBLICATION), .fun=nrow)
 n.paper
+
 # number of articles per region
-
 n.region <- ddply(.data=women, .variables=.(REGION), .fun=nrow)
-write.csv(n.region,"Results/region_year.csv")
+write.csv(n.region,"Results/descriptive/region_year.csv")
 
+# plot
+jpeg(filename = "Results/descriptive/n-region-barplot.jpeg",width=900,height=600,type="quartz")
 barplot(summary(women$REGION))
-jpeg(filename = "n-region-barplot.jpeg")
+dev.off()
 
-### Number of articles per country
+# number of articles per country
 
 n.country <- ddply(.data=women, .variables=.(COUNTRY_FINAL), .fun=nrow)
 n.country <- arrange(n.country,desc(V1))
-write.csv(n.country,"Results/n-country.csv")
+write.csv(n.country,"Results/descriptive/n-country.csv")
 
 #################################################################
 ##### Plotting women number of articles per year per region #####
 #################################################################
 
+# Number of Documents Per Region Over Time
 n.region.year <- ddply(.data=women, .variables=.(YEAR), .fun=summarize,"MENA"=sum(REGION=="MENA"),"Asia"=sum(REGION=="Asia"),"Africa"=sum(REGION=="Africa"),"EECA"=sum(REGION=="EECA"),"West"=sum(REGION=="West"),"LA"=sum(REGION=="LA"))
 n.region.year
 
@@ -40,8 +43,8 @@ melted <- melt(n.region.year,id.vars="YEAR",measure.vars=c("MENA","Asia","Africa
 names(melted) <- c("year","region","count")
 melted
 
-# regions over time.
+# Plot
+jpeg(filename = "Results/descriptive/n-region-plot.jpeg",width=900,height=600,type="quartz")
 ggplot(data=melted, aes(x=year,y=count,group=region,color=region)) + geom_line()
-jpeg(filename = "n-region-plot.jpeg")
-
+dev.off()
 

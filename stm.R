@@ -1,4 +1,4 @@
-
+setwd("~/Dropbox/berkeley/Dissertation/Data\ and\ Analyais/Git\ Repos/worlds-women")
 library(stm)
 rm(list=ls())
 
@@ -38,17 +38,23 @@ meta <-out$meta
 
 mod.15.1 <- stm(docs,vocab, 15, prevalence=~REGION+s(YEAR)+PUBLICATION, data=meta, seed = 00001)
 labelTopics(mod.15.1)
-topicQuality(model=mod.15.1, documents=docs)
 
+# Estimate model without covariates
 mod.15.1.a <- stm(docs,vocab, 15, data=meta, seed = 00001, model=mod.15.1)
 labelTopics(mod.15.1.a)
 topicQuality(model=mod.15.1.a, documents=docs)
 
-jpeg("Results/stms/15.1-1.jpeg",width=700,height=1000,type="quartz")
+# Topic Quality plot
+jpeg("Results/15.1/exclusivity-and-cohesiveness.jpeg",width=750,height=500,type="quartz")
+topicQuality(model=mod.15.1, documents=docs)
+dev.off()
+
+# Topic Labels plot
+jpeg("Results/15.1//labels-1.jpeg",width=700,height=1000,type="quartz")
 plot.STM(mod.15.1,type="labels",topics=1:10,width=75)
 dev.off()
 
-jpeg("Results/stms/15.1-2.jpeg",width=700,height=1000,type="quartz")
+jpeg("Results/15.1/labels-2.jpeg",width=700,height=1000,type="quartz")
 plot.STM(mod.15.1,type="labels",topics=11:15,width=75)
 dev.off()
 
@@ -101,9 +107,10 @@ labels = c("Business & Work","Women's Rights & Gender Equality","Marriage & Fami
 ######### Plot Topics  ###########
 ##################################
 
-# Corpus summary
-regions = c("Asia","EECA","MENA","Africa","LA","West")
+# Corpus Summary of Topic Proportions
+jpeg("Results/15.1/corpus-summary.jpeg",width=1000,height=1000,type="quartz")
 plot.STM(model,type="summary",custom.labels=labels,main="")
+dev.off()
 
 # Topic Correlation
 mod.out.corr<-topicCorr(model)
@@ -115,9 +122,7 @@ plot.topicCorr(mod.out.corr)
 
 #prep
 set.seed(11)
-prep <- estimateEffect(1:15 ~ REGION + s(YEAR),model,meta=meta,uncertainty="Global")
-prep
-
+prep <- estimateEffect(1:15 ~ REGION+s(YEAR),model,meta=meta,uncertainty="Global",documents=docs)
 
 # topics over time
 plot.estimateEffect(prep,covariate="YEAR",method="continuous",topics=c(1),printlegend=TRUE,xlab="Year",xlim=c(1980,2014),main = "Comparing Topics over Time",labeltype="custom",custom.labels=c("Politics"),ylim=c(0,.25),nsims=200)
@@ -125,7 +130,16 @@ plot.estimateEffect(prep,covariate="YEAR",method="continuous",topics=c(1),printl
 # topics over region
 regions = c("Asia","EECA","MENA","Africa","West","LA")
 set.seed(11)
-plot.estimateEffect(prep,"REGION",method="pointestimate",topics=1,printlegend=TRUE,labeltype="custom",custom.labels=regions,main="Sexual Assault",ci.level=.95,nsims=200)
+plot.estimateEffect(prep,"REGION",method="pointestimate",topics=10,printlegend=TRUE,labeltype="custom",custom.labels=regions,main="Sexual Assault",ci.level=.95,nsims=100)
+
+# Write Topic Proportion Estimates by Region
+
+for (i in 1:15){
+  file <- file.path("Results/15.1/region-proportion-plots",paste(as.character(i),".png",sep = ""))
+  jpeg(file,width=700,height=400,type="quartz")
+  plot.estimateEffect(prep,"REGION",method="pointestimate",topics=i,printlegend=TRUE,labeltype="custom",custom.labels=regions,main=labels[i],ci.level=.95,nsims=100)
+  dev.off()
+}
 
 #### Interactions
 

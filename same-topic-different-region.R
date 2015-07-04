@@ -80,7 +80,7 @@ distinctive.words <- function(region){
   
   # A function to get Standardized mean difference scores
   s.m.d.scores <- function(corp.1,corp.2){ # where x,y args are dtm dataframes for the two authors
-    score <- (means.corp.1 - means.corp.2) / sqrt((var.corp.1/n.corp.1) + (var.corp.2/n.corp.1))
+    score <- (means.corp.1 - means.corp.2) / sqrt((var.corp.1/n.corp.1) + (var.corp.2/n.corp.2))
     return(score)
   }
   

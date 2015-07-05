@@ -1,3 +1,10 @@
+# This script:
+# 1) Finds mean topic proportions for country-year and region-year levels
+# 2) Merges country-year topic proportions with other country-year variables
+# 3) Imputes missing values using nearest-value and Amelia techniques
+# 4) Lags variables
+# 5) Runs a few different regressiong modles
+
 setwd("~/Dropbox/berkeley/Dissertation/Data\ and\ Analyais/Git\ Repos/worlds-women")
 
 library(plyr)
@@ -16,10 +23,9 @@ meta.topics$X <- NULL
 meta.topics$X.1 <- NULL
 
 ############################################
-######## Topic means by country-year #######
+###### 1) Topic means by country-year ######
 ############################################
 
-names(meta.topics)
 x <- subset(meta.topics,select=c(business:politics,COUNTRY_CODE,YEAR,REGION))
 names(x)[16:18] <- c("iso3c","year","region")
 
@@ -30,14 +36,7 @@ y <- ddply(.data=x,.variables=.(iso3c,year), .fun=nrow)
 country.year.means$n <- y$V1
 write.csv(country.year.means,"Results/15.1/country-year-means.csv")
 
-# region-year means
-region.year.means <- ddply(.data=x, .variables=.(year,region), numcolwise(mean,na.rm = TRUE))
-y <- ddply(.data=x,.variables=.(year,region), .fun=nrow) 
-region.year.means$n <- y$V1
-write.csv(region.year.means,"Results/15.1/region-year-means.csv")
-
 # country-year number of top topic articles
-
 x <- subset(meta.topics,select=c(COUNTRY_CODE,YEAR,REGION,top.topic))
 names(x)[1:3] <- c("iso3c","year","region")
 country.year.topic.top <- ddply(.data=x, .variables=.(iso3c,year,top.topic), .fun=nrow)
@@ -52,11 +51,17 @@ country.year.topic.top$n <- y$V1
 country.year.topic.top[,3:17] <- country.year.topic.top[,3:17]/country.year.topic.top$n
 head(country.year.topic.top)
 
+# region-year means
+region.year.means <- ddply(.data=x, .variables=.(year,region), numcolwise(mean,na.rm = TRUE))
+y <- ddply(.data=x,.variables=.(year,region), .fun=nrow) 
+region.year.means$n <- y$V1
+write.csv(region.year.means,"Results/15.1/region-year-means.csv")
+
 # plotting
 ggplot(data=region.year.means, aes(x=year,y=rights,group=region,color=region)) + geom_line()
 
 ###############################################
-######## Prepare Country-level variables ######
+###### 2) Prepare Country-level variables #####
 ###############################################
 
 #### Load country-year database
@@ -86,9 +91,9 @@ length(unique(rt$rt_code))
 # removing cases with no rights DV
 rt <- rt[!is.na(rt$rights),]
 
-##########################
-##### Missing Values #####
-##########################
+#############################
+##### 3) Missing Values #####
+#############################
 
 rt.na.muslim <- rt[is.na(rt$muslim),]
 rt.na.polity <- rt[is.na(rt$polity2),]
@@ -152,9 +157,9 @@ overimpute(a.out, var = "polity2")
 # take 1st imputation
 rt <- a.out$imputations[[1]]
 
-########################
-### Lagged Variables ###
-########################
+###########################
+### 4) Lagged Variables ###
+###########################
 
 # make panel data
 rt <- pdata.frame(rt, c("ccode","year"))
@@ -172,7 +177,7 @@ rt$wecon <- lag(rt$wecon,1)
 rt$muslim <- lag(rt$muslim,1)
 
 ###################
-###### Model ######
+#### 5) Model #####
 ###################
 
 # Testing

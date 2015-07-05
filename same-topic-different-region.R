@@ -1,8 +1,7 @@
 ### This script analyzes how the same topic is discussed differently depending on ### the region it covers. It does this by:
-### 1. Subsets the meta.topics data into topic-specific lists of documents (i.e. about "Marriage")
-### documents with that topic as its top topic.
-### 2. Performs word seaprating algorithms
-### 3. Gets reprsentative tites
+### 1. Subsets the corpus into topic-specific lists of documents (i.e. about "Marriage")
+### 2. Performs word separating algorithms to get distinctive words for each region
+### 3. Gets reprsentative tites for each region / topic combo.
 
 #  Prepping.
 rm(list=ls())
@@ -35,9 +34,12 @@ make.dtm <- function(data){
 ######## Word Separating Function ########
 ##########################################
 
-# The following function inputs a region and returns the scores of three word separating algorithms - Linear Discriminant Analysis, Standardized Mean Difference and Standardized Log Odds. First you have to assign uni.dtm to the topic-specific dtm you made using the function above. See below.
+# The following function inputs a region and returns the scores of three word separating algorithms - 
+# Linear Discriminant Analysis, Standardized Mean Difference and Standardized Log Odds. 
+# The function passes two arguments: 
+# 1) `region` (e.g. "mena"), and 2) `uni.dtm`, i.e. a DTM of a topical subcopus
 
-distinctive.words <- function(region){
+distinctive.words <- function(region, uni.dtm){
   corp.1.uni <- uni.dtm[grep(region,uni.dtm$region),]
   corp.1.uni$region <- NULL
   corp.2.uni <- uni.dtm[-(grep(region,uni.dtm$region)),]
@@ -102,7 +104,7 @@ distinctive.words <- function(region){
   
   uni$stlogoddse <- s.l.o.scores(corp.1.uni,corp.2.uni)
   
-  # Write the words. Note that you have to change the file name as per what corpus your analyzing (see above). 
+  # Write the words.
   uni$words <- NULL
   return(uni)
 }
@@ -126,44 +128,42 @@ rights <- meta.topics[meta.topics$top.topic == "rights",]
 highest <- arrange(meta.topics,REGION,desc(rights)) 
 rights <- rbind(head(highest[highest$REGION=="Africa",],20),head(highest[highest$REGION=="Asia",],20),head(highest[highest$REGION=="EECA",],20),head(highest[highest$REGION=="LA",],20),head(highest[highest$REGION=="MENA",],20),head(highest[highest$REGION=="West",],20))
 
-##############################
-###### distinctive words #####
-##############################
+# find n - how many documents in each region in the subcorpus?
+summary(rights$REGION)
 
-# call function
+#############################
+##### distinctive words #####
+#############################
+
+# Make DTM from topical subcorpus made above
 rights <- make.dtm(rights)
 
-# Get Discrimianting Words
-uni.dtm <- rights
+# Get Distinctive Words Scores
+mena.uni <- distinctive.words("MENA",rights)
+eeca.uni <- distinctive.words("EECA",rights)
+west.uni <- distinctive.words("West",rights)
+africa.uni <- distinctive.words("Africa",rights)
+la.uni <- distinctive.words("LA",rights)
+asia.uni <- distinctive.words("Asia",rights)
 
-# apply function
-mena.uni <- distinctive.words("MENA")
-eeca.uni <- distinctive.words("EECA")
-west.uni <- distinctive.words("West")
-africa.uni <- distinctive.words("Africa")
-la.uni <- distinctive.words("LA")
-asia.uni <- distinctive.words("Asia")
+### write csv of all regions' distinctive words
+# this function passes the word scores made above
+# and returns the top 200 most distinctive words according the SMD score
 
-### write csv of all regions' top words
-names(asia.uni)
 top.200.smd <- function(data){
   return(rownames(data[order(data[,"smd"],decreasing=TRUE)[1:200],]))
 }
-topic.dist <- data.frame(top.200.smd(africa.uni),top.200.smd(asia.uni),top.200.smd(eeca.uni),top.200.smd(la.uni),top.200.smd(mena.uni),top.200.smd(west.uni))
-
-names(topic.dist) <- c("Africa","Asia","EECA","LA","MENA","West")
-
+top.smd.words <- data.frame(top.200.smd(africa.uni),top.200.smd(asia.uni),top.200.smd(eeca.uni),top.200.smd(la.uni),top.200.smd(mena.uni),top.200.smd(west.uni))
+names(top.smd.words) <- c("Africa","Asia","EECA","LA","MENA","West")
 write.csv(topic.dist,"Results/distinctive-words/rights-dist.csv")
 
 # write CSVs of individual regions with their 3 scores
 setwd("Results/distinctive-words/Rape")
-
 write.order <- function(data,filename){
   order <- data[order(data[,"smd"],decreasing=TRUE)[1:200],]
   order <- subset(order,select="smd")
   write.table(order,file = filename,col.names = FALSE,sep = ":")
 }
-
 write.order(mena.uni,"mena.txt")
 write.order(la.uni,"la.txt")
 write.order(eeca.uni,"eeca.txt")
@@ -171,33 +171,24 @@ write.order(west.uni,"west.txt")
 write.order(asia.uni,"asia.txt")
 write.order(africa.uni,"africa.txt")
 
-# find n for each region
-
-names(rights)
-summary(rights$REGION)
-rights$TITLE[rights$REGION=="LA"]
-
 ##############################################
-######### Find docs per Region/topic #########
+######### Find docs per region/topic #########
 ##############################################
 
-# find most representative titles for topic by region (i.e. marriage)
+# Option 1) find most representative titles for topic by region (i.e. marriage)
 highest <- arrange(meta.topics,REGION,desc(rights)) 
-
 highest <- data.frame(head(highest[highest$REGION=="Africa","TITLE"],20),head(highest[highest$REGION=="Asia","TITLE"],20),head(highest[highest$REGION=="EECA","TITLE"],20),head(highest[highest$REGION=="LA","TITLE"],20),head(highest[highest$REGION=="MENA","TITLE"],20),head(highest[highest$REGION=="West","TITLE"],20))
-
 names(highest) <- c("Africa","Asia","EECA","LA","MENA","West")
-
 write.csv(highest,"Results/titles/rights-highest.csv")
 
-# random sample titles by top-topic.
+# Option 2) random sample titles by top-topic.
 sample<- meta.topics[meta.topics$top.topic=="rights",]
 names(sample)
 sample <- data.frame(sample(sample[sample$REGION=="Africa","TITLE"],5),sample(sample[sample$REGION=="Asia","TITLE"],5),sample(sample[sample$REGION=="EECA","TITLE"],5),sample(sample[sample$REGION=="LA","TITLE"],5),sample(sample[sample$REGION=="MENA","TITLE"],5),sample(sample[sample$REGION=="West","TITLE"],5))
 sample
 write.csv(sample,"Results/titles/rights-sample.csv")
 
-# find all titles (and articles) in sub-corpus.
+# Option 3) find all titles (and articles) in sub-corpus.
 rights <- subset(meta.topics, top.topic=="rights",select=c(TITLE,REGION,TEXT,YEAR,COUNTRY_FINAL))
 rights <- arrange(rights,REGION)
 write.csv(rights,"Results/Rights-articles.csv")

@@ -13,10 +13,10 @@ library("xtable")
 library(plm)
 library(ggplot2)
 library(reshape2)
-library(stargazer)
-library(statar)
-library(sandwich)
-library(Amelia)
+library(stargazer) # pretty tables
+library(statar) # for missing values
+library(sandwich) # for robust standard errors
+library(Amelia) # for missing valus
 
 meta.topics <- read.csv("Data/meta-topics.csv")
 meta.topics$X <- NULL

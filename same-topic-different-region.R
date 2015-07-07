@@ -1,5 +1,6 @@
-### This script analyzes how the same topic is discussed differently depending on ### the region it covers. It does this by:
-### 1. Subsets the corpus into topic-specific lists of documents (i.e. about "Marriage")
+### This script analyzes how the same topic is discussed differently depending on 
+### the region it covers. Specifically, it:
+### 1. Subsets the corpus into topic-specific lists of documents (i.e. about "Rights")
 ### 2. Performs word separating algorithms to get distinctive words for each region
 ### 3. Gets reprsentative tites for each region / topic combo.
 
@@ -24,7 +25,6 @@ meta.topics$X.1 <- NULL
 
 # this function passes a subcorpus of the meta-topics.csv data for documents on a specific topic, 
 # and makes a DTM out of it. There are many ways one could subset. See below for options.
-
 make.dtm <- function(data){ 
   dtm <- create_matrix(data[["TEXT.NO.NOUN"]], language="english", removeNumbers=TRUE,
                             stemWords=TRUE, removeSparseTerms=.999, toLower = TRUE, 
@@ -126,7 +126,6 @@ top.200 <- function(data,score){
 
 # this function passes a score and returns a dataframe with each region's 
 # top 200 words for that score
-
 top.score <- function(score){
   df <- data.frame(matrix(data=NA,nrow=200,ncol=6))
   unis <- list(africa.uni, asia.uni, eeca.uni, la.uni, mena.uni, west.uni)
@@ -136,7 +135,6 @@ top.score <- function(score){
   names(df) <- c("Africa","Asia","EECA","LA","MENA","West")
   return(df)
 }
-
 
 ##############################
 ###### make sub-corpus #######

@@ -12,6 +12,12 @@ library(tm)
 require(rJava) # needed for stemming function 
 library(Snowball) # also needed for stemming function
 
+# Load Data
+
+meta.topics <- read.csv("Data/meta-topics.csv")
+meta.topics$X <- NULL
+meta.topics$X.1 <- NULL
+
 ##############################
 ######## DTM function ########
 ##############################
@@ -23,12 +29,11 @@ make.dtm <- function(data){
   dtm <- create_matrix(data[["TEXT.NO.NOUN"]], language="english", removeNumbers=TRUE,
                             stemWords=TRUE, removeSparseTerms=.999, toLower = TRUE, 
                             removePunctuation = TRUE)
-  dtm <- as.data.frame(inspect(dtm))
+  dtm <- as.data.frame(as.matrix(dtm))
   dtm$region <- data[["REGION"]]
   dtm[,1] <- NULL
   return(dtm)
 }
-
 
 ##########################################
 ######## Word Separating Function ########
@@ -102,12 +107,36 @@ distinctive.words <- function(region, uni.dtm){
     return(st.log.odds)
   }
   
-  uni$stlogoddse <- s.l.o.scores(corp.1.uni,corp.2.uni)
+  uni$st.log.odds <- s.l.o.scores(corp.1.uni,corp.2.uni)
   
   # Write the words.
   uni$words <- NULL
   return(uni)
 }
+
+############################
+##### Results Functions ####
+############################
+
+# this function passes the word scores (made above) and the specific score you want to order
+# and returns the top 200 most distinctive words for that score
+top.200 <- function(data,score){
+  return(rownames(data[order(data[,score],decreasing=TRUE)[1:200],]))
+}
+
+# this function passes a score and returns a dataframe with each region's 
+# top 200 words for that score
+
+top.score <- function(score){
+  df <- data.frame(matrix(data=NA,nrow=200,ncol=6))
+  unis <- list(africa.uni, asia.uni, eeca.uni, la.uni, mena.uni, west.uni)
+  for (i in 1:6){
+    df[,i] <- top.200(unis[[i]],score)
+  }
+  names(df) <- c("Africa","Asia","EECA","LA","MENA","West")
+  return(df)
+}
+
 
 ##############################
 ###### make sub-corpus #######
@@ -146,30 +175,17 @@ africa.uni <- distinctive.words("Africa",rights)
 la.uni <- distinctive.words("LA",rights)
 asia.uni <- distinctive.words("Asia",rights)
 
-### write csv of all regions' distinctive words
-# this function passes the word scores made above
-# and returns the top 200 most distinctive words according the SMD score
+#########################
+##### write results #####
+#########################
 
-top.200.smd <- function(data){
-  return(rownames(data[order(data[,"smd"],decreasing=TRUE)[1:200],]))
-}
-top.smd.words <- data.frame(top.200.smd(africa.uni),top.200.smd(asia.uni),top.200.smd(eeca.uni),top.200.smd(la.uni),top.200.smd(mena.uni),top.200.smd(west.uni))
-names(top.smd.words) <- c("Africa","Asia","EECA","LA","MENA","West")
-write.csv(topic.dist,"Results/distinctive-words/rights-dist.csv")
+# get top 200 words for SMD
+top.smd <- top.score("smd")
+write.csv(top.smd,"Results/distinctive-words/rights/rights-smd.csv")
 
-# write CSVs of individual regions with their 3 scores
-setwd("Results/distinctive-words/Rape")
-write.order <- function(data,filename){
-  order <- data[order(data[,"smd"],decreasing=TRUE)[1:200],]
-  order <- subset(order,select="smd")
-  write.table(order,file = filename,col.names = FALSE,sep = ":")
-}
-write.order(mena.uni,"mena.txt")
-write.order(la.uni,"la.txt")
-write.order(eeca.uni,"eeca.txt")
-write.order(west.uni,"west.txt")
-write.order(asia.uni,"asia.txt")
-write.order(africa.uni,"africa.txt")
+## get top 200 words for Standardized Log Odd
+top.slo <- top.score("st.log.odds")
+write.csv(top.slo,"Results/distinctive-words/rights/rights-slo.csv")
 
 ##############################################
 ######### Find docs per region/topic #########

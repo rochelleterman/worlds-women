@@ -1,13 +1,11 @@
-$\mu_{1}$ and $\mu_{2}$, then the variance of $\mu_{1}$ - $\mu_{2}$ 
- 
-$var(\mu_{1} - \mu_{2}) = var(\mu_{1}) + var(\mu_{2}) - 2 * cov(\mu_{1}, \mu_{2})$
- 
-If we assume μ1 and μ2 are independent, then under a wide range of assumptions:
- 
-$var(\mu_{1} - \mu_{2}) = var(x_{1})/N_{1} + var(x_{2})/N_{2}$
- 
-so the standard error is:
- 
-Standard error = $\sqrt{var(\mu_{1} - \mu_{2})}$
- 
-$=\sqrt{ var(x_{1})/N_{1} + var(x_{2})/N_{2} }$
+For each word $w$ in arbitrary corpus $c$, 
+
+\[\mu_{w} = \frac{\sum_{i=1}^{D}w_i}{N}\] 
+
+where $w_i$ is the number of times a $w$ appears in document $i$, $D$ is the total number of documents in $c$ and $N$ is the total number of words in $c$.
+
+For each word $w$ in regional sub-corpus $r$, the standardized mean difference score $x$ can be calculated as:
+
+\[x_{w,r}=\frac{\mu_{w,r} - \mu_{w,-r}}{\sqrt{ \frac{var(w_{r})}{N_{r}} + \frac{var(w_{-r})}{N_{-r} }}}\]
+
+Where $var(w_{r})$ is the variance of $w_{i}$ across documents $i$ in $r$. 

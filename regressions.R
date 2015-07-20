@@ -227,7 +227,7 @@ cor(rt.impute$muslim, rt.impute$mena, use="complete.obs") #0.6534842
 ###################
 
 # Enter Data
-rt <- rt.impute
+rt <- rt.orig
 stargazer(rt, type="text")
 
 # make panel data

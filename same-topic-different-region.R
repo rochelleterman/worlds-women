@@ -140,16 +140,16 @@ top.score <- function(score){
 ###### make sub-corpus #######
 ##############################
 
-# Option 1) get docs with distribution of topics >.5
+# Option 1) find documents for each topic using top topic
+rights <- meta.topics[meta.topics$top.topic == "rights",]
+
+# Option 2), get docs with distribution of topics >.5
 get.highest.docs <- function(x){
   docs <- subset(meta.topics,topic.docs[[x]]>.4,select=c(x,"PUBLICATION","TITLE","YEAR","COUNTRY_FINAL","REGION","SUBJECT","TEXT","TEXT.NO.NOUN"))
   docs <- docs[order(docs[[x]],decreasing = TRUE),]
   return(docs)
 }
 rights <- get.highest.docs("rights")
-
-# Option 2) find documents for each topic using top topic
-rights <- meta.topics[meta.topics$top.topic == "rights",]
 
 # Option 3) Get 20 most representative articles for each region on the topic
 highest <- arrange(meta.topics,REGION,desc(rights)) 

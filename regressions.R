@@ -240,8 +240,6 @@ summary(pm1)
 coeftest(pm1, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))
 se1 = coeftest(pm1, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
-#coeftest(pm1, vcovHC(pm1, type = "HC3"))
-
 # plm - 2
 pm2 <- plm(rights ~ lag(wosoc,1)+lag(muslim,1)+lag(polity2,1)+lag(physint,1)+log(lag(gdp.pc.un,1))+log(lag(pop.wdi,1))+lag(domestic9,1)+mena,data = rt,model = "pooling",index = c("ccode","year"))
 summary(pm2)

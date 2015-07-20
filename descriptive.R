@@ -4,9 +4,12 @@ library(plyr)
 library(ggplot2)
 library(reshape2)
 
+women <- women.foreign.1
+
 # Load data (optional)
 women <- read.csv("Data/women-foreign.csv")
 names(women)
+women$REGION <- as.factor(women$REGION)
 
 ########################################
 ######## Quick Sum and Barplots #######
@@ -29,6 +32,7 @@ dev.off()
 
 n.country <- ddply(.data=women, .variables=.(COUNTRY_FINAL), .fun=nrow)
 n.country <- arrange(n.country,desc(V1))
+n.country
 write.csv(n.country,"Results/descriptive/n-country.csv")
 
 #################################################################

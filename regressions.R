@@ -17,8 +17,10 @@ library(reshape2)
 library(stargazer) # pretty tables
 library(statar) # for missing values
 library(sandwich) # for robust standard errors
+library(lmtest) # for robust standard errors
 library(Amelia) # for missing valus
 library(data.table)  # for missing valus
+
 
 meta.topics <- read.csv("Data/meta-topics.csv")
 meta.topics$X <- NULL
@@ -104,9 +106,6 @@ rt <- read.csv("~/Dropbox/berkeley/Dissertation/Data\ and\ Analyais/Git\ Repos/c
 names(rt)
 rt$X <- NULL
 
-#### Merge
-# take only 1980-2013 topic data
-country.year <- country.year[country.year$year<2014,]
 # merge
 rt <- merge(rt,country.year,by=c("year","iso3c"),all.x=T)
 
@@ -125,13 +124,14 @@ rt$mena <- 0
 rt$mena[rt$region=="MENA"] <- 1
 
 ### subset 
-rt <- rt[,c("ccode","year","rights","muslim","mena","polity2","physint","gdp.pc.un","pop.wdi","wopol","wosoc","wecon","domestic9","lnreportcount")]
+rt <- rt[,c("ccode","year","rights","muslim","mena","polity2","physint","amnesty","statedept","gdp.pc.un","pop.wdi","wopol","wosoc","wecon","domestic9","lnreportcount")]
 
 # Write
 rt.orig <- rt
-write.csv(rt.orig,"Data/country-year/country-year-rights-lagged.csv")
+write.csv(rt.orig,"Data/country-year/country-year-rights.csv")
 
 cor(rt$muslim, rt$mena, use="complete.obs") #0.6626975
+cor(rt$amnesty,rt$statedept,use="complete.obs")
 
 #############################
 ##### 3) Missing Values #####
@@ -140,7 +140,7 @@ cor(rt$muslim, rt$mena, use="complete.obs") #0.6626975
 rt <- rt.orig
 
 ### subset 
-rt <- rt[,c("ccode","year","rights","muslim","mena","polity2","physint","gdp.pc.un","pop.wdi","wopol","wosoc","wecon","domestic9","lnreportcount")]
+rt <- rt[,c("ccode","year","rights","muslim","mena","polity2","physint","amnesty","statedept","gdp.pc.un","pop.wdi","wopol","wosoc","wecon","domestic9","lnreportcount")]
 
 # Option 1) Imputing values using nearest value
 ###############################################
@@ -162,6 +162,8 @@ impute <- function(var){
 }
 
 rt$physint <- impute(rt$physint)
+rt$statedept <- impute(rt$statedept)
+rt$amnesty <- impute(rt$amnesty)
 rt$polity2 <- impute(rt$polity2)
 rt$gdp.pc.un <- impute(rt$gdp.pc.un)
 rt$domestic9<- impute(rt$domestic9)
@@ -178,13 +180,15 @@ cor(rt$muslim, rt$mena, use="complete.obs") #0.6564686
 rt.nearest <- rt
 write.csv(rt.nearest, "Data/country-year/country-year-rights-nearest.csv")
 
+#rt.nearest <- read.csv("Data/country-year/country-year-rights-nearest.csv")
+
 # Option 2)  Amelia method
 ##########################
 
 rt <- rt.orig
 
 ### subset 
-rt <- rt[,c("ccode","year","rights","muslim","mena","polity2","physint","gdp.pc.un","pop.wdi","wopol","wosoc","wecon","domestic9","lnreportcount")]
+rt <- rt[,c("ccode","year","rights","muslim","mena","polity2","physint","amnesty","statedept","gdp.pc.un","pop.wdi","wopol","wosoc","wecon","domestic9","lnreportcount")]
 
 rt$year <- as.integer(as.character((rt$year)))
 # model 1
@@ -208,7 +212,7 @@ lapply(X=datasets, FUN=function(x){
 # map missing values
 missmap(a.out)
 # diagnostics
-overimpute(a.out, var = "rights")
+overimpute(a.out, var = "wosoc")
 # take 1st imputation
 rt.impute <- a.out$imputations[[1]]
 rt.impute$rights <- rt$rights
@@ -223,7 +227,7 @@ cor(rt.impute$muslim, rt.impute$mena, use="complete.obs") #0.6534842
 ###################
 
 # Enter Data
-rt <- rt.orig 
+rt <- rt.impute
 stargazer(rt, type="text")
 
 # make panel data
@@ -232,8 +236,8 @@ rt <- pdata.frame(data, c("ccode","year"))
 # plm - 1
 pm1 <- plm(rights ~ lag(wopol,1)+lag(muslim,1)+lag(polity2,1)+lag(physint,1)+log(lag(gdp.pc.un,1))+log(lag(pop.wdi,1))+lag(domestic9,1)+mena,data = rt,model = "pooling",index = c("ccode","year"))
 summary(pm1)
-rownames(plm1)
 
+coeftest(pm1, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))
 se1 = coeftest(pm1, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 #coeftest(pm1, vcovHC(pm1, type = "HC3"))
@@ -242,18 +246,22 @@ se1 = coeftest(pm1, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 pm2 <- plm(rights ~ lag(wosoc,1)+lag(muslim,1)+lag(polity2,1)+lag(physint,1)+log(lag(gdp.pc.un,1))+log(lag(pop.wdi,1))+lag(domestic9,1)+mena,data = rt,model = "pooling",index = c("ccode","year"))
 summary(pm2)
 
+coeftest(pm2, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))
 se2 = coeftest(pm2, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 # plm - 3
 pm3 <- plm(rights ~ lag(wecon,1)+lag(muslim,1)+lag(polity2,1)+lag(physint,1)+log(lag(gdp.pc.un,1))+log(lag(pop.wdi,1))+lag(domestic9,1)+mena,data = rt,model = "pooling",index = c("ccode","year"))
+summary(pm3)
 
+coeftest(pm3, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))
 se3 = coeftest(pm3, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
-stargazer(pm1,pm2,pm3, type = "text", se = list(se1,se2,se3), notes="Robust standard errors clustered on country appear in parentheses.", omit.stat = c("rsq","adj.rsq","f"), dep.var.labels=c("Women's Rights Coverage"),covariate.labels=c("Women's Political Rights","Women's Social Rights","Women's Economic Rights","Muslim","Democracy","Physical Integrity Index","GDP Per Capita (Log)","Population (Log)","Instability","MENA"), title="Original Data", out="Results/regressions/original.txt")
+stargazer(pm1,pm2,pm3, type = "html", se = list(se1,se2,se3), notes="Robust standard errors clustered on country appear in parentheses.", omit.stat = c("rsq","adj.rsq","f"),  dep.var.labels = "Proportion of Coverage Devoted to Women's Rights", covariate.labels=c("Women's Political Rights","Women's Social Rights","Women's Economic Rights","Muslim","Democracy","Physical Integrity Index","GDP Per Capita (Log)","Population (Log)","Instability","MENA"), out="Results/regressions/impute.html")
 
 #######################
 # 5. Robustness Tests #
 #######################
+
 lm1 <- lm(rights ~ lag(wopol,1)+lag(muslim,1)+lag(polity2,1)+lag(physint,1)+log(lag(gdp.pc.un,1))+log(lag(pop.wdi,1))+lag(domestic9,1)+mena,data = rt) 
 summary(lm1)
 

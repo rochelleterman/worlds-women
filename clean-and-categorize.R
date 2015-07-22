@@ -20,14 +20,12 @@ wp1 <- read.csv('Data/raw-CSVs/raw-wp1.csv')
 wp2 <- read.csv('Data/raw-CSVs/raw-wp2.csv')
 
 # subset 
-
 nyt <- subset(nyt,select=c(PUBLICATION,DATE,TITLE,BYLINE,COUNTRY,LENGTH,TYPE,SUBJECT,TEXT))
 wp1 <- subset(wp1,select=c(PUBLICATION,DATE,TITLE,BYLINE,COUNTRY,LENGTH,TYPE,SUBJECT,TEXT))
 wp2 <- subset(wp2,select=c(PUBLICATION,DATE,TITLE,BYLINE,COUNTRY,LENGTH,TYPE,SUBJECT,TEXT))
 women <- rbind(nyt,wp1,wp2)
 
 # get rid of fake records
-
 levels(women$PUBLICATION)
 women$PUBLICATION <- as.character(women$PUBLICATION)
 nyt.index <- grep("New York Times",women$PUBLICATION,ignore.case=T)
@@ -38,7 +36,6 @@ u <- union(nyt.index,wp.index)
 women <- women[u,]
 
 # get rid of paid death notices records
-
 paid <- grep("Paid Notice",women$TITLE,ignore.case=T)
 women <- women[-paid,]
 
@@ -178,7 +175,6 @@ n <- nrow(countries)
 for(i in 1:n){
   women$COUNTRY_FINAL <- country.standard(countries$Key[i],countries$Value[i],women)
 }
-
 sum(is.na(women$COUNTRY_FINAL)) # 17134
 
 #####################
@@ -186,7 +182,6 @@ sum(is.na(women$COUNTRY_FINAL)) # 17134
 #####################
 
 # Define function to get country code (ccode) from COUNTRY_FINAL and put it in column COUNTRY_CODE
-
 country.code <- function(x,y,z){
   country.index <- (grepl(x, z$COUNTRY_FINAL,ignore.case=T))
   z$COUNTRY_CODE[country.index] <- as.character(y)
@@ -200,9 +195,7 @@ n <- nrow(countries)
 }
 
 # Fix problematic codes
-
 unique(women$COUNTRY_FINAL[is.na(women$COUNTRY_CODE)])
-
 women$COUNTRY_CODE[women$COUNTRY_FINAL=="DRC"] <- "COD"
 women$COUNTRY_CODE[women$COUNTRY_FINAL=="Macedonia" & women$YEAR < 1992] <- "MKD"
 women$COUNTRY_CODE[women$COUNTRY_FINAL=="Macedonia" & women$YEAR > 1991] <- "MAC"
@@ -213,7 +206,6 @@ women$COUNTRY_CODE[women$COUNTRY_FINAL=="Serbia" & women$YEAR < 2003] <- "MKD"
 women$COUNTRY_CODE[women$COUNTRY_FINAL=="Serbia" & women$YEAR > 2002] <- "YUG"
 women$COUNTRY_CODE[women$COUNTRY_FINAL=="Serbia" & women$YEAR > 2005] <- "SRB"
 women$COUNTRY_CODE[women$COUNTRY_FINAL=="Kosovo" & women$YEAR > 2007] <- "MNE"
-
 
 #####################
 ### Apply Regions ###

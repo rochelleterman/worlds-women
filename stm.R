@@ -1,5 +1,8 @@
+# This script estimates the STM on women-processed.csv
+
 setwd("~/Dropbox/berkeley/Dissertation/Data\ and\ Analyais/Git\ Repos/worlds-women")
 library(stm)
+library(plyr)
 rm(list=ls())
 
 ### Load Data
@@ -12,7 +15,6 @@ women$X <- NULL
 ####################################
 
 # custom stopwords
-
 countries <- read.csv("country_codes.csv")
 stopwords.country <- c(as.character(countries$Key), "saudi", "german")
 stopwords.country <- tolower(stopwords.country)
@@ -35,12 +37,11 @@ meta <-out$meta
 ##################################
 
 ### Set K = 15
-
 mod.15.1 <- stm(docs,vocab, 15, prevalence=~REGION+s(YEAR)+PUBLICATION, data=meta, seed = 00001)
 labelTopics(mod.15.1)
 
 # Estimate model without covariates
-mod.15.1.a <- stm(docs,vocab, 15, data=meta, seed = 00001, model=mod.15.1)
+mod.15.1.a <- stm(docs,vocab, 15, data=meta, seed = 00001, model=mod.15.1, interactions = F)
 labelTopics(mod.15.1.a)
 topicQuality(model=mod.15.1.a, documents=docs)
 
@@ -65,7 +66,6 @@ dev.off()
 model <-mod.15.1
 
 # Example Docs
-
 thoughts1 <- findThoughts(model,texts=as.character(meta$TITLE),n=3,topics=1)$docs[[1]]
 thoughts2 <- findThoughts(model,texts=meta$TITLE,n=4,topics=2)$docs[[1]]
 thoughts3 <- findThoughts(model,texts=meta$TITLE,n=3,topics=3)$docs[[1]]
@@ -85,6 +85,7 @@ thoughts15 <- findThoughts(model,texts=meta$TITLE,n=3,topics=15)$docs[[1]]
 # Labels
 labelTopics(model)
 
+# representative titles
 plotQuote(thoughts1, width=40, main="Topic 1") 
 plotQuote(thoughts2, width=40, main="Topic 2")  
 plotQuote(thoughts3, width=40, main="Topic 3")  
@@ -101,6 +102,7 @@ plotQuote(thoughts13, width=40, main="Topic 13")
 plotQuote(thoughts14, width=40, main="Topic 14") 
 plotQuote(thoughts15, width=40, main="Topic 15") 
 
+# assign hand labels
 labels = c("Business & Work","Women's Rights & Gender Equality","Marriage & Family","Religion","Human Interest","Literature","Cancer","Maternal Health & Population","Tourism","Rape & Violence against Women","Arts","Sports","Combat","Fashion","Politics")
 
 ##################################
@@ -133,7 +135,6 @@ set.seed(11)
 plot.estimateEffect(prep,"REGION",method="pointestimate",topics=10,printlegend=TRUE,labeltype="custom",custom.labels=regions,main="Sexual Assault",ci.level=.95,nsims=100)
 
 # Write Topic Proportion Estimates by Region
-
 for (i in 1:15){
   file <- file.path("Results/15.1/region-proportion-plots",paste(as.character(i),".png",sep = ""))
   jpeg(file,width=400,height=300,type="quartz")
@@ -162,7 +163,6 @@ legend("topleft","(x,y)",legend=c("MENA","EECA"),fill=c("red","blue"))
 ######### Combine Meta Data + Topic Distributions #####
 #######################################################
 
-library(plyr)
 #Number of Documents by Number of Topics matrix of topic proportions
 topic.docs <- as.data.frame(mod.15.1$theta) 
 colnames(topic.docs) <- c("business","rights","marriage","religion","human","literature","cancer","health","tourism","rape","arts","sports","combat","fashion","politics")
@@ -198,8 +198,6 @@ topic.distr$total <- 100
 topic.distr <- round(topic.distr,2)
 topic.distr
 write.csv(topic.distr,"Results/15.1/region-distributions-per-topic.csv")
-
-#testing mean topic proportion
 
 #Proportion of region represented by each topic
 names(meta)

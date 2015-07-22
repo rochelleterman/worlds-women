@@ -237,15 +237,16 @@ women$REGION[women$COUNTRY_FINAL=="Myanmar (Burma)"] <- "Asia"
 ###### Subsetting and Writing #########
 #######################################
 
-### Subsetting Data
-
+# Subsetting Data
 women.foreign <- subset(women,!COUNTRY_CODE=="USA")
 women.foreign <- subset(women.foreign,!is.na(COUNTRY_CODE))
 
+# with only 1 major country
 women.foreign.1 <- women.foreign[ !(rownames(women.foreign) %in% more.index), ] 
 women.foreign.more <- women.foreign[ (rownames(women.foreign) %in% more.index), ] 
 more.index <- which(rownames(women.foreign) %in% more.index)
 
+# Prepare to write
 women.foreign$REGION <- as.factor(women.foreign$REGION)
 women.foreign$COUNTRY_FINAL <- as.factor(women.foreign$COUNTRY_FINAL)
 women.foreign$COUNTRY_MAJOR <- as.character(women.foreign$COUNTRY_MAJOR)

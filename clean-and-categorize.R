@@ -60,9 +60,6 @@ countries <- read.csv("Data/country_codes.csv")
 countries$Key <- as.character(countries$Key)
 countries$iso3c <- as.character(countries$iso3c)
 
-# get rid of OMAN because it will match "women"
-#countries <- countries[!countries$Value=="Oman",]
-
 # initialize columns
 women$COUNTRY_MAJOR <- NA # all major countries terms (>85%)
 women$COUNTRY_TOP_PERCENT <- NA # just the string with the top percent
@@ -97,6 +94,8 @@ row <- nrow(women)
 n = seq(1:row)
 women$COUNTRY_MAJOR[1:row] <- lapply(n,country.major)
 
+### HOW MANY ARTICLES WITH MORE THAN 1 MAJOR COUNTRY?
+
 # get indexes of articles with more than 1 major country
 x <- vector()
 for (i in 1:nrow(women)){
@@ -119,6 +118,7 @@ for (i in 1:length(country.list)){
 x <- data.frame(x)
 rownames(x) <- rownames(more)
 
+# get rid of regions
 x[x=="ASIA"] <- NA
 x[x=="NORTH AMERICA"] <- NA
 x[x=="AFRICA"] <- NA
@@ -129,6 +129,7 @@ x[x=="SOUTHERN ASIA"] <- NA
 x[x=="MIDDLE EAST"] <- NA
 x[x=="LATIN AMERICA"] <- NA
 
+# shift to the left
 x[]<-t(apply(x,1,function(x){
   c(x[!is.na(x)],x[is.na(x)])}))
 more <- x[!is.na(x$X2),]
@@ -136,7 +137,6 @@ more.index <- rownames(more)
 more.women <- women[more.index,]
 
 # percentage of articles with more than 1 major country
-
 length(more.index)/nrow(women) #0.0907867
 
 #########################

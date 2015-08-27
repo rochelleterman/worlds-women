@@ -39,8 +39,8 @@ rt <- pdata.frame(data, c("ccode","year"))
 rt$mena[rt$ccode == 666] <- 0
 
 ## 2 - step SELECTION MODELS
-summary( heckit (n.binary ~ lnreportcount + lag(muslim,1) + log(lag(gdp.pc.un,1)) + log(lag(pop.wdi,1)) + lag(polity2,1) + lag(domestic9,1),
-                 rights ~ (lag(wopol,1)*lag(muslim,1))+lag(polity2,1)+lag(physint,1),
+summary( heckit (n.binary ~ lag(mena,1) + log(lag(gdp.pc.un,1)) + log(lag(pop.wdi,1)) + lag(polity2,1) + lag(domestic9,1),
+                 rights ~ (lag(wosoc,1)*lag(muslim,1))+lag(polity2,1)+lag(physint,1),
                  rt) )
 
 pma <- plm(rights ~ mena + (lag(wopol,1)*lag(muslim,1))+lag(polity2,1)+lag(physint,1)+log(lag(gdp.pc.un,1))+log(lag(pop.wdi,1))+lag(domestic9,1),data = rt,model = "pooling",index = c("ccode","year"))

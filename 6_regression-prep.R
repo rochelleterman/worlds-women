@@ -143,7 +143,7 @@ rt$n.binary <- as.factor(rt$n.binary)
 summary(rt$n.binary)
 
 ### subset 
-rt <- rt[,c("ccode","year","n","n.binary","rights","muslim","mena","polity2","physint","amnesty","statedept","gdp.pc.un","pop.wdi","wopol","wosoc","wecon","domestic9","lnreportcount")]
+rt <- rt[,c("ccode","year","n","n.binary","rights","muslim","mena","polity2","physint","amnesty","statedept","gdp.pc.un","pop.wdi","wopol","wosoc","wecon","domestic9","lnreportcount", "region")]
 
 # Write
 rt.orig <- rt
@@ -236,6 +236,7 @@ rt.impute <- a.out$imputations[[1]]
 rt.impute$rights <- rt.orig$rights
 rt.impute$n <- rt.orig$n
 rt.impute$n.binary <- rt.orig$n.binary
+rt.impute$region <- rt.orig$region
 
 # test
 cor(rt.impute$muslim, rt.impute$mena, use="complete.obs") #0.6366512

@@ -90,6 +90,12 @@ ggplot(data=region.year.means, aes(x=year,y=rights,group=region,color=region)) +
 
 #decide which one you're going to use for rest of analysis
 country.year <- country.year.means
+
+# duplicates?
+x <- data.frame(cbind(country.year$iso3c,country.year$year))
+which(duplicated(x))
+
+# see countries with highest means
 country.means <- ddply(country.year, .(iso3c), summarize, mean = mean(rights,na.rm=T))
 country.means <- arrange(country.means,desc(mean))
 head(country.means,10)
@@ -102,20 +108,23 @@ ggplot(country.means, aes(x = iso3c, y = mean)) + geom_bar(stat = "identity")
 #### Load country.year database
 rt <- read.csv("~/Dropbox/berkeley/Dissertation/Data\ and\ Analyais/Git\ Repos/country-year-database/rt.no.us.csv")
 names(rt)
-rt$X <- NULL
+rt.null <- rt
 
 # merge
 rt <- merge(rt,country.year,by=c("year","iso3c"),all.x=T)
 
-### Find missing countries 
-rt.merge <- merge(rt,country.year,by=c("year","iso3c"),all.y=T)
+which(!country.year$iso3c %in% rt$iso3c)
+country.year$iso3c[1238]
+
+### Find missed observations
+rt.merge <- merge(rt.orig,country.year,by=c("year","iso3c"),all.y=T)
 rt.merge <- arrange(rt.merge,desc(year),ccode)
 x<- data.frame(cbind(rt.merge$year,rt.merge$ccode))
 x <- which(duplicated(x))
-unique(rt.merge$iso3c[x]) # iceland, ukraine, malta, barbados, grenada, samoa, Seychelles, Brunei, Monaco
+y <- rt.merge[x,]
 
 # number unique countries
-length(unique(rt$rt_code)) # 170
+length(unique(rt$rt_code)) # 197
 
 ### MENA dummy variable
 rt$mena <- 0
@@ -138,7 +147,7 @@ rt <- rt[,c("ccode","year","n","n.binary","rights","muslim","mena","polity2","ph
 
 # Write
 rt.orig <- rt
-write.csv(rt.orig,"Data/regression-data/regression-rights.csv")
+write.csv(rt.orig,"Data/regression-data/regression-rights.csv", row.names = F)
 
 # Test
 cor(rt$muslim, rt$mena, use="complete.obs") #0.6626975
@@ -155,6 +164,8 @@ rt <- rt.orig
 
 # write function that passes variable and fills in missing values based on nearest value
 
+# NEEDS WORK
+
 rt <- rt.orig
 rt <- arrange(rt, ccode)
 summary(rt$muslim)
@@ -165,7 +176,7 @@ impute <- function(var){
     date  = as.numeric(as.character(rt$year)),
     value = var
   )
-  setna(DT, along_with = date, by = id, roll=+Inf)
+  setna(DT, along_with = date, by = id, roll="nearest")
   return(DT$value)
 }
 
@@ -178,15 +189,17 @@ rt$domestic9<- impute(rt$domestic9)
 rt$wopol <- impute(rt$wopol)
 rt$wosoc <- impute(rt$wosoc)
 rt$wecon <- impute(rt$wecon)
-rt$muslim <- impute(rt$muslim)
 rt$pop.wdi <- impute(rt$pop.wdi)
+rt$lnreportcount <- impute(rt$lnreportcount)
 
-cor(rt$muslim, rt$mena, use="complete.obs") #0.6564686
+summary(rt$lnreportcount)
+summary(rt.orig$lnreportcount)
+
+cor(rt$muslim, rt$mena, use="complete.obs") #0.6365522
 
 # save and write
-
 rt.nearest <- rt
-write.csv(rt.nearest, "Data/regression-data/regression-rights-nearest.csv")
+write.csv(rt.nearest, "Data/regression-data/regression-rights-nearest.csv", row.names = F)
 
 #rt.nearest <- read.csv("Data/country-year/country-year-rights-nearest.csv")
 
@@ -213,10 +226,6 @@ tscsPlot(a.out, cs = "20",
          var = "wosoc", ylim = c(-1, 4))
 # Extract the imputed datasets from the amelia object
 datasets<-a.out$imputations
-# Apply the regression over each element of the list
-lapply(X=datasets, FUN=function(x){
-  summary(plm(rights ~ wopol+muslim+polity2+physint+log(gdp.pc.un)+log(pop.wdi)+domestic9+mena,data = x,model = "pooling",index = c("ccode","year")))
-})
 # map missing values
 missmap(a.out)
 # diagnostics
@@ -229,7 +238,7 @@ rt.impute$n <- rt.orig$n
 rt.impute$n.binary <- rt.orig$n.binary
 
 # test
-cor(rt.impute$muslim, rt.impute$mena, use="complete.obs") #0.6534842
+cor(rt.impute$muslim, rt.impute$mena, use="complete.obs") #0.6366512
 
 ## write
-write.csv(rt.impute,"Data/regression-data/regression-rights-imputed.csv")
+write.csv(rt.impute,"Data/regression-data/regression-rights-imputed.csv", row.names = F)

@@ -13,12 +13,18 @@ library(sandwich) # for robust standard errors
 library(lmtest) # for robust standard errors
 library(Amelia) # for missing valus
 library(data.table)  # for missing valus
-library(sampleSelection)
+library(sampleSelection) # for heckman correction
 
 # load data
 
-rt <- read.csv("Data/regression-data/regression-rights.csv")
-rt$X <- NULL
+rt.orig <- read.csv("Data/regression-data/regression-rights.csv")
+rt.orig$X <- NULL
+rt.nearest <- read.csv("Data/regression-data/regression-rights-nearest.csv")
+rt.nearest$X <- NULL
+rt.imputed <- read.csv("Data/regression-data/regression-rights-imputed.csv")
+rt.imputed$X <- NULL
+
+rt <- rt.orig
 
 # Summarize Data
 stargazer(rt, type="text")
@@ -30,10 +36,15 @@ rt <- pdata.frame(data, c("ccode","year"))
 #### 1. Heckman Models #####
 ############################
 
+rt$mena[rt$ccode == 666] <- 0
+
 ## 2 - step SELECTION MODELS
-summary( heckit (n.binary ~ lnreportcount + lag(mena,1) + log(lag(gdp.pc.un,1)) + log(lag(pop.wdi,1)) + lag(polity2,1),
-                 rights <- rights ~ lag(wosoc,1)+lag(mena,1)+lag(physint,1)+log(lag(gdp.pc.un,1))+log(lag(pop.wdi,1))+lag(domestic9,1),
+summary( heckit (n.binary ~ lnreportcount + lag(muslim,1) + log(lag(gdp.pc.un,1)) + log(lag(pop.wdi,1)) + lag(polity2,1) + lag(domestic9,1),
+                 rights ~ (lag(wopol,1)*lag(muslim,1))+lag(polity2,1)+lag(physint,1),
                  rt) )
+
+pma <- plm(rights ~ mena + (lag(wopol,1)*lag(muslim,1))+lag(polity2,1)+lag(physint,1)+log(lag(gdp.pc.un,1))+log(lag(pop.wdi,1))+lag(domestic9,1),data = rt,model = "pooling",index = c("ccode","year"))
+summary(pma)
 
 ###########################
 #### 2. Normal Models #####

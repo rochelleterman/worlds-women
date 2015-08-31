@@ -124,9 +124,9 @@ library(gvlma)
 gvmodel <- gvlma(fit) 
 summary(gvmodel)
 
-################################
-#### 3. Heckman + NB Models ####
-################################
+###########################
+#### 3. Heckman Models ####
+###########################
 
 ## 2 - step SELECTION MODELS
 summary( heckit (n.binary ~ lnreportcount + relevel(region,5) + log(lag(gdp.pc.un,1)) + log(lag(pop.wdi,1)) + lag(polity2,1) + lag(domestic9,1),
@@ -134,7 +134,7 @@ summary( heckit (n.binary ~ lnreportcount + relevel(region,5) + log(lag(gdp.pc.u
                  rt) )
 
 ################################
-#### 3. Poisson + NB Models ####
+#### 4. Poisson + NB Models ####
 ################################
 
 # Negative Binomial
@@ -158,7 +158,7 @@ plot(m2$residuals)
 # neg.binomial doesn't seem to be a good fit.
 
 ########################
-#### 4. PLM Models #####
+#### 5. PLM Models #####
 ########################
 
 # test fixed v. random, etc

@@ -35,8 +35,10 @@ rt <- pdata.frame(rt, c("ccode","year"))
 rt.1 <- rt[rt$n.binary==1,]
 rt.1$rights <- round(rt.1$rights)
 summary(rt.1$rights)
-
 rt.1$muslim[rt.1$muslim < 0] <- 0
+
+# remove Israel
+rt$mena[rt$ccode == 666] <- 0
 
 #############################
 #### 1.  Plots and Such #####
@@ -84,8 +86,6 @@ avPlots(fit)
 # identify D values > 4/(n-k-1) 
 cutoff <- 4/((nrow(rt.1)-length(fit$coefficients)-2)) 
 plot(fit, which=4, cook.levels=cutoff)
-# Influence Plot 
-# influencePlot(fit,	id.method="identify", main="Influence Plot", sub="Circle size is proportial to Cook's Distance" )
 
 # Points size reflecting Cook's distance
 myfortdata = fortify(lm)
@@ -128,8 +128,6 @@ summary(gvmodel)
 #### 3. Heckman + NB Models ####
 ################################
 
-rt$mena[rt$ccode == 666] <- 0
-
 ## 2 - step SELECTION MODELS
 summary( heckit (n.binary ~ lnreportcount + relevel(region,5) + log(lag(gdp.pc.un,1)) + log(lag(pop.wdi,1)) + lag(polity2,1) + lag(domestic9,1),
                  rights ~ (lag(wopol,1)*lag(mena,1))+lag(polity2,1)+lag(physint,1),
@@ -163,18 +161,7 @@ plot(m2$residuals)
 #### 4. PLM Models #####
 ########################
 
-lm1 <- lm(rights ~ lag(wopol,1)+lag(muslim,1)+lag(polity2,1)+lag(physint,1)+log(lag(gdp.pc.un,1))+log(lag(pop.wdi,1))+lag(domestic9,1)+mena,data = rt)
-summary(lm1)
-lm2 <- lm(rights ~ lag(wopol,1)+lag(mena,1)+lag(polity2,1)+lag(physint,1)+log(lag(gdp.pc.un,1))+log(lag(pop.wdi,1))+lag(domestic9,1)+mena,data = rt)
-summary(lm1)
-anova(lm1, lm2, test = "F")
-
-# plm - 1
-pm1 <- plm(rights ~ lag(wopol,1)+lag(muslim,1)+lag(physint,1)+log(lag(gdp.pc.un,1))+log(lag(pop.wdi,1))+lag(domestic9,1),data = rt,model="random",index = c("ccode","year"))
-summary(pm1)
-coeftest(pm1, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))
-se1 = coeftest(pm1, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
-
+# test fixed v. random, etc
 pm.f <- plm(rights ~ lag(wopol,1)+lag(muslim,1)+lag(physint,1)+log(lag(gdp.pc.un,1))+log(lag(pop.wdi,1))+lag(domestic9,1),data = rt,model="within",index = c("ccode","year"))
 summary(pm.f)
 pm.r <- plm(rights ~ lag(wopol,1)+mena+lag(physint,1)+log(lag(gdp.pc.un,1))+log(lag(pop.wdi,1))+lag(domestic9,1),data = rt,model="random",index = c("ccode","year"))
@@ -182,11 +169,17 @@ summary(pm.r)
 pm.p <- plm(rights ~ lag(wopol,1)+lag(muslim,1)+lag(physint,1)+log(lag(gdp.pc.un,1))+log(lag(pop.wdi,1))+lag(domestic9,1),data = rt,model="pooling",index = c("ccode","year"))
 pm.f.time <- pm.f <- plm(rights ~ lag(wopol,1)+lag(muslim,1)+lag(physint,1)+log(lag(gdp.pc.un,1))+log(lag(pop.wdi,1))+lag(domestic9,1) + factor(year),data = rt,model="within",index = c("ccode","year"))
 summary(pm.f.time)
-pFtest(pm.f.time, pm.f)
 
+pFtest(pm.f.time, pm.f)
 plmtest(pm.p, type=c("bp"))
 phtest(pm.f, pm.r)
 pcdtest(pm.f, test = c("lm"))
+
+# plm - 1
+pm1 <- plm(rights ~ lag(wopol,1)+lag(muslim,1)+lag(physint,1)+log(lag(gdp.pc.un,1))+log(lag(pop.wdi,1))+lag(domestic9,1),data = rt,model="random",index = c("ccode","year"))
+summary(pm1)
+coeftest(pm1, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))
+se1 = coeftest(pm1, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 # plm - 2
 pm2 <- plm(rights ~ lag(wosoc,1)+lag(muslim,1)+lag(polity2,1)+lag(physint,1)+log(lag(gdp.pc.un,1))+log(lag(pop.wdi,1))+lag(domestic9,1),data = rt,model = "pooling",index = c("ccode","year"))
@@ -202,22 +195,3 @@ coeftest(pm3, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))
 se3 = coeftest(pm3, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 stargazer(pm1,pm2,pm3, type = "html", se = list(se1,se2,se3), notes="Robust standard errors clustered on country appear in parentheses.", omit.stat = c("rsq","adj.rsq","f"),  dep.var.labels = "Proportion of Coverage Devoted to Women's Rights", covariate.labels=c("Women's Political Rights","Women's Social Rights","Women's Economic Rights","Muslim","Democracy","Physical Integrity Index","GDP Per Capita (Log)","Population (Log)","Instability","MENA"), out="Results/regressions/impute.html")
-
-#######################
-# 5. Robustness Tests #
-#######################
-
-lm1 <- lm(rights ~ lag(wopol,1)+lag(muslim,1)+lag(polity2,1)+lag(physint,1)+log(lag(gdp.pc.un,1))+log(lag(pop.wdi,1))+lag(domestic9,1)+mena,data = rt) 
-summary(lm1)
-
-random <- plm(rights ~ lag(wopol,1)+lag(muslim,1)+lag(polity2,1)+lag(physint,1)+log(lag(gdp.pc.un,1))+log(lag(pop.wdi,1))+lag(domestic9,1)+mena,data = rt,model = "random",index = c("ccode","year"))
-
-pool <- plm(rights ~ lag(wopol,1)+lag(muslim,1)+lag(polity2,1)+lag(physint,1)+log(lag(gdp.pc.un,1))+log(lag(pop.wdi,1))+lag(domestic9,1)+mena,data = rt,model = "pooling",index = c("ccode","year"))
-
-fixed <- plm(rights ~ lag(wopol,1)+lag(muslim,1)+lag(polity2,1)+lag(physint,1)+log(lag(gdp.pc.un,1))+log(lag(pop.wdi,1))+lag(domestic9,1)+mena,data = rt,model = "within",index = c("ccode","year"))
-
-phtest(fixed, pool)
-
-coeftest(lm1)
-coeftest(lm1, vcov = vcovHC(lm1, type = "HC1"))
-coeftest(pm1, vcov=function(x) vcovHC(x, cluster="time", type="HC1"))

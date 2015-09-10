@@ -105,31 +105,34 @@ ggplot(country.means, aes(x = iso3c, y = mean)) + geom_bar(stat = "identity")
 ###### 2) Prepare Country-level variables #####
 ###############################################
 
-#### Load country.year database
-rt <- read.csv("~/Dropbox/berkeley/Dissertation/Data\ and\ Analyais/Git\ Repos/country-year-database/rt.no.us.csv")
+## Load country.year database
+rt <- read.csv("../country-year-database/rt.no.us.csv")
 names(rt)
 rt.null <- rt
 
-# merge
+## merge
 rt <- merge(rt,country.year,by=c("year","iso3c"),all.x=T)
 
+## countries in text but not rt
 which(!country.year$iso3c %in% rt$iso3c)
 country.year$iso3c[1238]
 
-### Find missed observations
-rt.merge <- merge(rt.orig,country.year,by=c("year","iso3c"),all.y=T)
-rt.merge <- arrange(rt.merge,desc(year),ccode)
-x<- data.frame(cbind(rt.merge$year,rt.merge$ccode))
-x <- which(duplicated(x))
-y <- rt.merge[x,]
-
-# number unique countries
+## number unique countries
 length(unique(rt$rt_code)) # 197
 
-### MENA dummy variable
+## write CSV of all country-year observations
+x <- rt[,c("year","country","ccode","iso3c")]
+write.csv(x,"country-year-obs.csv")
+
+## MENA dummy variable
 rt$mena <- 0
 rt$mena[rt$region=="MENA"] <- 1
 summary(rt$mena)
+
+## majority Muslim dummy
+rt$muslim.maj <- 0
+rt$muslim.maj[rt$muslim>=.50] <- 1
+summary(rt$muslim.maj)
 
 ## Adjust n from NA to 0
 rt$n[is.na(rt$n)] <- 0
@@ -143,7 +146,7 @@ rt$n.binary <- as.factor(rt$n.binary)
 summary(rt$n.binary)
 
 ### subset 
-rt <- rt[,c("ccode","year","n","n.binary","rights","muslim","mena","polity2","physint","amnesty","statedept","gdp.pc.un","pop.wdi","wopol","wosoc","wecon","domestic9","lnreportcount", "region")]
+rt <- rt[,c("ccode","year","n","n.binary","rights","muslim","muslim.maj","mena","polity2","physint","amnesty","statedept","gdp.pc.un","pop.wdi","wopol","wosoc","wecon","domestic9","lnreportcount", "region")]
 
 # Write
 rt.orig <- rt
@@ -209,8 +212,7 @@ write.csv(rt.nearest, "Data/regression-data/regression-rights-nearest.csv", row.
 rt <- rt.orig
 
 # subset
-rt <- rt[,c(1,2,6:18)]
-
+rt <- rt[,c(1,2,9:19)]
 rt$year <- as.integer(as.character((rt$year)))
 # model 1
 set.seed(1234)
@@ -237,6 +239,9 @@ rt.impute$rights <- rt.orig$rights
 rt.impute$n <- rt.orig$n
 rt.impute$n.binary <- rt.orig$n.binary
 rt.impute$region <- rt.orig$region
+rt.impute$muslim.maj <- rt.orig$muslim.maj
+rt.impute$muslim <- rt.orig$muslim
+rt.impute$mena <- rt.orig$mena
 
 # test
 cor(rt.impute$muslim, rt.impute$mena, use="complete.obs") #0.6366512

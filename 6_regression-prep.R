@@ -122,7 +122,7 @@ length(unique(rt$rt_code)) # 197
 
 ## write CSV of all country-year observations
 x <- rt[,c("year","country","ccode","iso3c")]
-write.csv(x,"country-year-obs.csv")
+write.csv(x,"Data/country-year-obs.csv")
 
 ## MENA dummy variable
 rt$mena <- 0

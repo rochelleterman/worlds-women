@@ -1,11 +1,12 @@
 #### This script runs some basic summary stats on women-foreign.csv
+rm(list=ls())
 setwd("/Users/rterman/Dropbox/berkeley/Dissertation/Data\ and\ Analyais/Git\ Repos/worlds-women")
 library(plyr)
 library(ggplot2)
 library(reshape2)
 
-# Load data (optional)
-women <- read.csv("Data/women-foreign.csv")
+# Load data
+women <- read.csv("Data/Corpora/women-foreign.csv")
 names(women)
 women$REGION <- as.factor(women$REGION)
 

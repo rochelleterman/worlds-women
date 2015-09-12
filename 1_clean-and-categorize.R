@@ -235,6 +235,11 @@ unique(women$COUNTRY_FINAL[is.na(women$REGION)])
 women$REGION[women$COUNTRY_FINAL=="lebanon"] <- "MENA"
 women$REGION[women$COUNTRY_FINAL=="Myanmar (Burma)"] <- "Asia"
 
+##################################
+###### Remove Duplicates #########
+##################################
+
+
 #######################################
 ###### Subsetting and Writing #########
 #######################################
@@ -260,11 +265,11 @@ women.foreign.1$COUNTRY_NR <- as.character(women.foreign.1$COUNTRY_NR)
 
 
 #### WRITE FILES #####
-write.csv(women,"Data/women-all.csv") # write all
+write.csv(women,"Data/Corpora/women-all.csv", encoding="utf8", row.names = F) # write all
 
-con<-file('Data/women-foreign.csv',encoding="utf8")
-write.csv(women.foreign,file=con,fileEncoding="UTF8")
+con<-file('Data/Corpora/women-foreign.csv',encoding="utf8")
+write.csv(women.foreign,file=con,fileEncoding="UTF8", row.names = F)
 
-con<-file('Data/women-foreign-1.csv',encoding="utf8")
-write.csv(women.foreign.1,file=con,fileEncoding="UTF8")
+con<-file('Data/Corpora/women-foreign-1.csv',encoding="utf8")
+write.csv(women.foreign.1,file=con,fileEncoding="UTF8", row.names = F)
 

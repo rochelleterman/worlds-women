@@ -1,143 +1,148 @@
 "","COUNTRY_FINAL","V1"
-"1","India",367
-"2","China",353
-"3","France",249
-"4","United Kingdom",237
-"5","Afghanistan",223
-"6","Japan",220
-"7","Canada",185
-"8","Iraq",132
-"9","Germany",128
-"10","Israel",108
-"11","Iran",107
-"12","Russia",101
-"13","Saudi Arabia",98
-"14","South Africa",97
-"15","Kenya",93
-"16","Pakistan",91
-"17","Egypt",84
-"18","Mexico",81
-"19","Brazil",74
+"1","India",376
+"2","China",355
+"3","United Kingdom",265
+"4","France",256
+"5","Afghanistan",225
+"6","Japan",221
+"7","Canada",186
+"8","Germany",134
+"9","Iraq",132
+"10","Iran",108
+"11","Israel",108
+"12","Russia",106
+"13","Kenya",103
+"14","South Africa",100
+"15","Saudi Arabia",98
+"16","Pakistan",94
+"17","Egypt",86
+"18","Mexico",85
+"19","Brazil",77
 "20","Australia",70
-"21","South Korea",48
-"22","Italy",47
+"21","Italy",49
+"22","South Korea",48
 "23","Turkey",45
-"24","Ireland",37
-"25","Bangladesh",36
-"26","Palestine",34
-"27","Switzerland",34
-"28","Philippines",32
-"29","Kuwait",29
-"30","Spain",29
-"31","Netherlands",28
-"32","Norway",28
-"33","Sweden",28
-"34","Nigeria",26
+"24","Ireland",38
+"25","Bangladesh",37
+"26","Switzerland",35
+"27","Palestine",34
+"28","Nigeria",33
+"29","Philippines",33
+"30","Kuwait",30
+"31","Netherlands",30
+"32","Norway",30
+"33","Spain",30
+"34","Sweden",29
 "35","Bosnia",25
-"36","Indonesia",24
-"37","Chile",23
+"36","Indonesia",25
+"37","Chile",24
 "38","Haiti",22
-"39","Hong Kong",20
-"40","Malaysia",19
-"41","Somalia",19
-"42","Poland",18
-"43","Colombia",17
-"44","Liberia",16
-"45","Ukraine",16
-"46","Zimbabwe",16
-"47","Romania",15
-"48","Rwanda",15
-"49","Serbia",15
-"50","Thailand",15
-"51","Ethiopia",14
-"52","Ghana",14
-"53","Jordan",14
-"54","Sudan",14
-"55","Uganda",14
-"56","Cuba",13
-"57","Greece",13
-"58","Guatemala",13
-"59","New Zealand",13
-"60","Cambodia",12
-"61","Finland",12
-"62","Morocco",12
-"63","Argentina",11
-"64","Lebanon",11
-"65","Syria",11
-"66","Tunisia",11
-"67","Algeria",10
-"68","Austria",10
-"69","Belgium",10
-"70","Iceland",10
-"71","Nepal",10
-"72","Togo",10
-"73","Yemen",10
-"74","Denmark",9
-"75","El Salvador",9
-"76","Myanmar (Burma)",9
-"77","viet nam",9
-"78","Hungary",8
-"79","Senegal",8
-"80","UAE",8
-"81","DRC",7
-"82","Malawi",7
-"83","Nicaragua",7
-"84","Peru",7
-"85","Portugal",7
-"86","Singapore",7
-"87","Croatia",6
-"88","Czechoslovakia",6
-"89","Mali",6
-"90","Sierra Leone",6
-"91","Venezuela",6
-"92","Zambia",6
-"93","Bahrain",5
-"94","Libya",5
-"95","Mozambique",5
-"96","Papua New Guinea",5
-"97","Qatar",5
-"98","Sri Lanka",5
-"99","Tanzania",5
-"100","Cameroon",4
-"101","COTE D'IVOIRE",4
-"102","Ecuador",4
-"103","Guinea",4
-"104","Honduras",4
-"105","Kosovo",4
-"106","Niger",4
-"107","Panama",4
-"108","Swaziland",4
-"109","Armenia",3
-"110","Bolivia",3
-"111","Botswana",3
-"112","Cyprus",3
-"113","Dominican Rep",3
-"114","Eritrea",3
-"115","Guyana",3
-"116","Jamaica",3
-"117","Luxembourg",3
-"118","Paraguay",3
-"119","slovakia",3
-"120","Barbados",2
-"121","Brunei",2
-"122","gambia",2
-"123","Lithuania",2
-"124","Mauritania",2
-"125","Seychelles",2
-"126","Angola",1
-"127","Belarus",1
-"128","Bulgaria",1
-"129","Cape Verde",1
-"130","Costa Rica",1
-"131","Georgia",1
-"132","Grenada",1
-"133","Kazakhstan",1
-"134","Latvia",1
-"135","Liechtenstein",1
-"136","Malta",1
-"137","Monaco",1
-"138","Mongolia",1
-"139","samoa",1
-"140","Slovenia",1
-"141","Vietnam",1
-"142","Yugoslavia",1
+"39","Somalia",22
+"40","Ethiopia",20
+"41","Hong Kong",20
+"42","Malaysia",20
+"43","Poland",20
+"44","Belgium",19
+"45","Thailand",19
+"46","Colombia",18
+"47","Uganda",18
+"48","Jordan",17
+"49","Liberia",17
+"50","Ghana",16
+"51","Rwanda",16
+"52","Ukraine",16
+"53","Zimbabwe",16
+"54","Romania",15
+"55","Serbia",15
+"56","Sudan",15
+"57","Cuba",14
+"58","Greece",14
+"59","Guatemala",14
+"60","Finland",13
+"61","Morocco",13
+"62","New Zealand",13
+"63","Senegal",13
+"64","Cambodia",12
+"65","Argentina",11
+"66","Lebanon",11
+"67","Syria",11
+"68","Tunisia",11
+"69","Algeria",10
+"70","Austria",10
+"71","Iceland",10
+"72","Nepal",10
+"73","Togo",10
+"74","Yemen",10
+"75","Denmark",9
+"76","El Salvador",9
+"77","Hungary",9
+"78","Malawi",9
+"79","Myanmar (Burma)",9
+"80","UAE",9
+"81","viet nam",9
+"82","Mali",8
+"83","Singapore",8
+"84","Zambia",8
+"85","COTE D'IVOIRE",7
+"86","Czechoslovakia",7
+"87","DRC",7
+"88","Nicaragua",7
+"89","Peru",7
+"90","Portugal",7
+"91","Croatia",6
+"92","Sierra Leone",6
+"93","Sri Lanka",6
+"94","Tanzania",6
+"95","Venezuela",6
+"96","Bahrain",5
+"97","Libya",5
+"98","Luxembourg",5
+"99","Mozambique",5
+"100","Niger",5
+"101","Papua New Guinea",5
+"102","Qatar",5
+"103","Cameroon",4
+"104","Ecuador",4
+"105","Guinea",4
+"106","Honduras",4
+"107","Kosovo",4
+"108","Panama",4
+"109","Swaziland",4
+"110","Armenia",3
+"111","Bolivia",3
+"112","Botswana",3
+"113","Burkina Faso",3
+"114","Cyprus",3
+"115","Dominican Rep",3
+"116","Eritrea",3
+"117","Guyana",3
+"118","Jamaica",3
+"119","Paraguay",3
+"120","slovakia",3
+"121","Barbados",2
+"122","Brunei",2
+"123","gambia",2
+"124","Lithuania",2
+"125","Mauritania",2
+"126","Oman",2
+"127","Seychelles",2
+"128","Angola",1
+"129","Antigua and Barbuda",1
+"130","Belarus",1
+"131","Bhutan",1
+"132","Bulgaria",1
+"133","Cape Verde",1
+"134","Costa Rica",1
+"135","Georgia",1
+"136","Grenada",1
+"137","Kazakhstan",1
+"138","Latvia",1
+"139","Liechtenstein",1
+"140","Malta",1
+"141","Monaco",1
+"142","Mongolia",1
+"143","Namibia",1
+"144","samoa",1
+"145","Slovenia",1
+"146","Vietnam",1
+"147","Yugoslavia",1

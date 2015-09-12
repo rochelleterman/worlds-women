@@ -6,7 +6,7 @@ library(plyr)
 rm(list=ls())
 
 ### Load Data
-women <- read.csv('Data/women-processed.csv')
+women <- read.csv('Data/Corpora/women-processed.csv')
 names(women)
 women$X <- NULL
 

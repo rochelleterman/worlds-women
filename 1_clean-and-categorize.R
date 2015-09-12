@@ -38,6 +38,12 @@ women <- women[u,]
 paid <- grep("Paid Notice",women$TITLE,ignore.case=T)
 women <- women[-paid,]
 
+# get rid of duplicates
+
+x <- women[, c("DATE", "TITLE")]
+x <- which(duplicated(x))
+women <- women[-x,]
+
 ###############################
 ########## Year ###############
 ###############################
@@ -127,9 +133,10 @@ for (i in 1:nrow(women)){
 more <- women[x,] 
 rownames(more)
 
+
 # turn major countries into a data frame
 country.list <- more$COUNTRY_MAJOR
-x <- matrix(nrow=3588,ncol=25)
+x <- matrix(nrow=nrow(more),ncol=25)
 for (i in 1:length(country.list)){
   temp.list <- country.list[[i]]
   for (y in 1:length(temp.list)){
@@ -139,8 +146,10 @@ for (i in 1:length(country.list)){
 x <- data.frame(x)
 rownames(x) <- rownames(more)
 
+more.index <- rownames(women)[rownames(women) %in% rownames(more)]
+
 # percentage of articles with more than 1 major country
-length(more.index)/nrow(women) #0.08824105
+length(more.index)/nrow(women) #0.08850733
 
 #########################
 ### TOP Country Terms ###
@@ -181,7 +190,7 @@ n <- nrow(countries)
 for(i in 1:n){
   women$COUNTRY_FINAL <- country.standard(countries$Key[i],countries$Value[i],women)
 }
-sum(is.na(women$COUNTRY_FINAL)) # 15738
+sum(is.na(women$COUNTRY_FINAL)) # 15208
 
 # anyone missing?
 missing.final <- women[!is.na(women$COUNTRY_TOP_PERCENT) & is.na(women$COUNTRY_FINAL),]
@@ -235,11 +244,6 @@ unique(women$COUNTRY_FINAL[is.na(women$REGION)])
 women$REGION[women$COUNTRY_FINAL=="lebanon"] <- "MENA"
 women$REGION[women$COUNTRY_FINAL=="Myanmar (Burma)"] <- "Asia"
 
-##################################
-###### Remove Duplicates #########
-##################################
-
-
 #######################################
 ###### Subsetting and Writing #########
 #######################################
@@ -251,7 +255,6 @@ women.foreign <- subset(women.foreign,!is.na(COUNTRY_CODE))
 # with only 1 major country
 women.foreign.1 <- women.foreign[ !(rownames(women.foreign) %in% more.index), ] 
 women.foreign.more <- women.foreign[ (rownames(women.foreign) %in% more.index), ] 
-more.index <- which(rownames(women.foreign) %in% more.index)
 
 # Prepare to write
 women.foreign$REGION <- as.factor(women.foreign$REGION)
@@ -263,9 +266,8 @@ women.foreign$COUNTRY_NR <- as.character(women.foreign$COUNTRY_NR)
 women$COUNTRY_NR <- as.character(women$COUNTRY_NR)
 women.foreign.1$COUNTRY_NR <- as.character(women.foreign.1$COUNTRY_NR)
 
-
 #### WRITE FILES #####
-write.csv(women,"Data/Corpora/women-all.csv", encoding="utf8", row.names = F) # write all
+write.csv(women,"Data/Corpora/women-all.csv",row.names = F) # write all
 
 con<-file('Data/Corpora/women-foreign.csv',encoding="utf8")
 write.csv(women.foreign,file=con,fileEncoding="UTF8", row.names = F)

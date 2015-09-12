@@ -7,7 +7,6 @@
 ### 6. Exports data
 
 rm(list=ls())
-library("foreign")
 setwd("~/Dropbox/berkeley/Dissertation/Data\ and\ Analyais/Git\ Repos/worlds-women")
 
 ####################
@@ -15,9 +14,9 @@ setwd("~/Dropbox/berkeley/Dissertation/Data\ and\ Analyais/Git\ Repos/worlds-wom
 ####################
 
 # load data
-nyt <- read.csv('Data/raw-CSVs/raw-nyt.csv')
-wp1 <- read.csv('Data/raw-CSVs/raw-wp1.csv')
-wp2 <- read.csv('Data/raw-CSVs/raw-wp2.csv')
+nyt <- read.csv('Data/Raw/raw-CSVs/raw-nyt.csv')
+wp1 <- read.csv('Data/Raw/raw-CSVs/raw-wp1.csv')
+wp2 <- read.csv('Data/Raw/raw-CSVs/raw-wp2.csv')
 
 # subset 
 nyt <- subset(nyt,select=c(PUBLICATION,DATE,TITLE,BYLINE,COUNTRY,LENGTH,TYPE,SUBJECT,TEXT))
@@ -58,10 +57,34 @@ countries$Key <- as.character(countries$Key)
 countries$iso3c <- as.character(countries$iso3c)
 
 # initialize columns
+women$COUNTRY_NR <- NA # with regions removed
 women$COUNTRY_MAJOR <- NA # all major countries terms (>85%)
-women$COUNTRY_TOP_PERCENT <- NA # just the string with the top percent
+women$COUNTRY_TOP_PERCENT <- NA # the countrt with the top relevancy percent
 women$COUNTRY_FINAL <- NA #the country in COUNTRY_TOP_PERCENT in standardized format
 women$COUNTRY_CODE <- NA #the iso3c code representing the country in COUNTRY_FINAL
+
+############################
+### Remove Regions ###
+###########################
+
+regions<- c("NORTH AMERICA", "AFRICA", "EUROPEAN UNION MEMBER STATES", "EUROPE", "AFRICA", "ASIA","CARIBBEAN ISLANDS","CENTRAL AFRICA", "CENTRAL EUROPE", "EASTERN ASIA", "CENTRAL ASIA", "EASTERN EUROPE", "GULF STATES", "MEDITERRANEAN", "MIDDLE EAST", "NORTH & SOUTH AMERICAS", "NORTHERN AFRICA", "NORTHERN ASIA", "SOUTH AMERICA", "SOUTH-EASTERN ASIA", "WESTERN AFRICA", "WESTERN EUROPE", "SUB SAHARAN AFRICA", "LATIN AMERICA", "SOUTHERN ASIA", "SOUTHERN AFRICA", "ANTARCTICA", "EASTERN AFRICA", "CENTRAL AMERICA")
+
+remove.regions <- function(x){
+  country <- as.character(women$COUNTRY[x])
+  countries <- unlist(strsplit(country, ';\\s*')) # split on ';'
+  country.no.percents <- sub('\\s\\((\\d+)%.', '\\1', countries) # remove parantheses
+  country.no.percents <- sub('\\d+', '\\1', country.no.percents) # list just the subject
+  index <- which(!country.no.percents %in% regions)
+  countries <- countries[index]
+  countries <- paste(countries, collapse = '; ')
+  return(countries)
+}
+
+# apply function to data
+row <- nrow(women)
+n = seq(1:row)
+women$COUNTRY_NR[1:row] <- lapply(n,remove.regions)
+women$COUNTRY_NR[women$COUNTRY_MAJOR=="character(0)"] <- NA
 
 ############################
 ### MAJOR Country Terms ###
@@ -69,7 +92,7 @@ women$COUNTRY_CODE <- NA #the iso3c code representing the country in COUNTRY_FIN
 
 # Define function to take all major country terms (>85%)
 country.major <- function(x){
-  country <- as.character(women$COUNTRY[x]) # take one row
+  country <- as.character(women$COUNTRY_NR[x]) # take one row
   countries <- unlist(strsplit(country, ';\\s*')) # split on ';'
   country.percents <- sub('.*\\((\\d+)%.*', '\\1', countries) # list of just the percentages
   country.percents <- as.list(country.percents) # make a list
@@ -84,12 +107,13 @@ country.major <- function(x){
   return(countries.top)
 }
 
-country.major(2)
+country.major(16)
 
 # apply function to data
 row <- nrow(women)
 n = seq(1:row)
 women$COUNTRY_MAJOR[1:row] <- lapply(n,country.major)
+women$COUNTRY_MAJOR[women$COUNTRY_MAJOR=="character(0)"] <- NA
 
 ### HOW MANY ARTICLES WITH MORE THAN 1 MAJOR COUNTRY?
 
@@ -105,7 +129,7 @@ rownames(more)
 
 # turn major countries into a data frame
 country.list <- more$COUNTRY_MAJOR
-x <- matrix(nrow=5295,ncol=25)
+x <- matrix(nrow=3588,ncol=25)
 for (i in 1:length(country.list)){
   temp.list <- country.list[[i]]
   for (y in 1:length(temp.list)){
@@ -115,26 +139,8 @@ for (i in 1:length(country.list)){
 x <- data.frame(x)
 rownames(x) <- rownames(more)
 
-# get rid of regions
-x[x=="ASIA"] <- NA
-x[x=="NORTH AMERICA"] <- NA
-x[x=="AFRICA"] <- NA
-x[x=="EUROPE"] <- NA
-x[x=="SOUTH AMERICA"] <- NA
-x[x=="CENTRAL EUROPE"] <- NA
-x[x=="SOUTHERN ASIA"] <- NA
-x[x=="MIDDLE EAST"] <- NA
-x[x=="LATIN AMERICA"] <- NA
-
-# shift to the left
-x[]<-t(apply(x,1,function(x){
-  c(x[!is.na(x)],x[is.na(x)])}))
-more <- x[!is.na(x$X2),]
-more.index <- rownames(more)
-more.women <- women[more.index,]
-
 # percentage of articles with more than 1 major country
-length(more.index)/nrow(women) #0.0907867
+length(more.index)/nrow(women) #0.08824105
 
 #########################
 ### TOP Country Terms ###
@@ -142,7 +148,7 @@ length(more.index)/nrow(women) #0.0907867
 
 # Define function to take top-percentage country
 country.percentages <- function(x){
-  geo <- as.character(women$COUNTRY[x]) # take one row
+  geo <- as.character(women$COUNTRY_NR[x]) # take one row
   countries <- unlist(strsplit(geo, ';\\s*')) # split on ';'
   country.percents <- sub('.*\\((\\d+)%.*', '\\1', countries) # list of just the percentages
   country.percents <- as.list(country.percents) # make a list
@@ -175,7 +181,11 @@ n <- nrow(countries)
 for(i in 1:n){
   women$COUNTRY_FINAL <- country.standard(countries$Key[i],countries$Value[i],women)
 }
-sum(is.na(women$COUNTRY_FINAL)) # 17134
+sum(is.na(women$COUNTRY_FINAL)) # 15738
+
+# anyone missing?
+missing.final <- women[!is.na(women$COUNTRY_TOP_PERCENT) & is.na(women$COUNTRY_FINAL),]
+sort(unique(missing.final$COUNTRY_TOP_PERCENT))
 
 #####################
 ### Country Codes ###
@@ -192,7 +202,7 @@ country.code <- function(x,y,z){
 n <- nrow(countries)
  for(i in 1:n){
   women$COUNTRY_CODE <- country.code(countries$Key[i],countries$iso3c[i],women)
-}
+ }
 
 # Fix problematic codes
 unique(women$COUNTRY_FINAL[is.na(women$COUNTRY_CODE)])
@@ -244,9 +254,12 @@ women.foreign$COUNTRY_FINAL <- as.factor(women.foreign$COUNTRY_FINAL)
 women.foreign$COUNTRY_MAJOR <- as.character(women.foreign$COUNTRY_MAJOR)
 women$COUNTRY_MAJOR <- as.character(women$COUNTRY_MAJOR)
 women.foreign.1$COUNTRY_MAJOR <- as.character(women.foreign.1$COUNTRY_MAJOR)
+women.foreign$COUNTRY_NR <- as.character(women.foreign$COUNTRY_NR)
+women$COUNTRY_NR <- as.character(women$COUNTRY_NR)
+women.foreign.1$COUNTRY_NR <- as.character(women.foreign.1$COUNTRY_NR)
+
 
 #### WRITE FILES #####
-
 write.csv(women,"Data/women-all.csv") # write all
 
 con<-file('Data/women-foreign.csv',encoding="utf8")

@@ -20,10 +20,9 @@ library(Amelia) # for missing valus
 library(data.table)  # for missing valus
 library(sampleSelection)
 
-
 meta.topics <- read.csv("Data/meta-topics.csv")
 meta.topics$X <- NULL
-meta.topics$X.1 <- NULL
+names(meta.topics)
 
 #################################################
 ###### 1) Topic quantities by country.year ######
@@ -32,16 +31,18 @@ meta.topics$X.1 <- NULL
 ## Various ways to operationalize the DV:
 
 # Option 1) Mean topic distribution per country.year (weighted by words per doc)
-x <- subset(meta.topics,select=c(business:politics,COUNTRY_CODE,YEAR,REGION,number.of.non.stop.words))
+x <- subset(meta.topics,select=c(1:15,COUNTRY_CODE,YEAR,REGION,number.of.non.stop.words))
 names(x)[16:18] <- c("iso3c","year","region")
+# normalize
 x[,1:15] <- x[,1:15]*x$number.of.non.stop.words
+# transform to country-year
 country.year.means <- ddply(.data=x, .variables=.(iso3c,year), numcolwise(mean,na.rm = TRUE))
-# add 'number docs' column
+# add 'n = number docs' column
 y <- ddply(.data=x,.variables=.(iso3c,year), .fun=nrow) 
 country.year.means$n <- y$V1
 head(country.year.means) 
-sum(country.year.means[1,3:17]) # 182
-write.csv(country.year.means,"Results/15.1/country.year-means.csv")
+sum(country.year.means[1,3:17]) # sum words for 1strow = 182
+write.csv(country.year.means,"Results/stm/country.year-means.csv")
 
 # Option 2) Mean topic distribution per country.year (NOT weighted by words per doc)
 x <- subset(meta.topics,select=c(business:politics,COUNTRY_CODE,YEAR,REGION,number.of.non.stop.words))
@@ -79,7 +80,7 @@ x[,1:15] <- x[,1:15]*x$number.of.non.stop.words
 region.year.means <- ddply(.data=x, .variables=.(year,region), numcolwise(mean,na.rm = TRUE))
 y <- ddply(.data=x,.variables=.(year,region), .fun=nrow) 
 region.year.means$n <- y$V1
-write.csv(region.year.means,"Results/15.1/region-year-means.csv")
+write.csv(region.year.means,"Results/stm/region-year-means.csv")
 
 # plotting
 ggplot(data=region.year.means, aes(x=year,y=rights,group=region,color=region)) + geom_line()
@@ -115,7 +116,6 @@ rt <- merge(rt,country.year,by=c("year","iso3c"),all.x=T)
 
 ## countries in text but not rt
 which(!country.year$iso3c %in% rt$iso3c)
-country.year$iso3c[1238]
 
 ## number unique countries
 length(unique(rt$rt_code)) # 197
@@ -248,3 +248,4 @@ cor(rt.impute$muslim, rt.impute$mena, use="complete.obs") #0.6366512
 
 ## write
 write.csv(rt.impute,"Data/regression-data/regression-rights-imputed.csv", row.names = F)
+

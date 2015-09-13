@@ -23,7 +23,7 @@ rt.nearest$X <- NULL
 rt.imputed <- read.csv("Data/regression-data/regression-rights-imputed.csv")
 rt.imputed$X <- NULL
 
-rt <- rt.imputed
+rt <- rt.nearest
 
 # Summarize Data
 stargazer(rt, type="text")
@@ -63,6 +63,8 @@ x <- rnorm(1000)
 y <- rnorm(1000)
 bin<-hexbin(rt$muslim, rt$rights, xbins=50) 
 plot(bin, main="Hexagonal Binning")
+
+hist(rt.1$rights,  breaks = 100)
 
 #########################################
 #### 2. Linear Models + Diagnostics #####
@@ -130,7 +132,7 @@ summary(gvmodel)
 
 ## 2 - step SELECTION MODELS
 summary( heckit (n.binary ~ lnreportcount + relevel(region,5) + log(lag(gdp.pc.un,1)) + log(lag(pop.wdi,1)) + lag(polity2,1) + lag(domestic9,1),
-                 rights ~ (lag(wopol,1)*lag(mena,1))+lag(polity2,1)+lag(physint,1),
+                 rights ~ (lag(wopol,1)*lag(muslim,1))+lag(polity2,1)+lag(physint,1),
                  rt) )
 
 ################################
@@ -164,9 +166,10 @@ plot(m2$residuals)
 # test fixed v. random, etc
 pm.f <- plm(rights ~ lag(wopol,1)+lag(muslim,1)+lag(physint,1)+log(lag(gdp.pc.un,1))+log(lag(pop.wdi,1))+lag(domestic9,1),data = rt,model="within",index = c("ccode","year"))
 summary(pm.f)
-pm.r <- plm(rights ~ lag(wopol,1)+mena+lag(physint,1)+log(lag(gdp.pc.un,1))+log(lag(pop.wdi,1))+lag(domestic9,1),data = rt,model="random",index = c("ccode","year"))
+pm.r <- plm(rights ~ lag(wopol,1)+lag(muslim,1)+lag(physint,1)+log(lag(gdp.pc.un,1))+log(lag(pop.wdi,1))+lag(domestic9,1),data = rt,model="random",index = c("ccode","year"))
 summary(pm.r)
 pm.p <- plm(rights ~ lag(wopol,1)+lag(muslim,1)+lag(physint,1)+log(lag(gdp.pc.un,1))+log(lag(pop.wdi,1))+lag(domestic9,1),data = rt,model="pooling",index = c("ccode","year"))
+summary(pm.p)
 pm.f.time <- pm.f <- plm(rights ~ lag(wopol,1)+lag(muslim,1)+lag(physint,1)+log(lag(gdp.pc.un,1))+log(lag(pop.wdi,1))+lag(domestic9,1) + factor(year),data = rt,model="within",index = c("ccode","year"))
 summary(pm.f.time)
 
@@ -188,9 +191,8 @@ coeftest(pm2, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))
 se2 = coeftest(pm2, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 # plm - 3
-pm3 <- plm(rights ~ lag(wecon,1)+lag(muslim,1)+lag(polity2,1)+lag(physint,1)+log(lag(gdp.pc.un,1))+log(lag(pop.wdi,1))+lag(domestic9,1)+mena,data = rt,model = "pooling",index = c("ccode","year"))
+pm3 <- plm(rights ~ lag(wecon,1)+lag(muslim,1)+lag(polity2,1)+lag(physint,1)+log(lag(gdp.pc.un,1))+log(lag(pop.wdi,1))+lag(domestic9,1),data = rt,model = "pooling",index = c("ccode","year"))
 summary(pm3)
-
 coeftest(pm3, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))
 se3 = coeftest(pm3, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 

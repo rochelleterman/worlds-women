@@ -122,7 +122,7 @@ length(unique(rt$rt_code)) # 197
 
 ## write CSV of all country-year observations
 x <- rt[,c("year","country","ccode","iso3c")]
-write.csv(x,"Data/country-year-obs.csv")
+write.csv(x,"Data/Regression-Data/country-year-obs.csv")
 
 ## MENA dummy variable
 rt$mena <- 0
@@ -150,7 +150,7 @@ rt <- rt[,c("ccode","year","n","n.binary","rights","muslim","muslim.maj","mena",
 
 # Write
 rt.orig <- rt
-write.csv(rt.orig,"Data/regression-data/regression-rights.csv", row.names = F)
+write.csv(rt.orig,"Data/Regression-Data/regression-rights.csv", row.names = F)
 
 # Test
 cor(rt$muslim, rt$mena, use="complete.obs") #0.6626975
@@ -202,7 +202,7 @@ cor(rt$muslim, rt$mena, use="complete.obs") #0.6365522
 
 # save and write
 rt.nearest <- rt
-write.csv(rt.nearest, "Data/regression-data/regression-rights-nearest.csv", row.names = F)
+write.csv(rt.nearest, "Data/Regression-Data/regression-rights-nearest.csv", row.names = F)
 
 #rt.nearest <- read.csv("Data/country-year/country-year-rights-nearest.csv")
 
@@ -247,5 +247,5 @@ rt.impute$mena <- rt.orig$mena
 cor(rt.impute$muslim, rt.impute$mena, use="complete.obs") #0.6366512
 
 ## write
-write.csv(rt.impute,"Data/regression-data/regression-rights-imputed.csv", row.names = F)
+write.csv(rt.impute,"Data/Regression-Data/regression-rights-imputed.csv", row.names = F)
 

@@ -23,7 +23,7 @@ rt.nearest$X <- NULL
 rt.imputed <- read.csv("Data/regression-data/regression-rights-imputed.csv")
 rt.imputed$X <- NULL
 
-rt <- rt.nearest
+rt <- rt.orig
 
 # Summarize Data
 stargazer(rt, type="text")

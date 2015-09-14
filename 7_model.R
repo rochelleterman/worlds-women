@@ -22,7 +22,7 @@ rt.nearest <- read.csv("Data/Regression-Data/regression-rights-nearest.csv")
 rt.imputed <- read.csv("Data/Regression-Data/regression-rights-imputed.csv")
 
 # set database
-rt <- rt.orig
+rt <- rt.nearest
 
 # set dv
 rt$rights <- rt$rights.mean
@@ -132,7 +132,7 @@ summary(gvmodel)
 
 ## 2 - step SELECTION MODELS
 summary( heckit (n.binary ~ count + relevel(region,5) + log(lag(gdp.pc.un,1)) + log(lag(pop.wdi,1)) + lag(polity2,1) + lag(domestic9,1),
-                 rights ~ (lag(wosoc,1)+lag(muslim,1))+lag(physint,1)+lag(polity2,1),
+                 rights ~ (lag(wopol,1)+lag(muslim,1))+lag(physint,1)+lag(polity2,1),
                  rt) )
 
 ################################
@@ -179,13 +179,11 @@ pm.r <- plm(rights ~ lag(wopol,1)+lag(muslim,1)+lag(physint,1)+log(lag(gdp.pc.un
 summary(pm.r)
 pm.p <- plm(rights ~ lag(wopol,1)+lag(muslim,1)+lag(physint,1)+log(lag(gdp.pc.un,1))+log(lag(pop.wdi,1))+lag(domestic9,1),data = rt,model="pooling",index = c("ccode","year"))
 summary(pm.p)
-pm.f.time <- pm.f <- plm(rights ~ lag(wopol,1)+lag(muslim,1)+lag(physint,1)+log(lag(gdp.pc.un,1))+log(lag(pop.wdi,1))+lag(domestic9,1) + factor(year),data = rt,model="within",index = c("ccode","year"))
-summary(pm.f.time)
 
-pFtest(pm.f.time, pm.f)
+pcdtest(pm.f, test = c("lm"))
 plmtest(pm.p, type=c("bp"))
 phtest(pm.f, pm.r)
-pcdtest(pm.f, test = c("lm"))
+
 
 # plm - 1
 pm1 <- plm(rights ~ lag(wopol,1)+lag(muslim,1)+lag(physint,1)+log(lag(gdp.pc.un,1))+log(lag(pop.wdi,1))+lag(domestic9,1),data = rt,model="random",index = c("ccode","year"))
@@ -205,4 +203,4 @@ summary(pm3)
 coeftest(pm3, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))
 se3 = coeftest(pm3, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
-stargazer(pm1,pm2,pm3, type = "html", se = list(se1,se2,se3), notes="Robust standard errors clustered on country appear in parentheses.", omit.stat = c("rsq","adj.rsq","f"),  dep.var.labels = "Proportion of Coverage Devoted to Women's Rights", covariate.labels=c("Women's Political Rights","Women's Social Rights","Women's Economic Rights","Muslim","Democracy","Physical Integrity Index","GDP Per Capita (Log)","Population (Log)","Instability","MENA"), out="Results/regressions/orig.html")
+stargazer(pm1,pm2,pm3, type = "html", se = list(se1,se2,se3), notes="Robust standard errors clustered on country appear in parentheses.", omit.stat = c("rsq","adj.rsq","f"),  dep.var.labels = "Proportion of Coverage Devoted to Women's Rights", covariate.labels=c("Women's Political Rights","Women's Social Rights","Women's Economic Rights","Muslim","Democracy","Physical Integrity Index","GDP Per Capita (Log)","Population (Log)","Instability","MENA"), out="Results/regressions/nearest.html")

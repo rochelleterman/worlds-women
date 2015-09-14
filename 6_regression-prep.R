@@ -22,7 +22,6 @@ library(sampleSelection)
 
 # load data
 meta.topics <- read.csv("Data/meta-topics.csv")
-meta.topics$X <- NULL
 names(meta.topics)
 
 # prep docs
@@ -106,11 +105,15 @@ rt.null <- rt
 rt <- merge(rt,country.year,by=c("year","iso3c"),all.x=T)
 names(rt)
 
+## get rid of US
+rt <- rt[-which(rt$iso3c=="USA"),]
+which(rt$iso3c=="USA")
+
 # merge with NYT count
-nyt <- read.csv("Data/Regression-Data/n_nyt.csv")
+nyt <- read.csv("NYT-scraping/n_nyt.csv")
 nyt.sub <- nyt[,c("count", "ccode", "year")]
 rt <- merge(rt, nyt.sub, by = c("ccode", "year"))
-summary(rt$count)
+rt$count <- log(rt$count)
 
 ## countries in text but not rt
 which(!country.year$iso3c %in% rt$iso3c)
@@ -120,7 +123,7 @@ length(unique(rt$rt_code)) # 197
 
 ## write CSV of all country-year observations
 x <- rt[,c("year","country","ccode","iso3c")]
-write.csv(x,"Data/Regression-Data/country-year-obs.csv")
+write.csv(x,"NYT-scraping/country-year-obs.csv")
 
 ## MENA dummy variable
 rt$mena <- 0

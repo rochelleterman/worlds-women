@@ -20,84 +20,76 @@ library(Amelia) # for missing valus
 library(data.table)  # for missing valus
 library(sampleSelection)
 
+# load data
 meta.topics <- read.csv("Data/meta-topics.csv")
 meta.topics$X <- NULL
 names(meta.topics)
+
+# prep docs
+docs <- subset(meta.topics,select=c(1:15,COUNTRY_CODE,YEAR,REGION,number.of.non.stop.words))
+names(docs)[16:18] <- c("iso3c","year","region")
+# from topic proportions to number of words
+docs[,1:15] <- docs[,1:15]*docs$number.of.non.stop.words
+sum(docs[1,1:15]) # 306
 
 #################################################
 ###### 1) Topic quantities by country.year ######
 #################################################
 
 ## Various ways to operationalize the DV:
-
 # Option 1) Mean topic distribution per country.year (weighted by words per doc)
-x <- subset(meta.topics,select=c(1:15,COUNTRY_CODE,YEAR,REGION,number.of.non.stop.words))
-names(x)[16:18] <- c("iso3c","year","region")
+
+country.year.means <- ddply(.data=docs, .variables=.(iso3c,year), numcolwise(sum,na.rm = TRUE))
 # normalize
-x[,1:15] <- x[,1:15]*x$number.of.non.stop.words
-# transform to country-year
-country.year.means <- ddply(.data=x, .variables=.(iso3c,year), numcolwise(mean,na.rm = TRUE))
+country.year.means[,3:17] <- country.year.means[,3:17]/country.year.means$number.of.non.stop.words
 # add 'n = number docs' column
-y <- ddply(.data=x,.variables=.(iso3c,year), .fun=nrow) 
-country.year.means$n <- y$V1
+country.year.means$n <- (ddply(.data=docs,.variables=.(iso3c,year), .fun=nrow))$V1 
+# test
 head(country.year.means) 
-sum(country.year.means[1,3:17]) # sum words for 1strow = 182
+sum(country.year.means[1,3:17]) # should be 1
 write.csv(country.year.means,"Results/stm/country.year-means.csv")
 
-# Option 2) Mean topic distribution per country.year (NOT weighted by words per doc)
-x <- subset(meta.topics,select=c(business:politics,COUNTRY_CODE,YEAR,REGION,number.of.non.stop.words))
-names(x)[16:18] <- c("iso3c","year","region")
-country.year.means.unweighted <- ddply(.data=x, .variables=.(iso3c,year), numcolwise(mean,na.rm = TRUE))
-# add 'number docs' column
-y <- ddply(.data=x,.variables=.(iso3c,year), .fun=nrow) 
-country.year.means.unweighteds$n <- y$V1
-head(country.year.means.unweighted) 
-sum(country.year.means.unweighted[1,3:17]) # test
+# Option 2) Total Number of Words Devoted to Each Topic per country.year
+country.year.sums <- ddply(.data=docs, .variables=.(iso3c,year), numcolwise(sum,na.rm = TRUE))
+# add 'n = number docs' column
+country.year.sums$n <- (ddply(.data=docs,.variables=.(iso3c,year), .fun=nrow))$V1 
+# test
+head(country.year.sums) 
+sum(country.year.sums[3,3:17]) # sum words for 3strow = 1390
+write.csv(country.year.means,"Results/stm/country.year-sums.csv")
 
-# Option 3) Mean Number of Top-Topic Documents per country.year
-x <- subset(meta.topics,select=c(COUNTRY_CODE,YEAR,REGION,top.topic))
-names(x)[1:3] <- c("iso3c","year","region")
-country.year.top <- ddply(.data=x, .variables=.(iso3c,year,top.topic), .fun=nrow)
-sum(country.year.top$V1) # testing
-country.year.top <- dcast(country.year.top,iso3c + year ~ top.topic)
-head(country.year.top,20)
-# add 'n' column
-y <- ddply(.data=x,.variables=.(iso3c,year), .fun=nrow) 
-country.year.top$n <- y$V1
-# take mean TODO: Or Make NA <- 0?
-country.year.top[,3:17] <- country.year.top[,3:17]/country.year.top$n
-head(country.year.top)
-
-# Option 4) Total Number of Words Devoted to Each Topic per country.year
-x <- subset(meta.topics,select=c(business:politics,COUNTRY_CODE,YEAR,REGION,number.of.non.stop.words))
-names(x)[16:18] <- c("iso3c","year","region")
-x[,1:15] <- x[,1:15]*x$number.of.non.stop.words
- 
-###  Region-Year Playing ###
+############################
+### Region-Year Playing ###
 ############################
 
 # region-year means
-region.year.means <- ddply(.data=x, .variables=.(year,region), numcolwise(mean,na.rm = TRUE))
-y <- ddply(.data=x,.variables=.(year,region), .fun=nrow) 
-region.year.means$n <- y$V1
+region.year.means <- ddply(.data=docs, .variables=.(year,region), numcolwise(sum,na.rm = TRUE))
+region.year.means[3:17] <- region.year.means[3:17]/region.year.means$number.of.non.stop.words
+region.year.means$n <- (ddply(.data=docs,.variables=.(year,region), .fun=nrow))$V1 
 write.csv(region.year.means,"Results/stm/region-year-means.csv")
 
+# region-year sums
+region.year.sums <- ddply(.data=docs, .variables=.(year,region), numcolwise(sum,na.rm = TRUE))
+region.year.sums$n <- (ddply(.data=docs,.variables=.(year,region), .fun=nrow))$V1 
+write.csv(region.year.means,"Results/stm/region-year-sums.csv")
+
 # plotting
-ggplot(data=region.year.means, aes(x=year,y=rights,group=region,color=region)) + geom_line()
+ggplot(data=region.year.sums, aes(x=year,y=religion,group=region,color=region)) + geom_line()
 
 #################################
 ###### Assign DV and explore ####
 #################################
 
-#decide which one you're going to use for rest of analysis
-country.year <- country.year.means
+# assign 2 Rights DVs
+country.year <- cbind(country.year.means[,c(1,2,14)], country.year.sums[,c(14,18,19)])
+names(country.year) <- c("iso3c", "year","rights.mean","rights.sum","n.words","n.docs")
 
 # duplicates?
 x <- data.frame(cbind(country.year$iso3c,country.year$year))
 which(duplicated(x))
 
 # see countries with highest means
-country.means <- ddply(country.year, .(iso3c), summarize, mean = mean(rights,na.rm=T))
+country.means <- ddply(country.year, .(iso3c), summarize, mean = mean(rights.mean,na.rm=T))
 country.means <- arrange(country.means,desc(mean))
 head(country.means,10)
 ggplot(country.means, aes(x = iso3c, y = mean)) + geom_bar(stat = "identity")
@@ -108,11 +100,17 @@ ggplot(country.means, aes(x = iso3c, y = mean)) + geom_bar(stat = "identity")
 
 ## Load country.year database
 rt <- read.csv("../country-year-database/rt.no.us.csv")
-names(rt)
 rt.null <- rt
 
-## merge
+## merge with rights
 rt <- merge(rt,country.year,by=c("year","iso3c"),all.x=T)
+names(rt)
+
+# merge with NYT count
+nyt <- read.csv("Data/Regression-Data/n_nyt.csv")
+nyt.sub <- nyt[,c("count", "ccode", "year")]
+rt <- merge(rt, nyt.sub, by = c("ccode", "year"))
+summary(rt$count)
 
 ## countries in text but not rt
 which(!country.year$iso3c %in% rt$iso3c)
@@ -135,18 +133,19 @@ rt$muslim.maj[rt$muslim>=.50] <- 1
 summary(rt$muslim.maj)
 
 ## Adjust n from NA to 0
-rt$n[is.na(rt$n)] <- 0
-rt$n[rt$year==1979] <- NA
-summary(rt$n)
+rt$n.doc[is.na(rt$n.docs)] <- 0
+rt$n.doc[rt$year==1979] <- NA
+summary(rt$n.doc)
 
 ## Make n binary
-rt$n.binary <- rt$n
-rt$n.binary[rt$n > 0] <- 1
+rt$n.binary <- rt$n.docs
+rt$n.binary[rt$n.docs > 0] <- 1
+rt$n.binary[is.na(rt$n.docs)] <- 0
 rt$n.binary <- as.factor(rt$n.binary)
 summary(rt$n.binary)
 
 ### subset 
-rt <- rt[,c("ccode","year","n","n.binary","rights","muslim","muslim.maj","mena","polity2","physint","amnesty","statedept","gdp.pc.un","pop.wdi","wopol","wosoc","wecon","domestic9","lnreportcount", "region")]
+rt <- rt[,c("ccode","year","n.docs","n.binary","rights.sum","rights.mean","muslim","muslim.maj","mena","polity2","physint","amnesty","statedept","gdp.pc.un","pop.wdi","wopol","wosoc","wecon","domestic9","lnreportcount", "count","region")]
 
 # Write
 rt.orig <- rt
@@ -155,6 +154,9 @@ write.csv(rt.orig,"Data/Regression-Data/regression-rights.csv", row.names = F)
 # Test
 cor(rt$muslim, rt$mena, use="complete.obs") #0.6626975
 cor(rt$amnesty,rt$statedept,use="complete.obs") #0.8019385
+cor(rt$lnreportcount,rt$count,use="complete.obs")
+summary(rt$rights.mean)
+summary(rt$rights.sum)
 
 #############################
 ##### 3) Missing Values #####
@@ -210,9 +212,9 @@ write.csv(rt.nearest, "Data/Regression-Data/regression-rights-nearest.csv", row.
 ##########################
 
 rt <- rt.orig
-
+names(rt)
 # subset
-rt <- rt[,c(1,2,9:19)]
+rt <- rt[,c(1,2,10:20)]
 rt$year <- as.integer(as.character((rt$year)))
 # model 1
 set.seed(1234)
@@ -235,17 +237,18 @@ overimpute(a.out, var = "wosoc")
 # take 1st imputation
 rt.impute <- a.out$imputations[[1]]
 # overwrite dependent variables -- we don't want to impute those.
-rt.impute$rights <- rt.orig$rights
-rt.impute$n <- rt.orig$n
+rt.impute$rights.sum <- rt.orig$rights.sum
+rt.impute$rights.mean <- rt.orig$rights.mean
+rt.impute$n.docs <- rt.orig$n.docs
 rt.impute$n.binary <- rt.orig$n.binary
 rt.impute$region <- rt.orig$region
 rt.impute$muslim.maj <- rt.orig$muslim.maj
 rt.impute$muslim <- rt.orig$muslim
 rt.impute$mena <- rt.orig$mena
+rt.impute$count <- rt.orig$count
 
 # test
 cor(rt.impute$muslim, rt.impute$mena, use="complete.obs") #0.6366512
 
 ## write
 write.csv(rt.impute,"Data/Regression-Data/regression-rights-imputed.csv", row.names = F)
-

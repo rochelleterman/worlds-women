@@ -9,6 +9,9 @@ rm(list=ls())
 women <- read.csv('Data/Corpora/women-processed.csv')
 names(women)
 
+load("Data/stm.RData")
+model <- mod.15.new
+
 ####################################
 ######### Pre-processing ###########
 ####################################
@@ -35,7 +38,7 @@ meta <-out$meta
 ######### Choose Model ###########
 ##################################
 
-load("Data/stm.RData")
+
 # mod.15.new <- stm(docs,vocab, 15, prevalence=~REGION+s(YEAR)+PUBLICATION, data=meta, seed = 22222, max.em.its = 200)
 
 # Topic Quality plot
@@ -120,7 +123,7 @@ plot.topicCorr(mod.out.corr)
 prep <- estimateEffect(1:15 ~ REGION+s(YEAR),model,meta=meta,uncertainty="Global",documents=docs)
 
 # topics over time
-plot.estimateEffect(prep,covariate="YEAR",method="continuous",topics=c(3),printlegend=TRUE,xlab="Year",xlim=c(1980,2014),main = "Comparing Topics over Time",labeltype="custom",custom.labels=c("Religions"),ylim=c(0,.25),nsims=200)
+plot.estimateEffect(prep,covariate="YEAR",method="continuous",topics=c(12),printlegend=TRUE,xlab="Year",xlim=c(1980,2014),main = "Comparing Topics over Time",labeltype="custom",custom.labels=c("Rights"),ylim=c(0,.25),nsims=200)
 
 # topics over region
 regions = c("Asia","EECA","MENA","Africa","West","LA")
@@ -139,15 +142,14 @@ for (i in 1:15){
 # fit model
 mod.15.int <- stm(docs,vocab, 15, prevalence=~REGION*s(YEAR), data=meta, model=model)
 labelTopics(mod.15.int)
-topicQuality(model=mod.15.int, documents=docs)
 
 # estimate effect
 prep.int <- estimateEffect(1:15 ~ REGION * YEAR,mod.15.int,meta=meta,uncertainty="Global") 
 
 # plot topics over time by region
-plot.estimateEffect(prep,covariate="YEAR",method="continuous",topics=15,moderator="REGION",moderator.value="MENA",linecol="red", add=F,ylim=c(0,.2),printlegend=F)
+plot.estimateEffect(prep.int,covariate="YEAR",method="continuous",topics=3,moderator="REGION",moderator.value="MENA",linecol="red", add=F,ylim=c(0,.2),printlegend=F)
 
-plot.estimateEffect(prep.int,covariate="YEAR",method="continuous",topics=15,moderator="REGION",moderator.value="MENA",linecol="blue", add=T, ylim=c(0,.2),printlegend=F)
+plot.estimateEffect(prep.int,covariate="YEAR",method="continuous",topics=12,moderator="REGION",moderator.value="EECA",linecol="blue", add=T, ylim=c(0,.2),printlegend=F)
 
 legend("topleft","(x,y)",legend=c("MENA","EECA"),fill=c("red","blue"))
 
@@ -158,13 +160,14 @@ legend("topleft","(x,y)",legend=c("MENA","EECA"),fill=c("red","blue"))
 #Number of Documents by Number of Topics matrix of topic proportions
 topic.docs <- as.data.frame(mod.15.new$theta) 
 colnames(topic.docs) <- c("cancer", "reproductive", "religion", "business", "marriage", "arts", "migration", "rape", "war", "literature", "personal", "rights","politics", "sports", "fashion")
+x <- apply(topic.docs, 1, which.max)
 
 topic.docs$docs <- rownames(topic.docs)
 meta.topics <- cbind(topic.docs,meta)
 names(meta.topics)
 
 # add column for top topic for each article
-meta.topics$top.topic <- names(topic.docs)[apply(topic.docs, 1, which.max)] 
+meta.topics$top.topic <- names(topic.docs)[apply(topic.docs, 1, which.max)]
 
 #write csv for later
 write.csv(meta.topics,"Data/meta-topics.csv", row.names = F)

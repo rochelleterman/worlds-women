@@ -11,12 +11,10 @@ library("matrixStats")
 library(RTextTools)
 library(tm)
 require(rJava) # needed for stemming function 
-library(Snowball) # also needed for stemming function
+library(SnowballC) # also needed for stemming function
 
 # Load Data
-meta.topics <- read.csv("Data/meta-topics.csv")
-meta.topics$X <- NULL
-meta.topics$X.1 <- NULL
+meta.topics <- read.csv("Data/Corpora/meta-topics.csv")
 
 ##############################
 ######## DTM function ########

@@ -13,17 +13,19 @@ library(lmtest) # for robust standard errors
 library(data.table)  # for missing valus
 library(sampleSelection) # for heckman correction
 library(car)
+library(pscl)
 
 # load data
 
-rt.orig <- read.csv("Data/regression-data/regression-rights.csv")
-rt.orig$X <- NULL
-rt.nearest <- read.csv("Data/regression-data/regression-rights-nearest.csv")
-rt.nearest$X <- NULL
-rt.imputed <- read.csv("Data/regression-data/regression-rights-imputed.csv")
-rt.imputed$X <- NULL
+rt.orig <- read.csv("Data/Regression-Data/regression-rights.csv")
+rt.nearest <- read.csv("Data/Regression-Data/regression-rights-nearest.csv")
+rt.imputed <- read.csv("Data/Regression-Data/regression-rights-imputed.csv")
 
+# set database
 rt <- rt.orig
+
+# set dv
+rt$rights <- rt$rights.mean
 
 # Summarize Data
 stargazer(rt, type="text")
@@ -33,11 +35,9 @@ rt <- pdata.frame(rt, c("ccode","year"))
 
 # subset with an observation
 rt.1 <- rt[rt$n.binary==1,]
-rt.1$rights <- round(rt.1$rights)
-summary(rt.1$rights)
-rt.1$muslim[rt.1$muslim < 0] <- 0
+summary(rt.1$muslim)
 
-# remove Israel
+# remove Israel from MENA
 rt$mena[rt$ccode == 666] <- 0
 
 #############################
@@ -64,7 +64,7 @@ y <- rnorm(1000)
 bin<-hexbin(rt$muslim, rt$rights, xbins=50) 
 plot(bin, main="Hexagonal Binning")
 
-hist(rt.1$rights,  breaks = 100)
+hist(rt.1$rights,  breaks = 50)
 
 #########################################
 #### 2. Linear Models + Diagnostics #####
@@ -131,16 +131,25 @@ summary(gvmodel)
 ###########################
 
 ## 2 - step SELECTION MODELS
-summary( heckit (n.binary ~ lnreportcount + relevel(region,5) + log(lag(gdp.pc.un,1)) + log(lag(pop.wdi,1)) + lag(polity2,1) + lag(domestic9,1),
-                 rights ~ (lag(wopol,1)*lag(muslim,1))+lag(polity2,1)+lag(physint,1),
+summary( heckit (n.binary ~ count + relevel(region,5) + log(lag(gdp.pc.un,1)) + log(lag(pop.wdi,1)) + lag(polity2,1) + lag(domestic9,1),
+                 rights ~ (lag(wosoc,1)+lag(muslim,1))+lag(physint,1)+lag(polity2,1),
                  rt) )
 
 ################################
 #### 4. Poisson + NB Models ####
 ################################
 
+# Poisson
+m <- glm(rights ~ (lag(wopol,1) + lag(muslim,1))+lag(polity2,1)+lag(physint,1)+log(lag(gdp.pc.un,1))+log(lag(pop.wdi,1))+lag(domestic9,1),data = rt.1, family = "poisson")
+summary(m)
+
 # Negative Binomial
-m1 <- glm.nb(rights ~ (lag(wopol,1) + lag(muslim,1))+lag(polity2,1)+lag(physint,1)+log(lag(gdp.pc.un,1))+log(lag(pop.wdi,1))+lag(domestic9,1),data = rt.1)
+m1 <- glm.nb(rights ~ (lag(wopol,1) + lag(mena,1))+lag(polity2,1)+lag(physint,1)+log(lag(gdp.pc.un,1))+log(lag(pop.wdi,1))+lag(domestic9,1),data = rt.1)
+summary(m1)
+
+#0 Inflated
+m1 <- zeroinfl(round(rights) ~ (lag(wopol,1) + lag(mena,1))+lag(polity2,1)+lag(physint,1)+log(lag(gdp.pc.un,1))+log(lag(pop.wdi,1))+lag(domestic9,1),
+               data = rt, dist = "negbin", EM = TRUE)
 summary(m1)
 
 # GOF
@@ -149,7 +158,7 @@ summary(m1)
 )
 
 # testing negative binomial model assumption
-m2 <- glm(rights ~ (lag(wopol,1) + lag(muslim,1))+lag(polity2,1)+lag(physint,1)+log(lag(gdp.pc.un,1))+log(lag(pop.wdi,1))+lag(domestic9,1), family = "poisson", data = rt.1)
+m2 <- glm(rights ~ count + (lag(wopol,1) + lag(muslim,1))+lag(polity2,1)+lag(physint,1)+log(lag(gdp.pc.un,1))+log(lag(pop.wdi,1))+lag(domestic9,1), family = "poisson", data = rt.1)
 summary(m2)
 pchisq(2 * (logLik(m1) - logLik(m2)), df = 1, lower.tail = FALSE)
 plot(m2$residuals)
@@ -185,7 +194,7 @@ coeftest(pm1, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))
 se1 = coeftest(pm1, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 # plm - 2
-pm2 <- plm(rights ~ lag(wosoc,1)+lag(muslim,1)+lag(polity2,1)+lag(physint,1)+log(lag(gdp.pc.un,1))+log(lag(pop.wdi,1))+lag(domestic9,1),data = rt,model = "pooling",index = c("ccode","year"))
+pm2 <- plm(rights ~ lag(wosoc,1)+lag(mena,1)+lag(polity2,1)+lag(physint,1)+log(lag(gdp.pc.un,1))+log(lag(pop.wdi,1))+lag(domestic9,1),data = rt,model = "pooling",index = c("ccode","year"))
 summary(pm2)
 coeftest(pm2, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))
 se2 = coeftest(pm2, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
@@ -196,4 +205,4 @@ summary(pm3)
 coeftest(pm3, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))
 se3 = coeftest(pm3, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
-stargazer(pm1,pm2,pm3, type = "html", se = list(se1,se2,se3), notes="Robust standard errors clustered on country appear in parentheses.", omit.stat = c("rsq","adj.rsq","f"),  dep.var.labels = "Proportion of Coverage Devoted to Women's Rights", covariate.labels=c("Women's Political Rights","Women's Social Rights","Women's Economic Rights","Muslim","Democracy","Physical Integrity Index","GDP Per Capita (Log)","Population (Log)","Instability","MENA"), out="Results/regressions/impute.html")
+stargazer(pm1,pm2,pm3, type = "html", se = list(se1,se2,se3), notes="Robust standard errors clustered on country appear in parentheses.", omit.stat = c("rsq","adj.rsq","f"),  dep.var.labels = "Proportion of Coverage Devoted to Women's Rights", covariate.labels=c("Women's Political Rights","Women's Social Rights","Women's Economic Rights","Muslim","Democracy","Physical Integrity Index","GDP Per Capita (Log)","Population (Log)","Instability","MENA"), out="Results/regressions/orig.html")

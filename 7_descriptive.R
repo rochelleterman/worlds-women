@@ -10,6 +10,10 @@ library(reshape2)
 docs <- read.csv("Data/meta-topics.csv")
 rt <- read.csv("Data/country-year/original.csv")
 
+# from topic proportions to number of words
+docs[,1:15] <- docs[,1:15]*docs$n.words
+sum(docs[1,1:15]) # 348
+
 ########################################
 ######## Quick Sums and Barplots #######
 ########################################
@@ -62,7 +66,8 @@ dev.off()
 
 # region-year means
 region.year.means <- ddply(.data=docs, .variables=.(year,region), numcolwise(sum,na.rm = TRUE))
-region.year.means[3:17] <- region.year.means[3:17]/region.year.means$number.of.non.stop.words
+region.year.means[3:17] <- region.year.means[3:17]/region.year.means$n.words
+sum(region.year.means[1,3:17])
 region.year.means$n <- (ddply(.data=docs,.variables=.(year,region), .fun=nrow))$V1 
 write.csv(region.year.means,"Results/stm/region-year-means.csv")
 
@@ -72,8 +77,8 @@ region.year.sums$n <- (ddply(.data=docs,.variables=.(year,region), .fun=nrow))$V
 write.csv(region.year.means,"Results/stm/region-year-sums.csv")
 
 # plotting
-ggplot(data=region.year.sums, aes(x=year,y=religion,group=region,color=region)) + geom_line()
+ggplot(data=region.year.means, aes(x=year,y=religion,group=region,color=region)) + geom_line()
 
 # smoothering
-ggplot(data=region.year.sums, aes(x=year,y=religion,group=region,color=region)) + geom_line() + stat_smooth()
+ggplot(data=region.year.sums, aes(x=year,y=rights,group=region,color=region)) + geom_line() + stat_smooth()
 

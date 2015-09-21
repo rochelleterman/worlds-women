@@ -8,13 +8,20 @@ rm(list=ls())
 ### Load Data
 load("Data/stm.RData")
 model <- mod.15.new
+
+############################
+###### Label Topics ########
+############################
+
+labelTopics(model)
+labels[11] <- "Human Interest"
   
 ##################################
 ######### Plot Topics  ###########
 ##################################
 
 # Corpus Summary of Topic Proportions
-jpeg("Results/stm/corpus-summary.jpeg",width=1000,height=1000,type="quartz")
+jpeg("Results/stm/corpus-summary.jpeg",width=700,height=550,type="quartz")
 plot.STM(model,type="summary",custom.labels=labels,main="")
 dev.off()
 
@@ -34,7 +41,7 @@ plot.estimateEffect(prep,covariate="YEAR",method="continuous",topics=c(12),print
 
 # topics over region
 regions = c("Asia","EECA","MENA","Africa","West","LA")
-plot.estimateEffect(prep,"REGION",method="pointestimate",topics=8,printlegend=TRUE,labeltype="custom",custom.labels=regions,main="Sexual Assault",ci.level=.95,nsims=100)
+plot.estimateEffect(prep,"REGION",method="pointestimate",topics=12,printlegend=TRUE,labeltype="custom",custom.labels=regions,main="Women's Rights",ci.level=.95,nsims=100)
 
 # Write Topic Proportion Estimates by Region
 for (i in 1:15){

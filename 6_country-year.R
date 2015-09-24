@@ -129,7 +129,7 @@ rt$n.binary <- as.factor(rt$n.binary)
 summary(rt$n.binary)
 
 ### subset 
-rt <- rt[,c("ccode","year","n.docs","n.binary","rights.sum","rights.mean","muslim","muslim.maj","mena","polity2","physint","amnesty","statedept","gdp.pc.un","pop.wdi","wopol","wosoc","wecon","domestic9","lnreportcount", "count","region", "idealpoint")]
+rt <- rt[,c("ccode","year","n.docs","n.words","n.binary","rights.sum","rights.mean","muslim","muslim.maj","mena","polity2","physint","amnesty","statedept","gdp.pc.un","pop.wdi","wopol","wosoc","wecon","domestic9","lnreportcount", "count","region", "idealpoint")]
 
 # Write
 rt.orig <- rt
@@ -199,7 +199,7 @@ write.csv(rt.nearest, "Data/country-year/nearest.csv", row.names = F)
 rt <- rt.orig
 names(rt)
 # subset
-rt <- rt[,c(1,2,10:20,23)]
+rt <- rt[,c(1,2,11:21,24)]
 rt$year <- as.integer(as.character((rt$year)))
 # model 1
 set.seed(1234)
@@ -225,6 +225,7 @@ rt.impute <- a.out$imputations[[1]]
 rt.impute$rights.sum <- rt.orig$rights.sum
 rt.impute$rights.mean <- rt.orig$rights.mean
 rt.impute$n.docs <- rt.orig$n.docs
+rt.impute$n.words <- rt.orig$n.words
 rt.impute$n.binary <- rt.orig$n.binary
 rt.impute$region <- rt.orig$region
 rt.impute$muslim.maj <- rt.orig$muslim.maj

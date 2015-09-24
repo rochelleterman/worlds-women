@@ -61,6 +61,9 @@ rt <- pdata.frame(rt, c("ccode","year"))
 rt.1 <- rt[rt$n.binary==1,]
 summary(rt.1$muslim)
 
+# israel
+rt$mena[rt$ccode == 666] <- 0
+
 #############################
 #### 1.  Plots and Tests ####
 #############################
@@ -127,7 +130,6 @@ coeftest(logit3, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))
 
 interaction_plot_continuous(logit3, effect="lag(women_composite, 1)", moderator="lag(muslim, 1)", interaction="lag(women_composite, 1):lag(muslim, 1)", mean=T, title="Interaction between Women's Rights\nand Muslim Percentage on coverage",xlabel="Percentage Muslim", ylabel="Marginal Effect of Women's Rights on Coverage")
 
-
 ###################################
 #### 3. Negbin Model on N.Docs ####
 ###################################
@@ -154,13 +156,10 @@ coeftest(nb3, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))
 interaction_plot_continuous(nb3, effect="lag(women_composite, 1)", moderator="lag(muslim, 1)", interaction="lag(women_composite, 1):lag(muslim, 1)", mean=T, title="Interaction between Women's Rights\nand Muslim Percentage on coverage",xlabel="Percentage Muslim", ylabel="Marginal Effect of Women's Rights on Coverage")
 
 # tobit for good measure
-
 tobit <- tobit(n.docs ~ lag(n.docs, 1) + lag(count, 1) + lag(women_composite,1)*lag(muslim.maj,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt)
 summary(tobit)
 
 interaction_plot_binary(tobit, effect="lag(women_composite, 1)", moderator="lag(muslim.maj, 1)", interaction="lag(women_composite, 1):lag(muslim.maj, 1)", factor_labels=c("Not Muslim Majority","Muslim Majority"), xlabel="", ylabel="Effect of Women's Rights on Coverage", title="Interaction between Women's Rights\nand Muslim-majority status on coverage")
-
-
 
 ###########################
 #### 4. Heckman Models ####
@@ -171,11 +170,14 @@ heckit <- heckit(n.binary ~ lag(count, 1) + lag(women_composite,1)*lag(muslim.ma
                  rights ~ lag(women_composite,1) + lag(muslim.maj,1) + lag(physint,1) + lag(polity2, 1),
                  rt )
 summary(heckit)
-coeftest(heckit$lm, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))
-coeftest(heckit$lm,, vcov=function(x) NeweyWest(x, lag =1))
+heckit.se = coeftest(heckit$lm, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
+heckit.se
+coeftest(heckit$lm, vcov=function(x) NeweyWest(x, lag =1))
+
+# print
+stargazer(heckit$lm, type = "latex", se = list(heckit.se), notes="Robust standard errors clustered on country appear in parentheses.", omit.stat = c("rsq","adj.rsq","f"),  dep.var.labels = "Proportion of Coverage Devoted to Women's Rights", covariate.labels=c("Women's Rights Index","Muslim Majority","Physical Integrity Index","Democracy","???"))
 
 # OLS for good measure
-
 lm <- lm(rights ~ lag(women_composite,1) + lag(muslim.maj,1) + lag(physint,1), data = rt)
 summary(lm)
 
@@ -381,9 +383,6 @@ pm3 <- plm(rights ~ lag(wecon,1)+lag(muslim,1)+lag(polity2,1)+lag(physint,1)+log
 summary(pm3)
 coeftest(pm3, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))
 se3 = coeftest(pm3, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
-
-stargazer(pm1,pm2,pm3, type = "html", se = list(se1,se2,se3), notes="Robust standard errors clustered on country appear in parentheses.", omit.stat = c("rsq","adj.rsq","f"),  dep.var.labels = "Proportion of Coverage Devoted to Women's Rights", covariate.labels=c("Women's Political Rights","Women's Social Rights","Women's Economic Rights","Muslim","Democracy","Physical Integrity Index","GDP Per Capita (Log)","Population (Log)","Instability","MENA"), out="Results/regressions/nearest.html")
-
 
 #########################################
 #### 2. Linear Models + Diagnostics #####

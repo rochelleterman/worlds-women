@@ -3,6 +3,7 @@
 setwd("~/Dropbox/berkeley/Dissertation/Data\ and\ Analyais/Git\ Repos/worlds-women")
 library(stm)
 library(plyr)
+library(xtable)
 rm(list=ls())
 
 ### Load Data
@@ -13,9 +14,16 @@ model <- mod.15.new
 ###### Label Topics ########
 ############################
 
-labelTopics(model)
-labels[11] <- "Human Interest"
-  
+# make a table with top words
+prob <- labelTopics(model, n= 10)$prob
+frex <- labelTopics(model, n=10)$frex
+dat <- data.frame(labels)
+dat$Probability <- apply( prob, 1 , paste , collapse = ", " )
+dat$FREX <- apply( frex, 1 , paste , collapse = ", " )
+
+# export to Latex
+xtable(dat)
+
 ##################################
 ######### Plot Topics  ###########
 ##################################
@@ -115,9 +123,10 @@ topic.distr <- apply(topic.distr,2,norm)
 colnames(topic.distr) <- labels
 topic.distr <- t(topic.distr)
 topic.distr <- as.data.frame(topic.distr)
-topic.distr$total <- 100
+topic.distr$Total <- 100
 topic.distr <- round(topic.distr,2)
-topic.distr
+
+xtable(topic.distr)
 write.csv(topic.distr,"Results/stm/region-distributions-per-topic.csv")
 
 #Proportion of region represented by each topic

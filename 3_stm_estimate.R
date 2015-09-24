@@ -96,7 +96,7 @@ plotQuote(thoughts14, width=40, main="Topic 14")
 plotQuote(thoughts15, width=40, main="Topic 15") 
 
 # assign hand labels
-labels = c("Cancer", "Reproductive Health", "Religion", "Business & Work", "Marriage & Family", "Arts", "Migration", "Gender-Based Violence", "War & Combat", "Literature", "Personal Interest", "Women's Rights & Gender Equality","Politics", "Sports", "Fashion")
+labels = c("Cancer", "Reproductive Health", "Religion", "Business & Work", "Marriage & Family", "Arts", "Migration", "Gender-Based Violence", "War & Combat", "Literature", "Human Interest", "Women's Rights & Gender Equality","Politics", "Sports", "Fashion")
 
 # save data
 save(docs, vocab, meta, labels, mod.15.new, file = "Data/stm.RData")

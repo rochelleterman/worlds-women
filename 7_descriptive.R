@@ -51,8 +51,8 @@ n.region.year <- ddply(.data = rt, .variables = .(year, region), .fun=summarize,
 n.region.year <- n.region.year[!is.na(n.region.year$region) & n.region.year$year > 1979,]
 
 # Plot
-jpeg(filename = "Results/descriptive/n-region-plot.jpeg",width=900,height=600,type="quartz")
-ggplot(data=n.region.year, aes(x=year,y=women,group=region,color=region)) + geom_line()
+jpeg(filename = "Results/descriptive/n-region-plot.jpg",width=900,height=500,type="quartz")
+ggplot(data=n.region.year, aes(x=year,y=women,group=region,color=region)) + geom_line() + labs(x = "Year", y = "Number of Articles about Women") + theme(axis.text=element_text(size=12), axis.title=element_text(size=16))
 dev.off()
 
 # percentage of document about women

@@ -1,13 +1,8 @@
 # 1) Plots
-# 2) Heckman
-# 3) Panel Models
-# 4) Linear & Diagnostics
-# 5) Poisson & Negative Binomial
-
-cor(rt$women_composite, rt$mena, use = "complete.obs")
-library(usdm)
-
-coeftest(lm(women_composite ~ mena, data = rt ))
+# 2) Logit
+# 3) Neg. Binomial
+# 4) Heckit
+# 5) Robustness checks
 
 rm(list=ls())
 setwd("~/Dropbox/berkeley/Dissertation/Data\ and\ Analyais/Git\ Repos/worlds-women")
@@ -27,6 +22,7 @@ library(car)
 library(pscl)
 source("interaction_plots.R")
 library(mfx)
+library(usdm)
 
 #######################
 #### Prepare Data #####
@@ -62,7 +58,7 @@ rt.1 <- rt[rt$n.binary==1,]
 summary(rt.1$muslim)
 
 # israel
-rt$mena[rt$ccode == 666] <- 0
+# rt$mena[rt$ccode == 666] <- 0
 
 #############################
 #### 1.  Plots and Tests ####
@@ -175,18 +171,17 @@ heckit.se
 coeftest(heckit$lm, vcov=function(x) NeweyWest(x, lag =1))
 
 # print
-stargazer(heckit$lm, type = "latex", se = list(heckit.se), notes="Robust standard errors clustered on country appear in parentheses.", omit.stat = c("rsq","adj.rsq","f"),  dep.var.labels = "Proportion of Coverage Devoted to Women's Rights", covariate.labels=c("Women's Rights Index","Muslim Majority","Physical Integrity Index","Democracy","???"))
+stargazer(heckit$lm, type = "latex", se = list(heckit.se), notes="Robust standard errors clustered on country appear in parentheses.", omit.stat = c("rsq","adj.rsq","f"),  dep.var.labels = "Intercept", "Proportion of Coverage Devoted to Women's Rights", covariate.labels=c("Women's Rights Index","Muslim Majority","Physical Integrity Index","Democracy","???"))
 
 # OLS for good measure
 lm <- lm(rights ~ lag(women_composite,1) + lag(muslim.maj,1) + lag(physint,1), data = rt)
 summary(lm)
 
 # fractional logit
-glm <- glm(rights.mean ~ lag(women_composite,1) + lag(muslim.maj,1) + lag(physint,1), data = rt, family=binomial(link="logit"))
+glm <- glm(rights ~ lag(women_composite,1) + lag(muslim.maj,1) + lag(physint,1), weights = n.words, data = rt, family=binomial(link="logit"))
 summary(glm)
 coeftest(glm, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))
 coeftest(glm, sandwich)
-
 
 #############################
 #### 5. Robustness Tests ####

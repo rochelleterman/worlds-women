@@ -1,0 +1,27 @@
+\begin{table}[ht]
+\centering
+\small
+\begin{tabular}{P{.3cm} | M{4cm} | P{5cm} | P{5 cm} }
+  \hline
+ & Labels & Probability & FREX \\
+  \hline
+1 & Cancer & women, said, cancer, studi, breast, research, drug & cancer, implant, hormon, tumor, virus, breast, pill \\  &&&\\
+  2 & Reproductive Health & abort, health, women, countri, children, birth, year & abort, birth, health, matern, aid, childbirth, pregnant \\ &&&\\
+  3 & Religion & said, islam, religi, women, church, countri, ian & islam, religi, secular, circumcis, fundamentalist, koran, religion \\ &&&\\
+  4 & Business \& Work & women, said, percent, work, compani, year, job & ese, compani, corpor, board, employ, bank, job \\ &&&\\
+  5 & Marriage \& Family & said, famili, husband, girl, mother, year, children & father, husband, daughter, son, villag, bride, sister \\ &&&\\
+  6 & Arts & art, work, show, artist, page, perform, photograph & museum, sculptur, artist, painter, art, galleri, exhibit \\ &&&\\
+  7 & Migration & said, worker, citi, work, year, prostitut, govern & factori, brothel, prostitut, traffick, tourist, worker, migrant \\ &&&\\
+  8 & Gender-Based Violence & said, rape, polic, case, report, sexual, violenc & rape, crime, prosecutor, crimin, prosecut, sentenc, victim \\ &&&\\
+  9 & War \& Combat & said, women, war, militari, kill, attack, soldier & soldier, troop, militari, combat, bomb, command, gun \\ &&&\\
+  10 & Literature & book, film, write, stori, life, woman, love & novel, reader, film, charact, write, edit, literari \\ &&&\\
+  11 & Human Interest & like, say, one, women, can, just, peopl & think, see, thing, feel, someth, realli, just \\ &&&\\
+  12 & Women's Rights \& Gender Equality & women, right, law, men, said, issu, equal & law, equal, discrimin, constitut, legal, bill, divorc \\ &&&\\
+  13 & Politics & said, polit, presid, govern, minist, elect, parti & elect, deleg, vote, voter, confer, minist, prime \\ &&&\\
+  14 & Sports & team, women, game, said, world, play, olymp & game, olymp, sport, player, soccer, coach, athlet \\ &&&\\
+  15 & Fashion & women, dress, fashion, wear, design, cloth, said & jacket, coutur, kimono, fashion, shirt, silk, skirt \\ &&&\\
+   \hline
+\end{tabular}
+\end{table}
+\efloatseparator
+ 

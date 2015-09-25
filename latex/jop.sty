@@ -1,0 +1,64 @@
+% jop.sty by Jeff Gill <jgill@polisci.ufl.edu>
+% Purpose: To set articles using Journal of Politics guidelines.
+% Add to preamble:
+%     \usepackage{jop}
+%     \usepackage{soul}
+% Add the following line after \maketitle:
+%     \baselineskip=2.00\baselineskip
+
+% Redefine section commands to get appropriate JOP appearence.
+% JOP does not use section numbering.
+\setcounter{secnumdepth}{-2}
+% JOP does not use subsubsectioning.
+\let\subsubsection=\subsection
+\makeatletter
+  \renewcommand{\section}{\@startsection
+    {section}%
+    {1}%
+    {0mm}%
+    {-0.05\baselineskip}%
+    {0.01\baselineskip}%
+    {\center\large\bf\textsf} }
+  \renewcommand{\subsection}{\@startsection
+    {subsection}%
+    {2}%
+    {0mm}%
+    {0.01\baselineskip}%
+    {-\fontdimen2\font plus -\fontdimen3\font minus -\fontdimen4\font\thickspace\thickspace}%
+    {\textsf} }
+\makeatother
+
+% Various Package Requirements
+\RequirePackage{times}
+\RequirePackage{endnotes}
+\let\footnote=\endnote
+\RequirePackage[nolists]{endfloat}
+\RequirePackage{indentfirst}
+\RequirePackage{vmargin}
+        \setpapersize{USletter}
+        \setmarginsrb{1.0in}{1.0in}{1.0in}{1.0in}{0in}{0in}{0in}{0.2in}
+\setlength{\parindent}{4mm}
+
+% Redefinitions and Definitions
+\renewcommand{\bibitem}{\vskip 2pt\par\hangindent\parindent\hskip-\parindent}
+\newcommand{\bls}{\renewcommand{\baselinestretch}{2.0}} \bls
+
+% Edit the substitutions from `endfloat.sty' to conform to JOP guidelines.
+ \renewcommand{\figureplace}{%
+  \begin{center}
+    \begin{tabular}{c}
+    -\,-\,-\,-\,-\,-\,-\,-\,-\,-\,-\,-\,-\,-\,-\,-\,-\,-\\
+    \figurename~\thepostfig\ about here\\
+    -\,-\,-\,-\,-\,-\,-\,-\,-\,-\,-\,-\,-\,-\,-\,-\,-\,-
+    \end{tabular}
+  \end{center}}
+ \renewcommand{\tableplace}{%
+  \begin{center}
+    \begin{tabular}{c}
+    -\,-\,-\,-\,-\,-\,-\,-\,-\,-\,-\,-\,-\,-\,-\,-\,-\,-\\
+    \tablename~\theposttbl\ about here\\
+    -\,-\,-\,-\,-\,-\,-\,-\,-\,-\,-\,-\,-\,-\,-\,-\,-\,-
+    \end{tabular}
+  \end{center}}
+
+

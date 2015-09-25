@@ -42,6 +42,9 @@ length(unique(rt$ccode)) # 198
 # number of obs with a document
 summary(as.factor(rt$n.binary))
 
+# number of obs > 1979
+nrow(rt[rt$year > 1979,])# 6226
+
 ############################################################
 ##### Plotting  number of articles per year per region #####
 ############################################################

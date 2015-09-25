@@ -26,7 +26,7 @@
 \usepackage{multirow} 
 
 \usepackage{graphicx}
-\DeclareGraphicsExtensions{.pdf,.png,.jpg}
+\DeclareGraphicsExtensions{.pdf,.png,.jpg, .jpeg}
 \usepackage{caption}
 \usepackage{subcaption}
 \usepackage{float}
@@ -101,7 +101,7 @@ The primary data used in this study consists of all articles about women in non-
 
 Using the LexisNexis database, I downloaded all articles containing the subject term ``women" from these two outlets during the specified time period. Subject terms are derived from LexisNexis's SmartIndexing technology, which applies controlled vocabulary terms for different taxonomies such as subject, geographic region, language, etc. In addition to subject, documents are assigned country terms along with a relevance score that calculates how important or salient each country is to a document. Scores of 85 percent or higher indicate a major term. I assign each article to a single country using its most salient country term, if that term has a relevance score of 85 percent or higher. Articles with missing major country terms were discarded.\footnote{\hspace{5}Some articles contained more than one major country term; in these cases, I took the term with the highest relevance score. These cases accounted for only 9 per cent of the corpus.}  Because this study explores how U.S. media represent women abroad, I discarded all articles that were primarily about the United States. The final sample includes 4522 documents: 3720 from the New York Times and 802 from the Washington Post. 
 
-These data were then combined into a country-year data set, with each document assigned to an observation based on the year in which it was published and the country it most concerned. The country-year data set includes all current and historic U.N. states, plus Palestine but excluding the United States, for a total of 198 countries and 6380 observations. 
+These data were then combined into a country-year data set, with each document assigned to an observation based on the year in which it was published and the country it most concerned. The country-year data set includes all current and historic U.N. states, plus Palestine but excluding the United States, for a total of 198 countries and 6226 observations. 
 
 County-years were assigned a regional classification loosely based on Hafner-Burton and Ron's (2012) six regional groupings: \emph{Powerful West} (West) with 28 countries; \emph{Asia} (Asia) with 33 countries, including Pakistan; \emph{Latin America} (LA) with 33 countries; the \emph{Middle East and North Africa} (MENA) with 22 countries, including Afghanistan; \emph{Sub-Saharan Africa} (Africa), with 46 countries; and the \emph{Eastern Europe and Central Asia} (EECA) with 31 countries. These regional groupings generally conform to the United Nations' regional classification, with some exceptions. First, former countries are assigned to regions based on where their current territorial manifestations are classified. Second, due to ambiguity surrounding whether Pakistan and Afghanistan are part of the Middle East or Asia, I decided to code these countries based on their assignment in most U.S. higher education area studies programs, with Afghanistan going in MENA and Pakistan in Asia; these assignments generally reflect the location of these nations in U.S. popular consciousness. Finally, the Powerful West is a region that Hafner-Burton and Ron include in their study and that I agree is important given the theoretical argument we wish to test. This region includes advanced industrialized countries of North American and Western Europe, along with two highly developed Asian countries -- Australia and New Zealand.
 
@@ -115,11 +115,9 @@ County-years were assigned a regional classification loosely based on Hafner-Bur
 
 The first hypotheses pertains to the likelihood of U.S. news coverage on women. Here, the dependent variable (likelihood of U.S. news coverage of women) is operationalized in two ways. The first is a simple binary (\emph{Reported}) indicating whether a country-year observation was covered in the documents (true in 1451 cases). Second, I recorded the total number of articles about women for that observation (\emph{Document Count}). 
 
-Hypothesis 1 claims that the effect of women's rights on the likelihood of coverage is conditional on whether the unit of observation is a Muslim or Middle East country. Thus an interaction term is necessary for the model. The mediating variable (Muslim or Middle Eastern country) is operationalized in three ways: \emph{Percentage Muslim} captures the Muslim percentage of a population according to research by the Pew Research Center. \emph{Muslim Majority} is a binary indicating whether the \emph{Percentage Muslim} is 50 per cent or above. \emph{MENA} is a binary indicating whether a country is included in the Middle East and North Africa regional classification described above. I estimate models with all three measures in order to compare potential causal mechanisms. 
+Hypothesis 1 claims that the effect of women's rights on the likelihood of coverage is conditional on whether the unit of observation is a Muslim or Middle East country. Thus an interaction term is necessary for the model. \footnote{Clearly, respect for women's rights is itself affected by whether the observation is a Muslim or MENA country. However, tests using variable inflation factors indicate that collinearity was not a problem in the models, and, furthermore, the results are robust across a number of specifications.} The mediating variable (Muslim or Middle Eastern country) is operationalized in three ways: \emph{Percentage Muslim} captures the Muslim percentage of a population according to research by the Pew Research Center. \emph{Muslim Majority} is a binary indicating whether the \emph{Percentage Muslim} is 50 per cent or above. \emph{MENA} is a binary indicating whether a country is included in the Middle East and North Africa regional classification described above. I estimate models with all three measures in order to compare potential causal mechanisms. 
 
-Modeling \emph{Women's Rights}, or the material condition of women's rights and gender equality, is problematic due to the conceptual difficulties surrounding this term (Peksen 2011). While recognizing the limitations of such a measure, I rely on the popular Cingranelli-Richards Rights Index (CIRI), which culls data from the U.S. State Department's annual human rights country reports. This is appropriate for the task at hand, because we would expect that U.S. news media follow a commensurate understanding of ``women's rights'' with that used by the U.S. State Department. CIRI offers three variables capturing the notion of women's rights as they are effected in law and practice: \emph{Women's Economic Rights}, \emph{Women's Political Rights}, and \emph{Women's Social Rights}.\footnote{\hspace{5}The \emph{Women's Political Rights} variable include the following rights: ``The right to vote; the right to run for political office; the right to hold elected and appointed government positions; the right to join political parties; the right to petition government officials." \emph{Women's Social Rights} includes: ``The right to equal inheritance; the right to enter into marriage on a basis of equality with men; the right to travel abroad; the right to obtain a passport; the right to confer citizenship to children or a husband; the right to initiate a divorce; the right to own, acquire, manage, and retain property brought into marriage; the right to participate in social, cultural, and community activities; the right to an education; the freedom to choose a residence/domicile; freedom from female genital mutilation of children and adults without their consent; freedom from forced sterilization. \emph{Women's Economic Rights} is coded based on the following: ``Equal pay for equal work; free choice of profession or employment without the need to obtain a husband or male relative's consent; the right to gainful employment without the need to obtain a husband or male relative's consent; equality in hiring and promotion practices; job security (maternity leave, unemployment benefits, no arbitrary firing or layoffs, etc.); non-discrimination by employers; the right to be free from sexual harassment in the workplace; the right to work at night; the right to work in occupations classified as dangerous; the right to work in the military and police force."  (Cingranelli and Richards 2012)}  Each variable is an ordinal variable ranging from 0 (indicating that women's rights were not guaranteed by law during a given year) to 3 (indicating that women's rights were guaranteed in both law and practice.)\footnote{\hspace{5}The \emph{Women's Political Rights} and \emph{Women's Economic Rights} variables are only available to 2011. The \emph{Women's Social Rights} variable is only available to 2004.}
-
-Clearly, \emph{Women's Rights} is itself affected by whether the observer
+Modeling \emph{Women's Rights}, or the material condition of women's rights and gender equality, is problematic due to the conceptual difficulties surrounding this term (Peksen 2011). While recognizing the limitations of such a measure, I rely on the popular Cingranelli-Richards Rights Index (CIRI), which culls data from the U.S. State Department's annual human rights country reports. This is appropriate for the task at hand, because we would expect that U.S. news media follow a commensurate understanding of ``women's rights'' with that used by the U.S. State Department. CIRI offers three variables capturing the notion of women's rights as they are effected in law and practice: \emph{Women's Economic Rights}, \emph{Women's Political Rights}, and \emph{Women's Social Rights}.\footnote{\hspace{5}The \emph{Women's Political Rights} variable include the following rights: ``The right to vote; the right to run for political office; the right to hold elected and appointed government positions; the right to join political parties; the right to petition government officials." \emph{Women's Social Rights} includes: ``The right to equal inheritance; the right to enter into marriage on a basis of equality with men; the right to travel abroad; the right to obtain a passport; the right to confer citizenship to children or a husband; the right to initiate a divorce; the right to own, acquire, manage, and retain property brought into marriage; the right to participate in social, cultural, and community activities; the right to an education; the freedom to choose a residence/domicile; freedom from female genital mutilation of children and adults without their consent; freedom from forced sterilization. \emph{Women's Economic Rights} is coded based on the following: ``Equal pay for equal work; free choice of profession or employment without the need to obtain a husband or male relative's consent; the right to gainful employment without the need to obtain a husband or male relative's consent; equality in hiring and promotion practices; job security (maternity leave, unemployment benefits, no arbitrary firing or layoffs, etc.); non-discrimination by employers; the right to be free from sexual harassment in the workplace; the right to work at night; the right to work in occupations classified as dangerous; the right to work in the military and police force."  (Cingranelli and Richards 2012)}  Each variable is an ordinal variable ranging from 0 (indicating that women's rights were not guaranteed by law during a given year) to 3 (indicating that women's rights were guaranteed in both law and practice.)\footnote{\hspace{5}The \emph{Women's Political Rights} and \emph{Women's Economic Rights} variables are only available to 2011. The \emph{Women's Social Rights} variable is only available to 2004.} The composite variable \emph{Women's Rights} estimates the overall situation of women's rights by taking the mean of these three indicators.\footnote{\hspace{3} The results are robust when using the three individual indices in place of the composite variable. See Appendix}  
 
 I include a number of controls that may affect the likelihood of coverage. First, a straightforward alternative explanation suggests that reporting about women is proportional to general news coverage. The variable \emph{Country Reports} records the number of articles that appear in the \emph{New York Times} relating to a particular country-year, including those that are unrelated to the subject ``women." We would expect coverage about women to be highly correlated with general coverage for a given country-year.
 
@@ -129,17 +127,17 @@ Similarly, journalists may find it difficult to report on countries that are mir
 
 Finally, I include controls for \emph{GDP per capita} (logged) using World Bank Development Indicators and \emph{Population} (logged) using data from the United Nations. The rationale is that journalists find it easier to report about women in rich, populous countries, where it is easier to conduct field research and/or conduct interviews. 
 
-I use statistical models that account for the cross-national time-series structure of the data. Because the panel data are highly correlated, I use generalized estimating equations (Zorn 2001). When modeling the dependent variable using the \emph{Reporting} binary, I use a probit regression. When modeling the dependent variable using \emph{Document Counts}, I use a negative binomial regression since this variable consists of over-dispersed counts. Note that a tobit is inappropriate here because coverage cannot assume negative values. PAPER. To deal with heteroskedasticity, all estimates use Huber-White corrected robust standard errors clustered on country.  Time-variant independent and control variables are lagged by one year to mitigate simultaneity issues and lessen any incorrect direction of inference. I also include a lagged-dependent variable in some models to correct for serial correlation (Wooldridge 2002). The results are summarized in Tables \ref{table:logit} and \ref{table: negbin}.
+I use statistical models that account for the cross-national time-series structure of the data. Because the panel data are highly correlated, I use generalized estimating equations (Zorn 2001). When modeling the dependent variable using the \emph{Reporting} binary, I use a probit regression. When modeling the dependent variable using \emph{Document Counts}, I use a negative binomial regression since this variable consists of over-dispersed counts. Note that a tobit is inappropriate here because coverage cannot assume negative values. PAPER. To deal with heteroskedasticity, all estimates use Huber-White corrected robust standard errors clustered on country.  Time-variant independent and control variables are lagged by one year to mitigate simultaneity issues and lessen any incorrect direction of inference. I also include a lagged-dependent variable in some models to correct for serial correlation (Wooldridge 2002). The results are summarized in Tables \ref{table:logit} and \ref{table:negbin}.
 
 
 % Table created by stargazer v.5.1 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu
 % Date and time: Thu, Sep 24, 2015 - 17:25:44
 \begin{table}[!htbp] \centering 
-  \caption{Testing Hypothesis 1 with Binary DV}
+  \caption{Testing Hypothesis 1 with \emph{Reported} (Binary) DV}
   \label{table:logit} 
 \begin{tabular}{@{\extracolsep{5pt}}lccc} 
 \\[-1.8ex]\hline \\[-1.8ex] 
-\\[-1.8ex] & \multicolumn{3}{c}{\textbf{Reported (Binary)}} \\ 
+%\\[-1.8ex] & \multicolumn{3}{c}{\textbf{Reported (Binary)}} \\ 
 \\[-1.8ex] & \textbf{Model 1} & \textbf{Model 2} & \textbf{Model 3}\\ 
 \hline \\[-1.8ex] 
  Lagged DV & 0.494$^{***}$ & 0.495$^{***}$ & 0.495$^{***}$ \\ 
@@ -162,11 +160,11 @@ I use statistical models that account for the cross-national time-series structu
   & (0.023) & (0.023) & (0.023) \\ 
   GDP per capita & 0.133$^{***}$ & 0.119$^{***}$ & 0.131$^{***}$ \\ 
   & (0.024) & (0.025) & (0.024) \\ 
-  Interaction & $-$0.372$^{***}$ &  &  \\ 
+  Women's Rights x Muslim Majority & $-$0.372$^{***}$ &  &  \\ 
   & (0.127) &  &  \\ 
-  Interaction &  & $-$0.342$^{**}$ &  \\ 
+  Women's Rights x MENA &  & $-$0.342$^{**}$ &  \\ 
   &  & (0.142) &  \\ 
-  Interaction &  &  & $-$0.392$^{***}$ \\ 
+  Women's Rights x Muslim Percentage &  &  & $-$0.392$^{***}$ \\ 
   &  &  & (0.138) \\ 
   Constant & $-$8.310$^{***}$ & $-$8.212$^{***}$ & $-$8.265$^{***}$ \\ 
   & (0.443) & (0.442) & (0.441) \\ 
@@ -183,11 +181,11 @@ AIC & 3327.627 & 3327.162 & 3316.168 \\
 % Table created by stargazer v.5.1 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu
 % Date and time: Thu, Sep 24, 2015 - 17:20:04
 \begin{table}[!htbp] \centering 
-  \caption{Testing Hypothesis 1 with Count DV}
+  \caption{Testing Hypothesis 1 with \emph{Document Count} DV}
     \label{table:negbin} 
 \begin{tabular}{@{\extracolsep{5pt}}lccc} 
 \\[-1.8ex]\hline \\[-1.8ex] 
-\\[-1.8ex] & \multicolumn{3}{c}{\textbf{Document Count}} \\ 
+%\\[-1.8ex] & \multicolumn{3}{c}{\textbf{Document Count}} \\ 
 \\[-1.8ex] & \textbf{Model 1} & \textbf{Model 2} & \textbf{Model 3}\\ 
 \hline \\[-1.8ex] 
  Lagged DV & 0.147$^{***}$ & 0.149$^{***}$ & 0.149$^{***}$ \\ 
@@ -210,11 +208,11 @@ AIC & 3327.627 & 3327.162 & 3316.168 \\
   & (0.026) & (0.027) & (0.026) \\ 
   GDP per capita & 0.209$^{***}$ & 0.169$^{***}$ & 0.209$^{***}$ \\ 
   & (0.036) & (0.037) & (0.036) \\ 
-  Interaction & $-$0.821$^{***}$ &  &  \\ 
+  Women's Rights x Muslim Majority & $-$0.821$^{***}$ &  &  \\ 
   & (0.205) &  &  \\ 
-  Interaction &  & $-$0.581$^{***}$ &  \\ 
+  Women's Rights x MENA &  & $-$0.581$^{***}$ &  \\ 
   &  & (0.215) &  \\ 
-  Interaction &  &  & $-$0.825$^{***}$ \\ 
+  Women's Rights x Muslim Percentage &  &  & $-$0.825$^{***}$ \\ 
   &  &  & (0.218) \\ 
   Constant & $-$11.635$^{***}$ & $-$11.641$^{***}$ & $-$11.579$^{***}$ \\ 
   & (0.623) & (0.632) & (0.629) \\ 
@@ -229,6 +227,31 @@ AIC & 7173.156 & 7153.767 & 7158.999 \\
 \end{table} 
 
 The models provide strong support for Hypothesis 1. 
+
+\begin{figure}
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{nb1}
+  \caption{Interaction with \emph{Muslim Majority}}
+  \label{fig:sfig1}
+\end{subfigure} 
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{nb2}
+    \caption{Interaction with \emph{MENA}}
+  \label{fig:sfig2}
+\end{subfigure}
+\begin{subfigure}{.5\textwidth}
+\vspace{.5cm}
+  \centering
+  \includegraphics[width=1\linewidth]{nb3}
+    \caption{Interaction with \emph{Muslim Percentage}}
+  \label{fig:sfig2}
+\end{subfigure}
+\vspace{.5cm}
+\caption{Marginal Effect of \emph{Women's Rights} on \emph{Document Count}}
+\label{fig:fig}
+\end{figure}
 
 The findings are robust across a number of specifications. First, I ran alternative models replacing the \emph{Women's Rights Index} composite variable with individual scores representing \emph{Women's Political Rights}, \emph{Women's Social Rights}, and \emph{Women's Economic Rights} respectively. Second, to address potential bias stemming from missing data on covariates, I model effects using two imputation methods: a "nearest value" method, whereby I impute covariate data using the last reported value at the country level; and a multiple imputation method as as described by King et al (2001.\footnote{\hspace{5}I use the \emph{Amelia} package in $R$ to estimate missing data using multiple imputation. Honaker et al. 2011)} Finally, I estimated models without the lagged dependent variable, and removing Israel from the sample if MENA countries. The results with substantively equivalent across all models.\footnote{\hspace{5}All models are included in the Appendix.}
 
@@ -381,7 +404,7 @@ I model using a heck
   \label{} 
 \begin{tabular}{@{\extracolsep{5pt}}lccc} 
 \\[-1.8ex]\hline \\[-1.8ex] 
-\\[-1.8ex] & \multicolumn{3}{c}{\textbf{Proportion of Coverage about Women's Rights}} \\ 
+%\\[-1.8ex] & \multicolumn{3}{c}{\textbf{Proportion of Coverage about Women's Rights}} \\ 
 \\[-1.8ex] & \textbf{Model 1} & \textbf{Model 2} & \textbf{Model 3}\\ 
 \hline \\[-1.8ex] 
  Intercept & 0.094$^{***}$ & 0.096$^{***}$ & 0.090$^{***}$ \\ 

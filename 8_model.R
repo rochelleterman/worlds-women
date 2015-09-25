@@ -22,7 +22,7 @@ library(car)
 library(pscl)
 source("interaction_plots.R")
 library(mfx)
-library(usdm)
+# library(usdm)
 
 #######################
 #### Prepare Data #####
@@ -35,14 +35,11 @@ rt.imputed <- read.csv("Data/country-year/imputed.csv")
 # set database
 rt <- rt.orig
 
-# remove items without ccode
-rt <- rt[!is.na(rt$ccode),]
+# Deal with Palestine (without ccode)
+rt$ccode[is.na(rt$ccode)] <- 999
 
 # set dv
 rt$rights <- rt$rights.mean
-
-# if sum, set na to 0
-rt$rights[is.na(rt$rights)] <- 0
 
 # composite women's rights
 rt$women_composite <- rowMeans(cbind(rt$wopol,rt$wosoc,rt$wecon), na.rm = T)
@@ -50,15 +47,18 @@ rt$women_composite <- rowMeans(cbind(rt$wopol,rt$wosoc,rt$wecon), na.rm = T)
 # Summarize Data
 stargazer(rt, type="text")
 
-# make panel data
-rt <- pdata.frame(rt, c("ccode","year"))
-
 # subset with an observation
 rt.1 <- rt[rt$n.binary==1,]
 summary(rt.1$muslim)
 
 # israel
 rt$mena[rt$ccode == 666] <- 1
+
+# n.obs
+nrow(rt[rt$year>1979,])
+
+# make panel data
+rt <- pdata.frame(rt, c("ccode","year"))
 
 #############################
 #### 1.  Plots and Tests ####
@@ -88,15 +88,6 @@ plot(bin, main="Hexagonal Binning")
 hist(rt$n.docs,  breaks = 50)
 hist(rt.1$rights,  breaks = 50)
 
-# Wooldridge test for serial correlation
-pwartest(n.docs ~ lag(count, 1) + lag(women_composite,1)*lag(muslim.maj,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt)
-
-pwartest(n.docs ~lag(n.docs,1) + lag(count, 1) + lag(women_composite,1)*lag(muslim.maj,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt)
-
-pwartest(n.binary ~ lag(count, 1) + lag(women_composite,1)*lag(muslim.maj,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt)
-
-pwartest(n.binary  ~lag(n.binary,1) + lag(count, 1) + lag(women_composite,1)*lag(muslim.maj,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt)
-
 ########################################
 #### 2. LOGIT  Models on N. Binary #####
 ########################################
@@ -109,7 +100,7 @@ coeftest(logit1, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))
 logit1.se <- coeftest(logit1, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 jpeg("Results/regressions/interactive-plots/logit1.jpeg",width=700,height=500,type="quartz")
-interaction_plot_binary(logit1, effect="lag(women_composite, 1)", moderator="lag(muslim.maj, 1)", interaction="lag(women_composite, 1):lag(muslim.maj, 1)", factor_labels=c("Not Muslim","Muslim"), xlabel="Muslim majority", ylabel="Effect of Women's Rights on Coverage", title="Interaction between Women's Rights\nand Muslim-majority status on coverage")
+interaction_plot_binary(logit1, effect="lag(women_composite, 1)", moderator="lag(muslim.maj, 1)", interaction="lag(women_composite, 1):lag(muslim.maj, 1)", factor_labels=c("Not Muslim","Muslim"), xlabel="Muslim majority", ylabel="Marginal Effect of Women's Rights on Coverage", title="Interaction between Women's Rights\nand Muslim-majority status on coverage")
 dev.off()
 
 # MENA
@@ -131,8 +122,11 @@ interaction_plot_continuous(logit3, effect="lag(women_composite, 1)", moderator=
 dev.off()
 
 # PRINT
-stargazer(logit1, logit2, logit3, type = "latex", style = "ajps", se = list(logit1.se, logit2.se, logit3.se), notes="Robust standard errors clustered on country appear in parentheses.",  dep.var.labels = "Reported (Binary)", covariate.labels=c("Lagged DV", "Country Reports", "Women's Rights Index","Muslim Majority","MENA", "Muslim Percentage", "Democracy", "Instability", "Population", "GDP per capita", "Interaction", "Interaction","Interaction"))
+stargazer(logit1, logit2, logit3, type = "latex", style = "ajps", se = list(logit1.se, logit2.se, logit3.se), notes="Robust standard errors clustered on country appear in parentheses.",  dep.var.labels = "", covariate.labels=c("Lagged DV", "Country Reports", "Women's Rights Index","Muslim Majority","MENA", "Muslim Percentage", "Democracy", "Instability", "Population", "GDP per capita", "Interaction", "Interaction","Interaction"), star.cutoffs = c(0.05, 0.01, .001))
 
+lm.binary<- lm(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(women_composite,1)*lag(muslim.maj,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt)
+summary(lm.binary)
+coeftest(lm.binary, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))
 
 ###################################
 #### 3. Negbin Model on N.Docs ####
@@ -144,7 +138,7 @@ summary(nb1)
 nb1.se <- coeftest(nb1, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 jpeg("Results/regressions/interactive-plots/nb1.jpeg",width=700,height=500,type="quartz")
-interaction_plot_binary(nb1, effect="lag(women_composite, 1)", moderator="lag(muslim.maj, 1)", interaction="lag(women_composite, 1):lag(muslim.maj, 1)", factor_labels=c("Not Muslim Majority","Muslim Majority"), xlabel="", ylabel="Effect of Women's Rights on Coverage", title="Interaction between Women's Rights\nand Muslim-majority status on coverage")
+interaction_plot_binary(nb1, effect="lag(women_composite, 1)", moderator="lag(muslim.maj, 1)", interaction="lag(women_composite, 1):lag(muslim.maj, 1)", factor_labels=c("Not Muslim Majority","Muslim Majority"), xlabel="", ylabel="Marginal Effect of Women's Rights on Coverage", title="Interaction between Women's Rights\nand Muslim-majority status on coverage")
 dev.off()
 
 # MENA
@@ -166,10 +160,15 @@ interaction_plot_continuous(nb3, effect="lag(women_composite, 1)", moderator="la
 dev.off()
 
 # PRINT
-stargazer(nb1, nb2, nb3, type = "latex", style = "ajps", se = list(nb1.se, nb2.se, nb3.se), notes="Robust standard errors clustered on country appear in parentheses.",  dep.var.labels = "Reported (binary)", covariate.labels=c("Lagged DV", "Country Reports", "Women's Rights Index","Muslim Majority","MENA", "Muslim Percentage", "Democracy", "Instability", "Population", "GDP per capita", "Interaction", "Interaction","Interaction"))
+stargazer(nb1, nb2, nb3, type = "latex", style = "ajps", se = list(nb1.se, nb2.se, nb3.se), notes="Robust standard errors clustered on country appear in parentheses.",  dep.var.labels = "Reported (binary)", covariate.labels=c("Lagged DV", "Country Reports", "Women's Rights Index","Muslim Majority","MENA", "Muslim Percentage", "Democracy", "Instability", "Population", "GDP per capita", "Women's Rights x Muslim Majority", "Women's Rights x MENA","Women's Rights x Muslim Percentage"), star.cutoffs = c(0.05, 0.01, 0.001))
 
+# OLS
+lm.count <- lm(n.docs ~ lag(n.docs, 1) + lag(count, 1) + lag(women_composite,1)*lag(muslim.maj,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt)
+summary(lm.count)
+coeftest(lm.count, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))
 
 # tobit for good measure
+require(AER)
 tobit <- tobit(n.docs ~ lag(n.docs, 1) + lag(count, 1) + lag(women_composite,1)*lag(muslim.maj,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt)
 summary(tobit)
 
@@ -411,17 +410,14 @@ se3 = coeftest(pm3, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 #########################################
 #### 2. Linear Models + Diagnostics #####
 #########################################
+
 rt <- as.data.frame(rt)
 
 # fit linear model
 fit <- lm(n.docs ~ lag(count, 1) + lag(women_composite,1)*lag(muslim.maj,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt)
 
 # NeweyWest standard errors
-NeweyWest(fit, lag = 1, diagnostics = 1)
 coeftest(fit, vcov=function(x) NeweyWest(x, lag =1))
-
-# Panel corrected standard errors
-psce <-pcse(fit, groupN = as.numeric(rt$ccode), groupT = as.numeric(rt$year), pairwise=TRUE)
 
 # outliers
 outlierTest(fit) # Bonferonni p-value for most extreme obs
@@ -460,12 +456,45 @@ lines(xfit, yfit)
 ncvTest(fit)
 # plot studentized residuals vs. fitted values 
 spreadLevelPlot(fit)
+# Breuch Pagan test
+bptest(fit)
+coeftest(fit,vcov=hccm(fit))
 
-# Evaluate Collinearity
+########################################
+# Wooldridge test for serial correlation
+########################################
+
+# On N.Docs
+pwartest(n.docs ~ lag(count, 1) + lag(women_composite,1)*lag(muslim.maj,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt)
+
+# Adding laggged DV Help?
+pwartest(n.docs ~ lag(n.docs,1) + lag(count, 1) + lag(women_composite,1)*lag(muslim.maj,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt)
+
+# on N.Binary
+pwartest(n.binary ~ lag(count, 1) + lag(women_composite,1)*lag(muslim.maj,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt)
+
+# Adding lagged DV Help?
+pwartest(n.binary  ~lag(n.binary,1) + lag(count, 1) + lag(women_composite,1)*lag(muslim.maj,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt)
+
+###################
+# Collinearity tests
+###################
+
+# Correlation matrix
+require(Hmisc)
 names(rt)
-vars <- rt[,c(8,11,14,15,19,21,25)]
-vars$gdp.pc.un <- ln(vars$gdp.pc.un )
-vars$pop.wdi <- ln(vars$pop.wdi )
+vars <- rt[,c(9,11,15,16,20,22,26)]
+rcorr(as.matrix(vars), type="pearson")
+
+# Evaluate Collinearity with car
+fit <- lm(n.docs ~ lag(n.docs,1) + lag(count, 1) + lag(women_composite,1)*lag(muslim.maj,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt)
+vif(fit)
+sqrt(vif(fit)) > 2
+
+# Evluate collinearity with USDM
+require(usdm)
+vars$gdp.pc.un <- log(vars$gdp.pc.un )
+vars$pop.wdi <- log(vars$pop.wdi )
 names(vars)
 vif(vars) # variance inflation factors 
 v1 <- vifcor(vars, th=0.9)

@@ -114,6 +114,7 @@ summary(rt$mena)
 ## majority Muslim dummy
 rt$muslim.maj <- 0
 rt$muslim.maj[rt$muslim>=.50] <- 1
+rt$muslim.maj[is.na(rt$muslim)] <- NA
 summary(rt$muslim.maj)
 
 ## Adjust n from NA to 0
@@ -124,7 +125,7 @@ summary(rt$n.docs)
 ## Make n binary
 rt$n.binary <- rt$n.docs
 rt$n.binary[rt$n.docs > 0] <- 1
-rt$n.binary[is.na(rt$n.docs)] <- 0
+rt$n.binary[is.na(rt$n.docs)] <- NA
 rt$n.binary <- as.factor(rt$n.binary)
 summary(rt$n.binary)
 
@@ -238,3 +239,4 @@ cor(rt.impute$muslim, rt.impute$mena, use="complete.obs") #0.6366512
 
 ## write
 write.csv(rt.impute,"Data/country-year/imputed.csv", row.names = F)
+

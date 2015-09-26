@@ -122,8 +122,9 @@ interaction_plot_continuous(logit3, effect="lag(women_composite, 1)", moderator=
 dev.off()
 
 # PRINT
-stargazer(logit1, logit2, logit3, type = "latex", style = "ajps", se = list(logit1.se, logit2.se, logit3.se), notes="Robust standard errors clustered on country appear in parentheses.",  dep.var.labels = "", covariate.labels=c("Lagged DV", "Country Reports", "Women's Rights Index","Muslim Majority","MENA", "Muslim Percentage", "Democracy", "Instability", "Population", "GDP per capita", "Interaction", "Interaction","Interaction"), star.cutoffs = c(0.05, 0.01, .001))
+stargazer(logit1, logit2, logit3, type = "latex", style = "ajps", title = "Determinants of Coverage using Reported (Binary)", se = list(logit1.se, logit2.se, logit3.se), notes="Robust standard errors clustered on country appear in parentheses.",  dep.var.labels = "", covariate.labels=c("Lagged DV", "Country Reports", "Women's Rights Index","Muslim Majority","MENA", "Muslim Percentage", "Democracy", "Instability", "Population", "GDP per capita", "Women's Rights x Muslim Majority", "Women's Rights x MENA","Women's Rights x Muslim Percentage"), star.cutoffs = c(0.05, 0.01, .001))
 
+# OLS for good measure
 lm.binary<- lm(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(women_composite,1)*lag(muslim.maj,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt)
 summary(lm.binary)
 coeftest(lm.binary, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))
@@ -160,19 +161,12 @@ interaction_plot_continuous(nb3, effect="lag(women_composite, 1)", moderator="la
 dev.off()
 
 # PRINT
-stargazer(nb1, nb2, nb3, type = "latex", style = "ajps", se = list(nb1.se, nb2.se, nb3.se), notes="Robust standard errors clustered on country appear in parentheses.",  dep.var.labels = "Reported (binary)", covariate.labels=c("Lagged DV", "Country Reports", "Women's Rights Index","Muslim Majority","MENA", "Muslim Percentage", "Democracy", "Instability", "Population", "GDP per capita", "Women's Rights x Muslim Majority", "Women's Rights x MENA","Women's Rights x Muslim Percentage"), star.cutoffs = c(0.05, 0.01, 0.001))
+stargazer(nb1, nb2, nb3, type = "latex", title = "Determinants of Reporting using Document Count", style = "ajps", se = list(nb1.se, nb2.se, nb3.se), notes="Robust standard errors clustered on country appear in parentheses.",  dep.var.labels = "", covariate.labels=c("Lagged DV", "Country Reports", "Women's Rights Index","Muslim Majority","MENA", "Muslim Percentage", "Democracy", "Instability", "Population", "GDP per capita", "Women's Rights x Muslim Majority", "Women's Rights x MENA","Women's Rights x Muslim Percentage"), star.cutoffs = c(0.05, 0.01, 0.001))
 
 # OLS
 lm.count <- lm(n.docs ~ lag(n.docs, 1) + lag(count, 1) + lag(women_composite,1)*lag(muslim.maj,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt)
 summary(lm.count)
 coeftest(lm.count, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))
-
-# tobit for good measure
-require(AER)
-tobit <- tobit(n.docs ~ lag(n.docs, 1) + lag(count, 1) + lag(women_composite,1)*lag(muslim.maj,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt)
-summary(tobit)
-
-interaction_plot_binary(tobit, effect="lag(women_composite, 1)", moderator="lag(muslim.maj, 1)", interaction="lag(women_composite, 1):lag(muslim.maj, 1)", factor_labels=c("Not Muslim Majority","Muslim Majority"), xlabel="", ylabel="Effect of Women's Rights on Coverage", title="Interaction between Women's Rights\nand Muslim-majority status on coverage")
 
 ###########################
 #### 4. Heckman Models ####
@@ -182,7 +176,9 @@ interaction_plot_binary(tobit, effect="lag(women_composite, 1)", moderator="lag(
 heckit1 <- heckit(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(women_composite,1)*lag(muslim.maj,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),
                  rights ~ lag(rights, 1) + lag(women_composite,1) + lag(muslim.maj,1) + lag(polity2, 1) + lag(physint,1),
                  rt )
+summary(heckit1)
 heckit1.se = coeftest(heckit1$lm, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
+heckit1.se
 
 # MENA
 heckit2 <- heckit(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(women_composite,1)*lag(mena,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),
@@ -194,89 +190,90 @@ heckit2.se = coeftest(heckit2$lm, vcov=function(x) vcovHC(x, cluster="group", ty
 heckit3 <- heckit(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(women_composite,1)*lag(muslim,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),
                   rights ~ lag(rights, 1) + lag(women_composite,1) + lag(muslim,1) + lag(polity2, 1) + lag(physint,1),
                   rt )
+summary(heckit3$lm)
 heckit3.se = coeftest(heckit3$lm, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 # print
 
-stargazer(heckit1$lm, heckit2$lm, heckit3$lm, type = "latex", style = "ajps", se = list(heckit1.se, heckit2.se, heckit3.se), notes="Robust standard errors clustered on country appear in parentheses.",  dep.var.labels = "Proportion of Coverage about Women's Rights", covariate.labels=c("Intercept", "Lagged DV", "Women's Rights Index","Muslim Majority","MENA", "Muslim Percentage", "Democracy", "Physican Integrity Rights"))
+stargazer(heckit1$lm, heckit2$lm, heckit3$lm, type = "latex", style = "ajps", title = "Determinants of the Proportion of Coverage about Women's Rights, with lagged DV", se = list(heckit1.se, heckit2.se, heckit3.se), notes="Robust standard errors clustered on country appear in parentheses.",  dep.var.labels = "", covariate.labels=c("Intercept", "Lagged DV", "Women's Rights Index","Muslim Majority","MENA", "Muslim Percentage", "Democracy", "Physical Integrity Rights"), star.cutoffs = c(0.05, 0.01, 0.001))
 
 
-# OLS for good measure
-lm <- lm(rights ~ lag(rights, 1) + lag(women_composite,1) + lag(muslim.maj,1) + lag(physint,1), data = rt)
-summary(lm)
+#############################################
+#### 5.A Robustness Tests on LOGIT Model ####
+#############################################
 
-# fractional logit
-glm <- glm(rights ~ lag(rights, 1) + lag(women_composite,1) + lag(muslim.maj,1) + lag(physint,1), data = rt, family=binomial(link="logit"))
-summary(glm)
-coeftest(glm, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))
-coeftest(glm, sandwich)
-
-#############################
-#### 5. Robustness Tests ####
-#############################
-
-## LOGIT ON N.BINARY
-
-# women's political rights
+# 1. Replacing Women's Rights Composit with Women's Political Rights
 logit.r1.1 <- glm(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(wopol,1)*lag(muslim.maj,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt, family = "binomial") # muslim majority
-coeftest(logit.r1.1, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))
+logit.r1.1.se <- coeftest(logit.r1.1, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 logit.r1.2 <- glm(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(wopol,1)*lag(mena,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt, family = "binomial") # mena
-coeftest(logit.r1.2, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))
+logit.r1.2.se <- coeftest(logit.r1.2, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 logit.r1.3 <- glm(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(wopol,1)*lag(muslim,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt, family = "binomial") # muslim percentage
-coeftest(logit.r1.3, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))
+logit.r1.3.se <- coeftest(logit.r1.3, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
-# women's social rights
+stargazer(logit.r1.1, logit.r1.2, logit.r1.3, type = "latex", style = "ajps", title = "H1A, Women's Political Rights", se = list(logit.r1.1.se, logit.r1.2.se, logit.r1.3.se), notes="Robust standard errors clustered on country appear in parentheses.",  dep.var.labels = "", covariate.labels=c("Lagged DV", "Country Reports", "Women's Rights Index","Muslim Majority","MENA", "Muslim Percentage", "Democracy", "Instability", "Population", "GDP per capita", "Women's Rights x Muslim Majority", "Women's Rights x MENA","Women's Rights x Muslim Percentage"), star.cutoffs = c(0.05, 0.01, .001))
+
+
+# 2. Replacing Women's Rights Composit with Women's Social Rights
 logit.r2.1 <- glm(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(wosoc,1)*lag(muslim.maj,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt, family = "binomial") # muslim majority
-coeftest(logit.r2.1, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))
+logit.r2.1.se <- coeftest(logit.r2.1, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 logit.r2.2 <- glm(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(wosoc,1)*lag(mena,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt, family = "binomial") # mena
-coeftest(logit.r2.2, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))
+logit.r2.2.se <- coeftest(logit.r2.2, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 logit.r2.3 <- glm(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(wosoc,1)*lag(muslim,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt, family = "binomial") # muslim percentage
-coeftest(logit.r2.3, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))
+logit.r2.3.se <- coeftest(logit.r2.3, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
-# women's economic rights
+stargazer(logit.r2.1, logit.r2.2, logit.r2.3, type = "latex", style = "ajps", title = "H1A, Women's Social Rights", se = list(logit.r2.1.se, logit.r2.2.se, logit.r2.3.se), notes="Robust standard errors clustered on country appear in parentheses.",  dep.var.labels = "", covariate.labels=c("Lagged DV", "Country Reports", "Women's Rights Index","Muslim Majority","MENA", "Muslim Percentage", "Democracy", "Instability", "Population", "GDP per capita", "Women's Rights x Muslim Majority", "Women's Rights x MENA","Women's Rights x Muslim Percentage"), star.cutoffs = c(0.05, 0.01, .001))
+
+# 3. Replacing Women's Rights Composit with Women's Economic Rights
 logit.r3.1 <- glm(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(wecon,1)*lag(muslim.maj,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt, family = "binomial") # muslim majority
-coeftest(logit.r3.1, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))
+logit.r3.1.se <- coeftest(logit.r3.1, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 logit.r3.2 <- glm(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(wecon,1)*lag(mena,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt, family = "binomial") # mena
-coeftest(logit.r3.2, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))
+logit.r3.2.se <- coeftest(logit.r3.2, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 logit.r3.3 <- glm(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(wecon,1)*lag(muslim,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt, family = "binomial") # muslim percentage
-coeftest(logit.r3.3, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))
+logit.r3.3.se <- coeftest(logit.r3.3, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
-# 4: remove Israel from MENA
+stargazer(logit.r3.1, logit.r3.2, logit.r3.3, type = "latex", style = "ajps", title = "H1A, Women's Political Rights", se = list(logit.r3.1.se, logit.r3.2.se, logit.r3.3.se), notes="Robust standard errors clustered on country appear in parentheses.",  dep.var.labels = "", covariate.labels=c("Lagged DV", "Country Reports", "Women's Rights Index","Muslim Majority","MENA", "Muslim Percentage", "Democracy", "Instability", "Population", "GDP per capita", "Women's Rights x Muslim Majority", "Women's Rights x MENA","Women's Rights x Muslim Percentage"), star.cutoffs = c(0.05, 0.01, .001))
+
+# 4: Remove Israel from MENA
 rt.no.israel <- rt
 rt.no.israel$mena[rt.no.israel$ccode == 666] <- 0
 logit.r4 <- glm(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(women_composite,1)*lag(mena,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt.no.israel, family = "binomial")
 coeftest(logit.r4, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))
 
-# 5: removing lagged DV
+# 5: Removing lagged DV
 logit.r5.1 <- glm(n.binary ~ lag(count, 1) + lag(women_composite,1)*lag(muslim.maj,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt, family = "binomial") # muslim majority
-coeftest(logit.r5.1, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))
+logit.r5.1.se <- coeftest(logit.r5.1, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 logit.r5.2 <- glm(n.binary ~ lag(count, 1) + lag(women_composite,1)*lag(mena,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt, family = "binomial") # mena
-coeftest(logit.r5.2, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))
+logit.r5.2.se <- coeftest(logit.r5.2, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 logit.r5.3 <- glm(n.binary ~ lag(count, 1) + lag(women_composite,1)*lag(muslim,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt, family = "binomial") # muslim percentage
-coeftest(logit.r5.3, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))
+logit.r5.3.se <- coeftest(logit.r5.3, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
-# 6: missing data = nearest value
+stargazer(logit.r5.1, logit.r5.2, logit.r5.3, type = "latex", style = "ajps", title = "H1A, Removing Lagged DV", se = list(logit.r5.1.se, logit.r5.2.se, logit.r5.3.se), notes="Robust standard errors clustered on country appear in parentheses.",  dep.var.labels = "", covariate.labels=c("Lagged DV", "Country Reports", "Women's Rights Index","Muslim Majority","MENA", "Muslim Percentage", "Democracy", "Instability", "Population", "GDP per capita", "Women's Rights x Muslim Majority", "Women's Rights x MENA","Women's Rights x Muslim Percentage"), star.cutoffs = c(0.05, 0.01, .001))
+
+
+# 6: Missing data = nearest value
 rt.nearest$rights <- rt.nearest$rights.mean
 rt.nearest$rights[is.na(rt.nearest$rights)] <- 0
 rt.nearest$women_composite <- rowMeans(cbind(rt.nearest$wopol,rt.nearest$wosoc,rt.nearest$wecon), na.rm = T)
 rt.nearest <- pdata.frame(rt.nearest, c("ccode","year"))
 
-logit.r6.1 <- glm(n.docs ~ lag(n.docs, 1) + lag(count, 1) + lag(women_composite,1)*lag(muslim.maj,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt.nearest, family = "binomial") # muslim majority
-coeftest(logit.r6.1, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))
+logit.r6.1 <- glm(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(women_composite,1)*lag(muslim.maj,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt.nearest, family = "binomial") # muslim majority
+logit.r6.1.se <- coeftest(logit.r6.1, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
-logit.r6.2 <- glm(n.docs ~ lag(n.docs, 1) + lag(count, 1) + lag(women_composite,1)*lag(mena,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt.nearest, family = "binomial") # mena
-coeftest(logit.r6.2, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))
+logit.r6.2 <- glm(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(women_composite,1)*lag(mena,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt.nearest, family = "binomial") # mena
+logit.r6.2.se <- coeftest(logit.r6.2, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
-logit.r6.3 <- glm(n.docs ~ lag(n.docs, 1) + lag(count, 1) + lag(women_composite,1)*lag(muslim,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt.nearest, family = "binomial") # muslim percentavge
-coeftest(logit.r6.3, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))
+logit.r6.3 <- glm(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(women_composite,1)*lag(muslim,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt.nearest, family = "binomial") # muslim percentavge
+logit.r6.3.se <- coeftest(logit.r6.3, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
+
+stargazer(logit.r6.1, logit.r6.2, logit.r6.3, type = "latex", title = "H1A: Missing Data, Nearest Value", style = "ajps", se = list(logit.r6.1.se, logit.r6.2.se, logit.r6.3.se), notes="Robust standard errors clustered on country appear in parentheses.",  dep.var.labels = "", covariate.labels=c("Lagged DV", "Country Reports", "Women's Rights","Muslim Majority","MENA", "Muslim Percentage", "Democracy", "Instability", "Population", "GDP per capita", "Women's Rights x Muslim Majority", "Women's Rights x MENA","Women's Rights x Muslim Percentage"), star.cutoffs = c(0.05, 0.01, 0.001))
 
 # 7: Missing Data - Multiple Imputation
 rt.imputed$rights <- rt.imputed$rights.mean
@@ -284,93 +281,238 @@ rt.imputed$rights[is.na(rt.imputed$rights)] <- 0
 rt.imputed$women_composite <- rowMeans(cbind(rt.imputed$wopol,rt.imputed$wosoc,rt.imputed$wecon), na.rm = T)
 rt.imputed <- pdata.frame(rt.imputed, c("ccode","year"))
 
-logit.r7.1 <- glm(n.docs ~ lag(n.docs, 1) + lag(count, 1) + lag(women_composite,1)*lag(muslim.maj,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt.imputed, family = "binomial") # muslim majority
-coeftest(logit.r7.1, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))
+logit.r7.1 <- glm(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(women_composite,1)*lag(muslim.maj,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt.nearest, family = "binomial") # muslim majority
+logit.r7.1.se <- coeftest(logit.r7.1, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
-logit.r7.2 <- glm(n.docs ~ lag(n.docs, 1) + lag(count, 1) + lag(women_composite,1)*lag(mena,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt.imputed, family = "binomial") # mena
-coeftest(logit.r7.2, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))
+logit.r7.2 <- glm(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(women_composite,1)*lag(mena,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt.nearest, family = "binomial") # mena
+logit.r7.2.se <- coeftest(logit.r7.2, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
-logit.r7.3 <- glm(n.docs ~ lag(n.docs, 1) + lag(count, 1) + lag(women_composite,1)*lag(muslim,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt.imputed, family = "binomial") # muslim percentavge
-coeftest(logit.r7.3, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))
+logit.r7.3 <- glm(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(women_composite,1)*lag(muslim,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt.nearest, family = "binomial") # muslim percentavge
+logit.r7.3.se <- coeftest(logit.r7.3, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
+stargazer(logit.r7.1, logit.r7.2, logit.r7.3, type = "latex", title = "H1A: Missing Data, Multiple Imputation", style = "ajps", se = list(logit.r7.1.se, logit.r7.2.se, logit.r7.3.se), notes="Robust standard errors clustered on country appear in parentheses.",  dep.var.labels = "", covariate.labels=c("Lagged DV", "Country Reports", "Women's Rights","Muslim Majority","MENA", "Muslim Percentage", "Democracy", "Instability", "Population", "GDP per capita", "Women's Rights x Muslim Majority", "Women's Rights x MENA","Women's Rights x Muslim Percentage"), star.cutoffs = c(0.05, 0.01, 0.001))
 
-## NEGATIVE BINOMIAL on N.Docs ##
+###################################################################
+### 5.B: Robutness Checks on Negative Binomial Model of Counts ####
+###################################################################
 
-# 1: women's political rights
+# 1. Replacing Women's Rights Composit with Women's Political Rights
 nb.r1.1 <- glm.nb(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(wopol,1)*lag(muslim.maj,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt) # muslim majority
-coeftest(nb.r1.1, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))
+nb.r1.1.se <- coeftest(nb.r1.1, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 nb.r1.2 <- glm.nb(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(wopol,1)*lag(mena,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt) # mena
-coeftest(nb.r1.2, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))
+nb.r1.2.se <- coeftest(nb.r1.2, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 nb.r1.3 <- glm.nb(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(wopol,1)*lag(muslim,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt) # muslim percentage
-coeftest(nb.r1.3, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))
+nb.r1.3.se <- coeftest(nb.r1.3, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
-# 2: women's social rights
+stargazer(nb.r1.1, nb.r1.2, nb.r1.3, type = "latex", title = "H1B: Women's Political Rights", style = "ajps", se = list(nb.r1.1.se, nb.r1.2.se, nb.r1.3.se), notes="Robust standard errors clustered on country appear in parentheses.",  dep.var.labels = "", covariate.labels=c("Lagged DV", "Country Reports", "Women's Political Rights","Muslim Majority","MENA", "Muslim Percentage", "Democracy", "Instability", "Population", "GDP per capita", "Women's Rights x Muslim Majority", "Women's Rights x MENA","Women's Rights x Muslim Percentage"), star.cutoffs = c(0.05, 0.01, 0.001))
+
+
+# 2. Replacing Women's Rights Composit with Women's Social Rights
 nb.r2.1 <- glm.nb(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(wosoc,1)*lag(muslim.maj,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt) # muslim majority
-coeftest(nb.r2.1, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))
+nb.r2.1.se <- coeftest(nb.r2.1, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 nb.r2.2 <- glm.nb(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(wosoc,1)*lag(mena,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt) # mena
-coeftest(nb.r2.2, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))
+nb.r2.2.se <- coeftest(nb.r2.2, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 nb.r2.3 <- glm.nb(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(wosoc,1)*lag(muslim,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt) # muslim percentage
-coeftest(nb.r2.3, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))
+nb.r2.3.se <- coeftest(nb.r2.3, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
-# 3: women's economic rights
+stargazer(nb.r2.1, nb.r2.2, nb.r2.3, type = "latex", title = "H1B: Women's Social Rights", style = "ajps", se = list(nb.r2.1.se, nb.r2.2.se, nb.r2.3.se), notes="Robust standard errors clustered on country appear in parentheses.",  dep.var.labels = "", covariate.labels=c("Lagged DV", "Country Reports", "Women's Social Rights","Muslim Majority","MENA", "Muslim Percentage", "Democracy", "Instability", "Population", "GDP per capita", "Women's Rights x Muslim Majority", "Women's Rights x MENA","Women's Rights x Muslim Percentage"), star.cutoffs = c(0.05, 0.01, 0.001))
+
+# 3. Replacing Women's Rights Composit with Women's Economic Rights
 nb.r3.1 <- glm.nb(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(wecon,1)*lag(muslim.maj,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt) # muslim majority
-coeftest(nb.r3.1, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))
+nb.r3.1.se <- coeftest(nb.r3.1, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 nb.r3.2 <- glm.nb(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(wecon,1)*lag(mena,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt) # mena
-coeftest(nb.r3.2, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))
+nb.r3.2.se <- coeftest(nb.r3.2, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 nb.r3.3 <- glm.nb(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(wecon,1)*lag(muslim,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt) # muslim percentage
-coeftest(nb.r3.3, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))
+nb.r3.3.se <- coeftest(nb.r3.3, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
-# 4: remove Israel from MENA
+stargazer(nb.r3.1, nb.r3.2, nb.r3.3, type = "latex", title = "H1B: Women's Economic Rights", style = "ajps", se = list(nb.r3.1.se, nb.r3.2.se, nb.r3.3.se), notes="Robust standard errors clustered on country appear in parentheses.",  dep.var.labels = "", covariate.labels=c("Lagged DV", "Country Reports", "Women's Economic Rights","Muslim Majority","MENA", "Muslim Percentage", "Democracy", "Instability", "Population", "GDP per capita", "Women's Rights x Muslim Majority", "Women's Rights x MENA","Women's Rights x Muslim Percentage"), star.cutoffs = c(0.05, 0.01, 0.001))
+
+# 4. Remove Israel from MENA
 rt.no.israel <- rt
 rt.no.israel$mena[rt.no.israel$ccode == 666] <- 0
 nb.r4 <- glm.nb(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(women_composite,1)*lag(mena,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt.no.israel)
 coeftest(nb.r4, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))
 
-# 5: removing lagged DV
+# 5. Removing lagged DV
 nb.r5.1 <- glm.nb(n.binary ~ lag(count, 1) + lag(women_composite,1)*lag(muslim.maj,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt) # muslim majority
-coeftest(nb.r5.1, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))
+nb.r5.1.se <- coeftest(nb.r5.1, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 nb.r5.2 <- glm.nb(n.binary ~ lag(count, 1) + lag(women_composite,1)*lag(mena,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt) # mena
-coeftest(nb.r5.2, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))
+nb.r5.2.se <- coeftest(nb.r5.2, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 nb.r5.3 <- glm.nb(n.binary ~ lag(count, 1) + lag(women_composite,1)*lag(muslim,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt) # muslim percentage
-coeftest(nb.r5.3, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))
+nb.r5.3.se <- coeftest(nb.r5.3, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
-## 6: missing data = nearest value
+stargazer(nb.r5.1, nb.r5.2, nb.r5.3, type = "latex", title = "H1B: Removing Lagged DV", style = "ajps", se = list(nb.r5.1.se, nb.r5.2.se, nb.r5.3.se), notes="Robust standard errors clustered on country appear in parentheses.",  dep.var.labels = "", covariate.labels=c("Country Reports", "Women's Rights","Muslim Majority","MENA", "Muslim Percentage", "Democracy", "Instability", "Population", "GDP per capita", "Women's Rights x Muslim Majority", "Women's Rights x MENA","Women's Rights x Muslim Percentage"), star.cutoffs = c(0.05, 0.01, 0.001))
+
+## 6. Missing data = nearest value -- NOT VALID
 rt.nearest$rights <- rt.nearest$rights.mean
 rt.nearest$rights[is.na(rt.nearest$rights)] <- 0
 rt.nearest$women_composite <- rowMeans(cbind(rt.nearest$wopol,rt.nearest$wosoc,rt.nearest$wecon), na.rm = T)
 rt.nearest <- pdata.frame(rt.nearest, c("ccode","year"))
 
 nb.r6.1 <- glm.nb(n.docs ~ lag(n.docs, 1) + lag(count, 1) + lag(women_composite,1)*lag(muslim.maj,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt.nearest) # muslim majority
-coeftest(nb.r6.1, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))
+nb.r6.1.se <- coeftest(nb.r6.1, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 nb.r6.2 <- glm.nb(n.docs ~ lag(n.docs, 1) + lag(count, 1) + lag(women_composite,1)*lag(mena,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt.nearest) # mena
-coeftest(nb.r6.2, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))
+nb.r6.2.se <- coeftest(nb.r6.2, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 nb.r6.3 <- glm.nb(n.docs ~ lag(n.docs, 1) + lag(count, 1) + lag(women_composite,1)*lag(muslim,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt.nearest) # muslim percentavge
-coeftest(nb.r6.3, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))
+nb.r6.3.se <- coeftest(nb.r6.3, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
-# 7: Missing Data - Multiple Imputation
+stargazer(nb.r6.1, nb.r6.2, nb.r6.3, type = "latex", title = "H1B: Missing Data, Nearest Value", style = "ajps", se = list(nb.r6.1.se, nb.r6.2.se, nb.r6.3.se), notes="Robust standard errors clustered on country appear in parentheses.",  dep.var.labels = "", covariate.labels=c("Lagged DV", "Country Reports", "Women's Rights","Muslim Majority","MENA", "Muslim Percentage", "Democracy", "Instability", "Population", "GDP per capita", "Women's Rights x Muslim Majority", "Women's Rights x MENA","Women's Rights x Muslim Percentage"), star.cutoffs = c(0.05, 0.01, 0.001))
+
+# 7. Missing Data - Multiple Imputation
 rt.imputed$rights <- rt.imputed$rights.mean
 rt.imputed$rights[is.na(rt.imputed$rights)] <- 0
 rt.imputed$women_composite <- rowMeans(cbind(rt.imputed$wopol,rt.imputed$wosoc,rt.imputed$wecon), na.rm = T)
 rt.imputed <- pdata.frame(rt.imputed, c("ccode","year"))
 
 nb.r7.1 <- glm.nb(n.docs ~ lag(n.docs, 1) + lag(count, 1) + lag(women_composite,1)*lag(muslim.maj,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt.imputed) # muslim majority
-coeftest(nb.r7.1, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))
+nb.r7.1.se <- coeftest(nb.r7.1, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 nb.r7.2 <- glm.nb(n.docs ~ lag(n.docs, 1) + lag(count, 1) + lag(women_composite,1)*lag(mena,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt.imputed) # mena
-coeftest(nb.r7.2, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))
+nb.r7.2.se <- coeftest(nb.r7.2, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 nb.r7.3 <- glm.nb(n.docs ~ lag(n.docs, 1) + lag(count, 1) + lag(women_composite,1)*lag(muslim,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt.imputed) # muslim percentavge
-coeftest(nb.r7.3, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))
+nb.r7.3.se <- coeftest(nb.r7.3, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
+
+stargazer(nb.r7.1, nb.r7.2, nb.r7.3, type = "latex", title = "H1B: Missing Data, Multiple Imputation", style = "ajps", se = list(nb.r7.1.se, nb.r7.2.se, nb.r7.3.se), notes="Robust standard errors clustered on country appear in parentheses.",  dep.var.labels = "", covariate.labels=c("Lagged DV", "Country Reports", "Women's Rights","Muslim Majority","MENA", "Muslim Percentage", "Democracy", "Instability", "Population", "GDP per capita", "Women's Rights x Muslim Majority", "Women's Rights x MENA","Women's Rights x Muslim Percentage"), star.cutoffs = c(0.05, 0.01, 0.001))
+
+#################################################
+#### 5.C: Robustness Checks on Heckman Model ###
+#################################################
+
+# 1. Removing lagged DV (in Linear Model)
+heckit.r1.1 <- heckit(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(women_composite,1)*lag(muslim.maj,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),
+                  rights ~ lag(women_composite,1) + lag(muslim.maj,1) + lag(polity2, 1) + lag(physint,1),
+                  rt ) # muslim maj
+heckit.r1.1.se <- coeftest(heckit.r1.1$lm, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
+
+heckit.r1.2 <- heckit(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(women_composite,1)*lag(mena,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),
+                  rights ~ lag(women_composite,1) + lag(mena,1) + lag(polity2, 1) + lag(physint,1),
+                  rt ) # mena
+heckit.r1.2.se <- coeftest(heckit.r1.2$lm, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
+
+heckit.r1.3 <- heckit(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(women_composite,1)*lag(muslim,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),
+                  rights ~ lag(women_composite,1) + lag(muslim,1) + lag(polity2, 1) + lag(physint,1),
+                  rt ) # muslim perc.
+heckit.r1.3.se <- coeftest(heckit.r1.3$lm, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
+
+# print
+stargazer(heckit.r1.1$lm, heckit.r1.2$lm, heckit.r1.3$lm, type = "latex", style = "ajps", title = "H2: Removing lagged DV (in Linear Model)", se = list(heckit.r1.1.se, heckit.r1.2.se, heckit.r1.3.se), notes="Robust standard errors clustered on country appear in parentheses.",  dep.var.labels = "", covariate.labels=c("Intercept",  "Women's Rights Index","Muslim Majority","MENA", "Muslim Percentage", "Democracy", "Physical Integrity Rights"), star.cutoffs = c(0.05, 0.01, 0.001))
+
+# 2. Removing Israel from MENA
+rt.no.israel <- rt
+rt.no.israel$mena[rt.no.israel$ccode == 666] <- 0
+
+heckit.r5.1 <- heckit(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(women_composite,1)*lag(muslim.maj,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),
+                      rights ~ lag(rights, 1) + lag(women_composite,1) + lag(muslim.maj,1) + lag(polity2, 1) + lag(physint,1),
+                      rt.no.israel) # muslim maj
+heckit.r5.1.se <- coeftest(heckit.r5.1$lm, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
+
+heckit.r5.2 <- heckit(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(women_composite,1)*lag(mena,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),
+                      rights ~ lag(rights, 1) + lag(women_composite,1) + lag(mena,1) + lag(polity2, 1) + lag(physint,1),
+                      rt.no.israel ) # mena
+heckit.r5.2.se <- coeftest(heckit.r5.2$lm, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
+
+heckit.r5.3 <- heckit(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(women_composite,1)*lag(muslim,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),
+                      rights ~ lag(rights, 1) + lag(women_composite,1) + lag(muslim,1) + lag(polity2, 1) + lag(physint,1),
+                      rt.no.israel ) # muslim perc.
+heckit.r5.3.se <- coeftest(heckit.r5.3$lm, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
+
+# print
+stargazer(heckit.r5.1$lm, heckit.r5.2$lm, heckit.r5.3$lm, type = "latex", style = "ajps", title = "H2: Removing Israel from MENA", se = list(heckit.r5.1.se, heckit.r5.1.se, heckit.r5.3.se), notes="Robust standard errors clustered on country appear in parentheses.",  dep.var.labels = "", covariate.labels=c("Intercept", "Lagged DV", "Women's Rights Index","Muslim Majority","MENA", "Muslim Percentage", "Democracy", "Physican Integrity Rights"), star.cutoffs = c(0.05, 0.01, 0.001))
+
+# 3. Use Fractional Logit Instead
+heckit.r3.1 <- glm(rights ~ lag(rights, 1) + lag(women_composite,1) + lag(muslim.maj,1) + lag(physint,1), data = rt, family=binomial(link="logit"), weights = n.words)
+summary(heckit.r3.1)
+heckit.r3.1.se <- coeftest(heckit.r3.1, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
+
+heckit.r3.2 <- glm(rights ~ lag(rights, 1) + lag(women_composite,1) + lag(mena,1) + lag(physint,1), data = rt, family=binomial(link="logit"), weights = n.words)
+summary(heckit.r3.1)
+heckit.r3.2.se <- coeftest(heckit.r3.2, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
+
+heckit.r3.3 <- glm(rights ~ lag(rights, 1) + lag(women_composite,1) + lag(muslim,1) + lag(physint,1), data = rt, family=binomial(link="logit"), weights = n.words)
+summary(heckit.r3.1)
+heckit.r3.3.se <- coeftest(heckit.r3.3, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
+
+stargazer(heckit.r3.1, heckit.r3.2, heckit.r3.3, type = "latex", style = "ajps", title = "H2: Fractional Logit", se = list(heckit.r3.1.se, heckit.r3.2.se, heckit.r3.3.se), notes="Robust standard errors clustered on country appear in parentheses.",  dep.var.labels = "", covariate.labels=c("Lagged DV", "Women's Rights Index","Muslim Majority","MENA", "Muslim Percentage", "Democracy", "Physical Integrity Rights"), star.cutoffs = c(0.05, 0.01, 0.001))
+
+# 4. Fractional Logit without Lagged DV
+heckit.r4.1 <- glm(rights ~ lag(women_composite,1) + lag(muslim.maj,1) + lag(physint,1), data = rt, family=binomial(link="logit"), weights = n.words)
+summary(heckit.r4.1)
+heckit.r4.1.se <- coeftest(heckit.r4.1, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
+
+heckit.r4.2 <- glm(rights ~lag(women_composite,1) + lag(mena,1) + lag(physint,1), data = rt, family=binomial(link="logit"), weights = n.words)
+summary(heckit.r4.1)
+heckit.r4.2.se <- coeftest(heckit.r4.2, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
+
+heckit.r4.3 <- glm(rights ~ lag(women_composite,1) + lag(muslim,1) + lag(physint,1), data = rt, family=binomial(link="logit"), weights = n.words)
+summary(heckit.r4.1)
+heckit.r4.3.se <- coeftest(heckit.r4.3, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
+
+stargazer(heckit.r4.1, heckit.r4.2, heckit.r4.3, type = "latex", style = "ajps", title = "H2: Fractional Logit without lagged DV", se = list(heckit.r4.1.se, heckit.r4.2.se, heckit.r4.3.se), notes="Robust standard errors clustered on country appear in parentheses.",  dep.var.labels = "", covariate.labels=c("Lagged DV", "Women's Rights Index","Muslim Majority","MENA", "Muslim Percentage", "Democracy", "Physical Integrity Rights"), star.cutoffs = c(0.05, 0.01, 0.001))
+
+# 5. Replacing Women's Rights Composit with Women's Economic Rights
+heckit.r5.1 <- heckit(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(wopol,1)*lag(muslim.maj,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),
+                      rights ~ lag(rights) + lag(wopol,1) + lag(muslim.maj,1) + lag(polity2, 1) + lag(physint,1),
+                      rt) # muslim maj
+heckit.r5.1.se <- coeftest(heckit.r5.1$lm, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
+
+heckit.r5.2 <- heckit(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(wopol,1)*lag(mena,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),
+                      rights ~ lag(rights) + lag(wopol,1) + lag(mena,1) + lag(polity2, 1) + lag(physint,1),
+                      rt ) # mena
+heckit.r5.2.se <- coeftest(heckit.r5.2$lm, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
+
+heckit.r5.3 <- heckit(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(wopol,1)*lag(muslim,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),
+                      rights ~ lag(rights) + lag(wopol,1) + lag(muslim,1) + lag(polity2, 1) + lag(physint,1),
+                      rt ) # muslim perc.
+heckit.r5.3.se <- coeftest(heckit.r5.3$lm, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
+
+stargazer(heckit.r5.1$lm, heckit.r5.2$lm, heckit.r5.3$lm, type = "latex", style = "ajps", title = "H2: Women's Political Rights", se = list(heckit.r5.1.se, heckit.r5.2.se, heckit.r5.3.se), notes="Robust standard errors clustered on country appear in parentheses.",  dep.var.labels = "", covariate.labels=c("Intercept", "Lagged DV", "Women's Political Rights","Muslim Majority","MENA", "Muslim Percentage", "Democracy", "Physical Integrity Rights"), star.cutoffs = c(0.05, 0.01, 0.001))
+
+# 6. Replacing Women's Rights Composit with Women's Social Rights
+heckit.r6.1 <- heckit(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(wosoc,1)*lag(muslim.maj,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),
+                      rights ~ lag(rights) + lag(wosoc,1) + lag(muslim.maj,1) + lag(polity2, 1) + lag(physint,1),
+                      rt) # muslim maj
+heckit.r6.1.se <- coeftest(heckit.r6.1$lm, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
+
+heckit.r6.2 <- heckit(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(wosoc,1)*lag(mena,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),
+                      rights ~ lag(rights) + lag(wosoc,1) + lag(mena,1) + lag(polity2, 1) + lag(physint,1),
+                      rt ) # mena
+heckit.r6.2.se <- coeftest(heckit.r6.2$lm, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
+
+heckit.r6.3 <- heckit(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(wosoc,1)*lag(muslim,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),
+                      rights ~ lag(rights) + lag(wosoc,1) + lag(muslim,1) + lag(polity2, 1) + lag(physint,1),
+                      rt ) # muslim perc.
+heckit.r6.3.se <- coeftest(heckit.r6.3$lm, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
+
+stargazer(heckit.r6.1$lm, heckit.r6.2$lm, heckit.r6.3$lm, type = "latex", style = "ajps", title = "H2: Women's Social Rights", se = list(heckit.r6.1.se, heckit.r6.2.se, heckit.r6.3.se), notes="Robust standard errors clustered on country appear in parentheses.",  dep.var.labels = "", covariate.labels=c("Intercept", "Lagged DV", "Women's Social Rights","Muslim Majority","MENA", "Muslim Percentage", "Democracy", "Physical Integrity Rights"), star.cutoffs = c(0.05, 0.01, 0.001))
+
+# 7. Replacing Women's Rights Composit with Women's Economic Rights
+heckit.r7.1 <- heckit(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(wecon,1)*lag(muslim.maj,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),
+                      rights ~ lag(rights) + lag(wecon,1) + lag(muslim.maj,1) + lag(polity2, 1) + lag(physint,1),
+                      rt) # muslim maj
+heckit.r7.1.se <- coeftest(heckit.r7.1$lm, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
+
+heckit.r7.2 <- heckit(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(wecon,1)*lag(mena,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),
+                      rights ~ lag(rights) + lag(wecon,1) + lag(mena,1) + lag(polity2, 1) + lag(physint,1),
+                      rt ) # mena
+heckit.r7.2.se <- coeftest(heckit.r7.2$lm, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
+
+heckit.r7.3 <- heckit(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(wecon,1)*lag(muslim,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),
+                      rights ~ lag(rights) + lag(wecon,1) + lag(muslim,1) + lag(polity2, 1) + lag(physint,1),
+                      rt ) # muslim perc.
+heckit.r7.3.se <- coeftest(heckit.r7.3$lm, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
+
+stargazer(heckit.r7.1$lm, heckit.r7.2$lm, heckit.r7.3$lm, type = "latex", style = "ajps", title = "H2: Women's Economic Rights", se = list(heckit.r7.1.se, heckit.r7.2.se, heckit.r7.3.se), notes="Robust standard errors clustered on country appear in parentheses.",  dep.var.labels = "", covariate.labels=c("Intercept", "Lagged DV", "Women's Economic Rights","Muslim Majority","MENA", "Muslim Percentage", "Democracy", "Physical Integrity Rights"), star.cutoffs = c(0.05, 0.01, 0.001))
 
 ########################
 #### 6. PLM Models #####
@@ -407,8 +549,9 @@ summary(pm3)
 coeftest(pm3, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))
 se3 = coeftest(pm3, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
+
 #########################################
-#### 2. Linear Models + Diagnostics #####
+#### 7. Linear Models + Diagnostics #####
 #########################################
 
 rt <- as.data.frame(rt)

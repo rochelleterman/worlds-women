@@ -116,6 +116,7 @@ rt$muslim.maj <- 0
 rt$muslim.maj[rt$muslim>=.50] <- 1
 rt$muslim.maj[is.na(rt$muslim)] <- NA
 summary(rt$muslim.maj)
+summary(rt$muslim)
 
 ## Adjust n from NA to 0
 rt$n.docs[is.na(rt$n.docs)] <- 0

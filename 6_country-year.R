@@ -21,11 +21,12 @@ library(data.table)  # for missing valus
 library(sampleSelection)
 
 # load data
-meta.topics <- read.csv("Data/meta-topics.csv")
+meta.topics <- read.csv("Data/Corpora/meta-topics.csv")
 names(meta.topics)
 
 # prep docs
 docs <- subset(meta.topics,select=c(1:15,iso3c,year,region,n.words))
+
 # from topic proportions to number of words
 docs[,1:15] <- docs[,1:15]*docs$n.words
 sum(docs[1,1:15]) # 348
@@ -188,16 +189,14 @@ rt$pop.wdi <- impute(rt$pop.wdi)
 rt$lnreportcount <- impute(rt$lnreportcount)
 rt$idealpoint <- impute(rt$idealpoint)
 
+# test
 summary(rt$lnreportcount)
 summary(rt.orig$lnreportcount)
-
 cor(rt$muslim, rt$mena, use="complete.obs") #0.6365522
 
 # save and write
 rt.nearest <- rt
 write.csv(rt.nearest, "Data/country-year/nearest.csv", row.names = F)
-
-#rt.nearest <- read.csv("Data/country-year/country-year-rights-nearest.csv")
 
 # Option 2)  Amelia method
 ##########################
@@ -205,7 +204,7 @@ write.csv(rt.nearest, "Data/country-year/nearest.csv", row.names = F)
 rt <- rt.orig
 names(rt)
 # subset
-rt <- rt[,c(1,2,13:22,25)]
+rt <- rt[,c(1,2,12:22,25)]
 rt$year <- as.integer(as.character((rt$year)))
 # model 1
 set.seed(1234)

@@ -1,5 +1,7 @@
 \documentclass[11pt, oneside]{article}
 
+\usepackage{appendix}
+
 \usepackage{natbib}
 \usepackage{harvard}
 \usepackage{har2nat}
@@ -141,105 +143,12 @@ Similarly, journalists may find it difficult to report on countries that are mir
 
 Finally, I include controls for \emph{GDP per capita} (logged) using World Bank Development Indicators and \emph{Population} (logged) using data from the United Nations. The rationale is that journalists find it easier to report about women in rich, populous countries, where it is easier to conduct field research and/or conduct interviews. 
 
-I use statistical models that account for the cross-national time-series structure of the data. Because the panel data are highly correlated, I use generalized estimating equations \cite{zorn2001}. When modeling the dependent variable using the \emph{Reporting} binary, I use a probit regression. When modeling the dependent variable using \emph{Reported (Count)}, I use a negative binomial regression since this variable consists of over-dispersed counts. Note that a tobit is inappropriate here because coverage cannot assume negative values \cite{sigelman1999}. To deal with heteroskedasticity, all estimates use Huber-White corrected robust standard errors clustered on country.  Time-variant independent and control variables are lagged by one year to mitigate simultaneity issues and lessen any incorrect direction of inference. I also include a lagged-dependent variable to correct for serial correlation \cite{wooldridge2010}. The results are summarized in Tables \ref{table:logit} and \ref{table:negbin}.
+I use statistical models that account for the cross-national time-series structure of the data. Because the panel data are highly correlated, I use generalized estimating equations \cite{zorn2001}. When modeling the dependent variable using the \emph{Reporting} binary, I use a probit regression. When modeling the dependent variable using \emph{Reported (Count)}, I use a negative binomial regression since this variable consists of over-dispersed counts. Note that a tobit is inappropriate here because coverage cannot assume negative values \cite{sigelman1999}. To deal with heteroskedasticity, all estimates use Huber-White corrected robust standard errors clustered on country.  Time-variant independent and control variables are lagged by one year to mitigate simultaneity issues and lessen any incorrect direction of inference. I also include a lagged-dependent variable to correct for serial correlation \cite{wooldridge2010}. The results are summarized in Tables \ref{table:probit} and \ref{table:negbin}.
 
+\include{probit}
+\include{negbin}
 
-% Table created by stargazer v.5.1 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu
-% Date and time: Fri, Sep 25, 2015 - 16:59:55
-\begin{table}[!htbp] \centering 
-  \caption{Probit Analysis of U.S. News Coverage about Women Abroad} 
-  \label{table:logit} 
-\begin{tabular}{@{\extracolsep{5pt}}lccc} 
-\\[-1.8ex]\hline \\[-1.8ex] 
-\\[-1.8ex] & \multicolumn{3}{c}{\textbf{Dependent Variable:} \emph{Reported (Binary)}} \\
-\\[-1.8ex] & \textbf{Model 1} & \textbf{Model 2} & \textbf{Model 3}\\ 
-\hline \\[-1.8ex] 
- Lagged DV & 0.496$^{***}$ & 0.495$^{***}$ & 0.495$^{***}$ \\ 
-  & (0.061) & (0.061) & (0.061) \\ 
-  Country Reports & 0.002$^{***}$ & 0.002$^{***}$ & 0.002$^{***}$ \\ 
-  & (0.0003) & (0.0003) & (0.0003) \\ 
-  Women's Rights Index & 0.078 & 0.087 & 0.102 \\ 
-  & (0.066) & (0.064) & (0.069) \\ 
-  Muslim Majority & 0.425$^{*}$ &  &  \\ 
-  & (0.167) &  &  \\ 
-  MENA &  & 0.552$^{**}$ &  \\ 
-  &  & (0.183) &  \\ 
-  Muslim Percentage &  &  & 0.512$^{**}$ \\ 
-  &  &  & (0.185) \\ 
-  Democracy & 0.006 & 0.011$^{*}$ & 0.007 \\ 
-  & (0.005) & (0.005) & (0.005) \\ 
-  Instability & $-$0.00001 & $-$0.00001 & $-$0.00001 \\ 
-  & (0.00002) & (0.00002) & (0.00002) \\ 
-  Population & 0.381$^{***}$ & 0.379$^{***}$ & 0.376$^{***}$ \\ 
-  & (0.023) & (0.023) & (0.023) \\ 
-  GDP per capita & 0.134$^{***}$ & 0.119$^{***}$ & 0.131$^{***}$ \\ 
-  & (0.024) & (0.025) & (0.024) \\ 
-  Women's Rights x Muslim Majority & $-$0.368$^{**}$ &  &  \\ 
-  & (0.127) &  &  \\ 
-  Women's Rights x MENA &  & $-$0.342$^{*}$ &  \\ 
-  &  & (0.142) &  \\ 
-  Women's Rights x Muslim Percentage &  &  & $-$0.392$^{**}$ \\ 
-  &  &  & (0.138) \\ 
-  Constant & $-$8.317$^{***}$ & $-$8.212$^{***}$ & $-$8.265$^{***}$ \\ 
-  & (0.443) & (0.442) & (0.441) \\ 
- N & 3946 & 3962 & 3946 \\ 
-Log Likelihood & $-$1648.063 & $-$1653.581 & $-$1648.084 \\ 
-AIC & 3316.127 & 3327.162 & 3316.168 \\ 
-\hline \\[-1.8ex] 
-\multicolumn{4}{l}{$^{***}$p $<$ .001; $^{**}$p $<$ .01; $^{*}$p $<$ .05} \\ 
-\multicolumn{4}{l}{Robust standard errors clustered on country appear in parentheses.} \\ 
-\end{tabular} 
-\end{table} 
-
-% Table created by stargazer v.5.1 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu
-% Date and time: Fri, Sep 25, 2015 - 17:00:46
-\begin{table}[!htbp] \centering 
-  \caption{Negative Binomial Analysis of U.S. News Coverage about Women Abroad} 
-  \label{table:negbin} 
-\begin{tabular}{@{\extracolsep{5pt}}lccc} 
-\\[-1.8ex]\hline \\[-1.8ex] 
-\\[-1.8ex] & \multicolumn{3}{c}{\textbf{Dependent Variable:} \emph{Reported (Count)}} \\
-\\[-1.8ex] & \textbf{Model 1} & \textbf{Model 2} & \textbf{Model 3}\\ 
-\hline \\[-1.8ex] 
- Lagged DV & 0.147$^{***}$ & 0.149$^{***}$ & 0.149$^{***}$ \\ 
-  & (0.013) & (0.013) & (0.013) \\ 
-  Country Reports & 0.001$^{***}$ & 0.001$^{***}$ & 0.001$^{***}$ \\ 
-  & (0.0002) & (0.0001) & (0.0002) \\ 
-  Women's Rights Index & 0.115 & 0.154 & 0.153 \\ 
-  & (0.096) & (0.093) & (0.103) \\ 
-  Muslim Majority & 1.042$^{**}$ &  &  \\ 
-  & (0.320) &  &  \\ 
-  MENA &  & 1.298$^{***}$ &  \\ 
-  &  & (0.340) &  \\ 
-  Muslim Percentage &  &  & 1.166$^{***}$ \\ 
-  &  &  & (0.352) \\ 
-  Democracy & 0.005 & 0.018 & 0.007 \\ 
-  & (0.010) & (0.010) & (0.010) \\ 
-  Instability & $-$0.00001 & $-$0.00001 & $-$0.00000 \\ 
-  & (0.00002) & (0.00002) & (0.00002) \\ 
-  Population & 0.529$^{***}$ & 0.539$^{***}$ & 0.521$^{***}$ \\ 
-  & (0.026) & (0.027) & (0.026) \\ 
-  GDP per capita & 0.209$^{***}$ & 0.169$^{***}$ & 0.209$^{***}$ \\ 
-  & (0.036) & (0.037) & (0.036) \\ 
-  Women's Rights x Muslim Majority & $-$0.816$^{***}$ &  &  \\ 
-  & (0.205) &  &  \\ 
-  Women's Rights x MENA &  & $-$0.581$^{**}$ &  \\ 
-  &  & (0.215) &  \\ 
-  Women's Rights x Muslim Percentage &  &  & $-$0.825$^{***}$ \\ 
-  &  &  & (0.218) \\ 
-  Constant & $-$11.631$^{***}$ & $-$11.641$^{***}$ & $-$11.579$^{***}$ \\ 
-  & (0.622) & (0.632) & (0.629) \\ 
- N & 3946 & 3962 & 3946 \\ 
-Log Likelihood & $-$3569.768 & $-$3566.883 & $-$3569.499 \\ 
-$\theta$ & 0.905$^{***}$  (0.061) & 0.933$^{***}$  (0.064) & 0.907$^{***}$  (0.061) \\ 
-AIC & 7159.537 & 7153.767 & 7158.999 \\ 
-\hline \\[-1.8ex] 
-\multicolumn{4}{l}{$^{***}$p $<$ .001; $^{**}$p $<$ .01; $^{*}$p $<$ .05} \\ 
-\multicolumn{4}{l}{Robust standard errors clustered on country appear in parentheses.} \\ 
-\end{tabular} 
-\end{table} 
-
-The models provide strong support for Hypothesis 1. All three interaction terms are statistically significant and negative, suggesting that the effect of \emph{Women's Rights Index} varies across Muslim (MENA) and non-Muslim (non-MENA) countries. To help interpret these results, Figure \ref{fig:interactions} visualizes the marginal effect of \emph{Women's Rights} on \emph{Reported (Count)} for each of the three Muslim/MENA-related variables.\footnote{Results are substantively identical for probit model on the \emph{Reported (Binary)} DV.} The results suggest a double standard when it comes to how the U.S. news media represent women around the world. Not only are women in MENA and Muslim countries represented more often and in greater quantities, they garner special attention if their rights are violated. But the relationship is inverse for other nations, where better women's rights records correlate with higher likelihood of coverage. 
+The models provide strong support for Hypothesis 1. All three interaction terms are statistically significant and negative, suggesting that the effect of \emph{Women's Rights Index} varies across Muslim (MENA) and non-Muslim (non-MENA) countries. To help interpret these results, Figure \ref{fig:interactions} visualizes the marginal effect of \emph{Women's Rights} on \emph{Reported (Count)} for each of the three Muslim/MENA-related variables.\footnote{\hspace{5}Results are substantively identical for probit model on the \emph{Reported (Binary)} DV.} The results suggest a double standard when it comes to how the U.S. news media represent women around the world. Not only are women in MENA and Muslim countries represented more often and in greater quantities, they garner special attention if their rights are violated. But the relationship is inverse for other nations, where better women's rights records correlate with higher likelihood of coverage. 
 
 \begin{figure}
 \begin{subfigure}{.5\textwidth}
@@ -266,17 +175,17 @@ The models provide strong support for Hypothesis 1. All three interaction terms 
 \label{fig:interactions}
 \end{figure}
 
-The findings are robust across a number of specifications. First, I ran alternative models replacing the \emph{Women's Rights Index} composite variable with individual scores representing \emph{Women's Political Rights}, \emph{Women's Social Rights}, and \emph{Women's Economic Rights} respectively. Second, to address potential bias stemming from missing data on covariates, I model effects using two imputation methods: a "nearest value" method, whereby I impute covariate data using the last reported value at the country level; and a multiple imputation method as as described by King et al \citeyear{king2001}.\footnote{\hspace{5} I use the \emph{Amelia} package in $R$ to estimate missing data using multiple imputation \cite{honaker2011}.} Finally, I estimated models without the lagged dependent variable, and removing Israel from the sample if MENA countries. The results with substantively equivalent across all models.\footnote{\hspace{5}All models are included in the Appendix.}
+The findings are robust across a number of specifications. First, I ran alternative models replacing the \emph{Women's Rights Index} composite variable with individual scores representing \emph{Women's Political Rights}, \emph{Women's Social Rights}, and \emph{Women's Economic Rights} respectively. Second, to address potential bias stemming from missing data on covariates, I model effects using two imputation methods: a "nearest value" method, whereby I impute covariate data using the last reported value at the country level; and a multiple imputation method as as described by King et al \citeyear{king2001}.\footnote{\hspace{5} I use the \emph{Amelia} package in $R$ to estimate missing data using multiple imputation \cite{honaker2011}.} Finally, I estimated models without the lagged dependent variable, and removing Israel from the sample if MENA countries. The results with substantively equivalent across all models.\footnote{\hspace{5}Reports of all models are included in the Appendix.}
 
 \subsection{Measuring Substantive Focus}
 
 While the above findings pertain to the quantity of coverage about women abroad, the second hypotheses pertains to the quality of coverage. What, precisely, is being reported in these articles? How does the substance of news vary depending on the society being discussed? Articles about women can take a variety of content, from elections and protests to sports and fashion. But gendered orientalism claims that U.S. media coverage of women in Muslim and Middle Eastern countries is obsessed about one issue in particular: women's rights and gender equality. This obsession, scholars claim, is not present for other places, . 
 
-Testing this hypothesis requires information on the distribution of themes or topics in the corpus. Fortunately, recent advances in computational tools for the analysis of textual data enable new tools used to categorize and compare texts on a large scale \cite{grimmer2013}. Among the most promising tools for social scientists and humanists, and the chief method used in this paper, is the probabilistic topic model, an algorithm used to code the content of a corpus of texts into substantively meaningful categories, or ``topics," using the statistical correlations between words in a corpus \cite{mohr2013}.\footnote{As a demonstration, imagine we have two sets of documents, one about food and the other about sports. We would expect that, given a document is about a particular topic, certain words would appear more or less frequently. ``Sports" and ``athlete" would appear more often in documents about sports, while ``food" and ``ingredient" would appear in documents about food, and ``is" would appear equally in both. A topic model captures this intuition in a statistical framework, discovering abstract topics that might be thought of as a constellation of words that tend to come up in conversation \cite{mohr2013}.}
+Testing this hypothesis requires information on the distribution of themes or topics in the corpus. Fortunately, recent advances in computational tools for the analysis of textual data enable new tools used to categorize and compare texts on a large scale \cite{grimmer2013}. Among the most promising tools for social scientists and humanists, and the chief method used in this paper, is the probabilistic topic model, an algorithm used to code the content of a corpus of texts into substantively meaningful categories, or ``topics," using the statistical correlations between words in a corpus \cite{mohr2013}.\footnote{\hspace{5}As a demonstration, imagine we have two sets of documents, one about food and the other about sports. We would expect that, given a document is about a particular topic, certain words would appear more or less frequently. ``Sports" and ``athlete" would appear more often in documents about sports, while ``food" and ``ingredient" would appear in documents about food, and ``is" would appear equally in both. A topic model captures this intuition in a statistical framework, discovering abstract topics that might be thought of as a constellation of words that tend to come up in conversation \cite{mohr2013}.}
 
 For the purposes of this study, topic modeling holds a number of advantages over other methods given the outcome of interest. The main benefit of this method lies in its ability to infer and analyze substantively meaningful categories (topics) with minimal assumptions and expense \cite{quinn2010}. Unlike human-coder approaches, an automated topic model estimates topics from the observed data without assuming the substance, division, or keywords of topics beforehand. Thus it ameliorates the potential for confirmation bias. It is also fully replicable, because it is fully automated, which is an important validity concern for content analysis \cite{neuendorf2011}.
 
-One alternative workflow is to categorize each document based on whether or not it pertains to women's rights as a whole, and then calculate the proportion of articles in the ``rights" category for a each country-year. Unfortunately, such a blunt metric flattens important dimensions of variation. Most articles about women have at least one mention of women's rights and gender equality, but differ in the degree to which they emphasize this theme. The gendered orientalist argument claims that for Muslim and/or MENA countries, \emph{every} story, whether about politics or sports or literature, is framed as a women's rights issue. A mixed-membership topic model estimates the outcome of interest more directly, because it represents texts as a distribution over many topics, not just one category. This allows us to compare how one document compares to another in terms of its \emph{proportion} -- not just presence -- of a topic. However, as a robustness check, I also apply document-level labels indicating whether an article (as a whole) pertains to women's rights and gender equality. This provides an alternative measure of the main outcome variable to be used in the models described below.\footnote{I use a computational strategy to apply boolean labels to documents. If a document contained the word `right' (including the plural `rights'), `equal', `sexist', or `sexism', it was labeled as pertaining to women's rights. Approximately 52.6 per cent of documents were classified as `true' on this boolean label. For each country-year observation, I summed all country-year documents containing the women's rights label, and divided this count by the total number of articles for that country year. This offers a similar fractional variable to the \emph{Women's Rights Focus} variable used in the main analyses, described below.}
+One alternative workflow is to categorize each document based on whether or not it pertains to women's rights as a whole, and then calculate the proportion of articles in the ``rights" category for a each country-year. Unfortunately, such a blunt metric flattens important dimensions of variation. Most articles about women have at least one mention of women's rights and gender equality, but differ in the degree to which they emphasize this theme. The gendered orientalist argument claims that for Muslim and/or MENA countries, \emph{every} story, whether about politics or sports or literature, is framed as a women's rights issue. A mixed-membership topic model estimates the outcome of interest more directly, because it represents texts as a distribution over many topics, not just one category. This allows us to compare how one document compares to another in terms of its \emph{proportion} -- not just presence -- of a topic. However, as a robustness check, I also apply document-level labels indicating whether an article (as a whole) pertains to women's rights and gender equality. This provides an alternative measure of the main outcome variable to be used in the models described below.\footnote{\hspace{5}I use a computational strategy to apply boolean labels to documents. If a document contained the word `right' (including the plural `rights'), `equal', `sexist', or `sexism', it was labeled as pertaining to women's rights. Approximately 52.6 per cent of documents were classified as `true' on this boolean label. For each country-year observation, I summed all country-year documents containing the women's rights label, and divided this count by the total number of articles for that country year. This offers a similar fractional variable to the \emph{Women's Rights Focus} variable used in the main analyses, described below.}
 
 
 \subsection{Data Preparation}
@@ -289,7 +198,7 @@ Once pre-processing was completed, the remaining words were transformed into a v
 	
 \subsection{Model Selection and Topics}
 
-To identify and explore the thematic topics in U.S. news media reporting about women abroad, I use the Structural Topic Model, developed by Roberts et al. \cite{roberts2013structural} with the goal to help ``understand relationships between metadata and topics in their text corpus" \cite[p. 2]{lucas2015computer}.\footnote{I use the $R$ package \emph{stm} to estimate the model \cite{roberts2014stm}.} The Structural Topic Model (STM) extends the popular topic modeling tool called Latent Dirichlet Allocation (LDA) by incorporating document-level metadata into the analysis as covariates. This allows us to measure systematic changes in topical prevalence according to changes in metadata, similar to a regression framework \cite[p. 5]{roberts2014}.
+To identify and explore the thematic topics in U.S. news media reporting about women abroad, I use the Structural Topic Model, developed by Roberts et al. \cite{roberts2013structural} with the goal to help ``understand relationships between metadata and topics in their text corpus" \cite[p. 2]{lucas2015computer}.\footnote{\hspace{5}I use the $R$ package \emph{stm} to estimate the model \cite{roberts2014stm}.} The Structural Topic Model (STM) extends the popular topic modeling tool called Latent Dirichlet Allocation (LDA) by incorporating document-level metadata into the analysis as covariates. This allows us to measure systematic changes in topical prevalence according to changes in metadata, similar to a regression framework \cite[p. 5]{roberts2014}.
 
 When estimating an STM, the analyst must make a number of important decisions pertaining to model selection. First, she must specify the number of topics ($K$) to be estimated. There is no one answer for this decision (Roberts et al. 2014). The choice of $K$ depends on a number of factors, including the nature of the documents under study and the level of granularity the analyst wishes to capture. In addition, STM depends on a multi-modal objective function, meaning that models with the same parameters (that is, the same data, covariates, and number of topic) may produce different results -- that is, different topics -- depending on the starting seed value.
 
@@ -411,52 +320,15 @@ The dependent variable in Hypothesis 2 is the percentage of coverage devoted to 
 
 The dependent variable \emph{Rights Focus} is then regressed onto two main explanatory variables in order to test the hypothesis described above. The first is \emph{Women's Rights Index}, measuring respect for women's political, social, and economic rights, using the same CIRI indicator described above. The second is whether the observation represents a Muslim or Middle Eastern country, again using the same variable previously described: the fractional \emph{Percentage Muslim} ranging from 0 to 1, the dichotomous \emph{Muslim Majority}, and the dichotomous \emph{MENA} variables. 
 
-I also include two controls that may affect the amount of rights language in reporting. First, coverage of women's rights may be driven by the general state of human rights protections in certain countries. For instance, the poorer a country's rights protections, the more coverage it may receive on its rights situation in general, including women's rights. For this reason, I include a \emph{Democracy} variable, described above. I also include a measure of general human rights protections, the \emph{Physical Integrity Rights} index, also from the CIRI dataset,\footnote{The variable is composed of the four integrity rights variables, including disappearance, extra-judicial killing, political imprisonment, and torture. It is a nine-point scale that ranges from a minimum of zero to a maximum of eight, where zero indicates no respect for physical integrity rights and eight indicates full respect for those rights \cite{cingranelli2012}. The data is available to 2011. It should be noted that there are alternative measures for the state of human rights protections used in the literature, such as the CIRI's Empowerment Rights Index, and the Political Terror Scale measures. I chose the Physical Integrity Index in the models discussed below, but I also estimated models using these two alternative measures, with the same substantive results.}
+I also include two controls that may affect the amount of rights language in reporting. First, coverage of women's rights may be driven by the general state of human rights protections in certain countries. For instance, the poorer a country's rights protections, the more coverage it may receive on its rights situation in general, including women's rights. For this reason, I include a \emph{Democracy} variable, described above. I also include a measure of general human rights protections, the \emph{Physical Integrity Rights} index, also from the CIRI dataset,\footnote{\hspace{5}The variable is composed of the four integrity rights variables, including disappearance, extra-judicial killing, political imprisonment, and torture. It is a nine-point scale that ranges from a minimum of zero to a maximum of eight, where zero indicates no respect for physical integrity rights and eight indicates full respect for those rights \cite{cingranelli2012}. The data is available to 2011. It should be noted that there are alternative measures for the state of human rights protections used in the literature, such as the CIRI's Empowerment Rights Index, and the Political Terror Scale measures. I chose the Physical Integrity Index in the models discussed below, but I also estimated models using these two alternative measures, with the same substantive results.}
 
-Because country-years had to contain at least one article to be included in the sample (n = 1451), I use a two-step heckit model to account for potential selection effects. The selection equation is identical to the model presented in Table \ref{table:logit}, where the dependent variable is the \emph{Reported (Binary)} variable, indicating whether a country-year contained any articles in the data set. Conditional on this value being 1, an OLS model was estimated regressing \emph{Rights Focus} on the four explanatory variables. I also include a one-year lagged dependent variable into the model, based on the reasoning that journalists maintain their thematic focus for a particular country from year to year. As with the previous models, I lag time-variant explanatory variables by one year and use Huber-White corrected robust standard errors clustered on country.
+Because country-years had to contain at least one article to be included in the sample (n = 1451), I use a two-step heckit model to account for potential selection effects. The selection equation is identical to the model presented in Table \ref{table:probit}, where the dependent variable is the \emph{Reported (Binary)} variable, indicating whether a country-year contained any articles in the data set. Conditional on this value being 1, an OLS model was estimated regressing \emph{Rights Focus} on the four explanatory variables. I also include a one-year lagged dependent variable into the model, based on the reasoning that journalists maintain their thematic focus for a particular country from year to year. As with the previous models, I lag time-variant explanatory variables by one year and use Huber-White corrected robust standard errors clustered on country.
 
-% Table created by stargazer v.5.1 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu
-% Date and time: Fri, Sep 25, 2015 - 17:01:53
-\begin{table}[!htbp] \centering 
-  \caption{Two-Step Analysis of \emph{Rights Focus} in U.S. News Coverage about Women Abroad} 
-  \label{} 
-\begin{tabular}{@{\extracolsep{5pt}}lccc} 
-\\[-1.8ex]\hline \\[-1.8ex] 
-\\[-1.8ex] & \multicolumn{3}{c}{\textbf{Dependent Variable:} \emph{Rights Focus}} \\
-\\[-1.8ex] & \textbf{Model 1} & \textbf{Model 2} & \textbf{Model 3}\\ 
-\hline \\[-1.8ex] 
- Intercept & 0.096$^{***}$ & 0.102$^{***}$ & 0.094$^{***}$ \\ 
-  & (0.012) & (0.012) & (0.013) \\ 
-  Lagged DV & 0.101$^{*}$ & 0.107$^{*}$ & 0.103$^{*}$ \\ 
-  & (0.047) & (0.047) & (0.047) \\ 
-  Women's Rights Index & $-$0.018$^{**}$ & $-$0.021$^{**}$ & $-$0.018$^{**}$ \\ 
-  & (0.007) & (0.007) & (0.007) \\ 
-  Muslim Majority & 0.033$^{**}$ &  &  \\ 
-  & (0.010) &  &  \\ 
-  MENA &  & 0.026$^{*}$ &  \\ 
-  &  & (0.010) &  \\ 
-  Muslim Percentage &  &  & 0.034$^{**}$ \\ 
-  &  &  & (0.012) \\ 
-  Democracy & $-$0.0005 & $-$0.001 & $-$0.001 \\ 
-  & (0.001) & (0.001) & (0.001) \\ 
-  Physical Integrity Rights & 0.002 & 0.002 & 0.002 \\ 
-  & (0.002) & (0.002) & (0.002) \\ 
-  Inverse Mills Ratio & 0.001 & 0.003 & 0.0001 \\ 
-  & (0.009) & (0.009) & (0.009) \\ 
- N & 656 & 656 & 656 \\ 
-R-squared & 0.555 & 0.552 & 0.554 \\ 
-Adj. R-squared & 0.550 & 0.547 & 0.549 \\ 
-Residual Std. Error (df = 649) & 0.084 & 0.084 & 0.084 \\ 
-F Statistic (df = 7; 649) & 115.565$^{***}$ & 114.384$^{***}$ & 115.032$^{***}$ \\ 
-\hline \\[-1.8ex] 
-\multicolumn{4}{l}{$^{***}$p $<$ .001; $^{**}$p $<$ .01; $^{*}$p $<$ .05} \\ 
-\multicolumn{4}{l}{Robust standard errors clustered on country appear in parentheses.} \\ 
-\end{tabular} 
-\end{table} 
+\include{heckit}
 
 In all models, \emph{Women's Rights Index} is statistically significant and negative, indicating that U.S. news media will focus their coverage of women around ``Women's Rights \& Gender Equality'' in those areas with poor respect for women's rights. This is hardly surprising. But even when we control for the material status of gender equality on the ground, we find that the coefficients on the \emph{Muslim Majority}, \emph{MENA} and \emph{Muslim Percentage} variables are statistically significant and positive. In other words, U.S. news media talk more about ``Women's Rights \& Gender Equality'' if the country being covered is in the MENA region or has a larger Muslim population, regardless of women's status in these societies. This finding supports Hypothesis 2, which states that women from Muslim and/or MENA countries are represented narrowly in U.S. news media, characterized largely by their subordination, whereas women from other societies are portrayed in greater complexity. On the other hand, the magnitude of these coefficients are small, ranging from $0.026$ to $0.034$. So while U.S. media will focus more on women's rights when it comes to Muslim and MENA countries, the bias amounts to roughly 3 per cent more coverage about this issue (in terms of topic proportions).
 
-As in the previous section, results are robust to a range of alternative specifications. First, while the addition of a lagged DV helps correct for serial correlation, it shrinks the sample size considerably, because observations must contain at least one article at year $t$ and $t-1$ to be included. As a robustness check, I removed this lagged DV, thus allowing for a larger sample. Second, I replaced the composite \emph{Women's Rights} variable with the three individual indicators representing Women's Political Rights, Women's Social Rights, and Women's Economic Rights. Third, I estimate models using an alternative measure of the dependent variable \emph{Rights Focus}, which is independent of the topic model.\footnote{This alternative is a simple boolean label that marks a document as pertaining to women's rights if it contains any word in a set of rights-related words. See note 10} Finally, I estimated one-step models using OLS and fractional logit. In all models,  the \emph{Muslim Majority}, \emph{MENA} and \emph{Muslim Percentage} variables were statistically significant and positive.\footnote{Reports of all alternative models are included in the appendix.}
+As in the previous section, results are robust to a range of alternative specifications. First, while the addition of a lagged DV helps correct for serial correlation, it shrinks the sample size considerably, because observations must contain at least one article at year $t$ and $t-1$ to be included. As a robustness check, I removed this lagged DV, thus allowing for a larger sample. Second, I replaced the composite \emph{Women's Rights} variable with the three individual indicators representing Women's Political Rights, Women's Social Rights, and Women's Economic Rights. Third, I estimate models using an alternative measure of the dependent variable \emph{Rights Focus}, which is independent of the topic model.\footnote{\hspace{5}This alternative is a simple boolean label that marks a document as pertaining to women's rights if it contains any word in a set of rights-related words. See note 10} Finally, I estimated one-step models using OLS and fractional logit. In all models,  the \emph{Muslim Majority}, \emph{MENA} and \emph{Muslim Percentage} variables were statistically significant and positive.\footnote{\hspace{5}Reports of all alternative models are included in the appendix.}
 
 \subsection{Conclusions}
 
@@ -466,7 +338,7 @@ These findings are important because, as many scholars have argued, mass media i
 
 The media's obsession with Muslim women's rights has two implications which are especially pertinent. First, while women from Muslim and Middle Eastern countries are front and center on the agenda, oppression in other societies is ignored. As with other humanitarian issues, the United States has a limited attention span when it to global women's rights. Insofar as media attention drives awareness and resources, women from non-Muslim countries in Africa, Asia, Latin America and Europe lose out in this scenario, even if they suffer more egregiously.
 
-Second, an obsession with Muslim women's rights may, ironically, have counterproductive consequences for the goal of gender equality in these societies. Considering the already volatile environment surrounding Islam in the American public sphere, a disproportionate focus on Muslim women's oppression is likely to be met with suspicion and incredulity among Muslim men and women alike. This is especially likely when the media's diagnoses of sexism in Muslim societies point overwhelmingly to Islam.\footnote{ As illustrated in Figure \ref{fig:4topics} and Table \ref{table:region-distr}, the topic of ``Religion'' -- even more than ``Women's Rights \& Gender Equality'' -- was disproportionately present in coverage about MENA countries.} Tired of feeling singled out, Muslims both at home and abroad may learn to equate feminist criticism with imperialism and Islamophobia, thus undermining even local initiatives for gender equality \cite{terman2015islamophobia}.
+Second, an obsession with Muslim women's rights may, ironically, have counterproductive consequences for the goal of gender equality in these societies. Considering the already volatile environment surrounding Islam in the American public sphere, a disproportionate focus on Muslim women's oppression is likely to be met with suspicion and incredulity among Muslim men and women alike. This is especially likely when the media's diagnoses of sexism in Muslim societies point overwhelmingly to Islam.\footnote{\hspace{5}As illustrated in Figure \ref{fig:4topics} and Table \ref{table:region-distr}, the topic of ``Religion'' -- even more than ``Women's Rights \& Gender Equality'' -- was disproportionately present in coverage about MENA countries.} Tired of feeling singled out, Muslims both at home and abroad may learn to equate feminist criticism with imperialism and Islamophobia, thus undermining even local initiatives for gender equality \cite{terman2015islamophobia}.
 
 Yet, a number of questions remain. First, due to the limited sample, we do not know whether and to what degree these biases vary across outlet or platform. Some scholars of ``gendered orientalist'' argue that conservative and right-wing factions are the worst offenders, whereas other insist that the stereotypes surrounding Islam and Muslim women are ubiquitous amongst even progressive crowds \cite{kumar2012islamophobia}. Using similar techniques to the ones presented here, future research could examine these trends in liberal vs. conservative media. Likewise, scholars could compare coverage in news outlets vs. entertainment, as well as media outside the United States.
 
@@ -476,8 +348,45 @@ Finally, while essay has largely neglected questions relating to \emph{change ov
 
 \newpage
 
-
-
 \bibliography{rights}
+
+\newpage
+
+\appendix
+
+\section{Robustness Checks}
+
+\subsection{Alternative Models for Table \ref{table:probit}}
+
+\include{probit-1}
+\include{probit-2}
+\include{probit-3}
+\include{probit-4}
+\include{probit-5}
+\include{probit-6}
+
+\subsection{Alternative Models for Table \ref{table:negbin}}
+
+\include{negbin-1}
+\include{negbin-2}
+\include{negbin-3}
+\include{negbin-4}
+\include{negbin-5}
+\include{negbin-6}
+
+\subsection{Alternative Models for Table \ref{table:heckit}}
+
+\include{heckit-1}
+\include{heckit-2}
+\include{heckit-3}
+\include{heckit-4}
+\include{heckit-5}
+\include{heckit-6}
+\include{heckit-7}
+\include{heckit-8}
+\include{heckit-9}
+
+
+
 
 \end{document}  

@@ -1,16 +1,16 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2014.5.25)  27 SEP 2015 23:45
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.5.24)  28 SEP 2015 19:55
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
  %&-line parsing enabled.
 **terman_women.tex
 (./terman_women.tex
-LaTeX2e <2014/05/01>
-Babel <3.9k> and hyphenation patterns for 78 languages loaded.
-(/usr/local/texlive/2014/texmf-dist/tex/latex/base/article.cls
-Document Class: article 2007/10/19 v1.4h Standard LaTeX document class
-(/usr/local/texlive/2014/texmf-dist/tex/latex/base/size11.clo
-File: size11.clo 2007/10/19 v1.4h Standard LaTeX file (size option)
+LaTeX2e <2015/01/01>
+Babel <3.9l> and hyphenation patterns for 79 languages loaded.
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2014/09/29 v1.4h Standard LaTeX document class
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/size11.clo
+File: size11.clo 2014/09/29 v1.4h Standard LaTeX file (size option)
 )
 \c@part=\count79
 \c@section=\count80
@@ -24,21 +24,27 @@ File: size11.clo 2007/10/19 v1.4h Standard LaTeX file (size option)
 \belowcaptionskip=\skip42
 \bibindent=\dimen102
 )
-(/usr/local/texlive/2014/texmf-dist/tex/latex/natbib/natbib.sty
+(/usr/local/texlive/2015/texmf-dist/tex/latex/appendix/appendix.sty
+Package: appendix 2009/09/02 v1.2b extra appendix facilities
+\c@@pps=\count87
+\c@@ppsavesec=\count88
+\c@@ppsaveapp=\count89
+)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/natbib/natbib.sty
 Package: natbib 2010/09/13 8.31b (PWD, AO)
 \bibhang=\skip43
 \bibsep=\skip44
 LaTeX Info: Redefining \cite on input line 694.
-\c@NAT@ctr=\count87
+\c@NAT@ctr=\count90
 )
-(/usr/local/texlive/2014/texmf-dist/tex/latex/harvard/harvard.sty
+(/usr/local/texlive/2015/texmf-dist/tex/latex/harvard/harvard.sty
 Package: harvard 
 
-(/usr/local/texlive/2014/texmf-dist/tex/latex/base/ifthen.sty
-Package: ifthen 2001/05/26 v1.1c Standard LaTeX ifthen package (DPC)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/ifthen.sty
+Package: ifthen 2014/09/29 v1.1c Standard LaTeX ifthen package (DPC)
 )
 
-/usr/local/texlive/2014/texmf-dist/tex/latex/harvard/harvard.sty:29: LaTeX Erro
+/usr/local/texlive/2015/texmf-dist/tex/latex/harvard/harvard.sty:29: LaTeX Erro
 r: Command \harvardurl already defined.
                Or name \end... illegal, see p.192 of the manual.
 
@@ -51,7 +57,7 @@ l.29 }
 ? s
 OK, entering \scrollmode...
 
-/usr/local/texlive/2014/texmf-dist/tex/latex/harvard/harvard.sty:67: LaTeX Erro
+/usr/local/texlive/2015/texmf-dist/tex/latex/harvard/harvard.sty:67: LaTeX Erro
 r: Command \harvarditem already defined.
                Or name \end... illegal, see p.192 of the manual.
 
@@ -66,7 +72,7 @@ Type  I <command> <return>  to replace it with another command,
 or  <return>  to continue without it.
 
 
-/usr/local/texlive/2014/texmf-dist/tex/latex/harvard/harvard.sty:191: LaTeX Err
+/usr/local/texlive/2015/texmf-dist/tex/latex/harvard/harvard.sty:191: LaTeX Err
 or: Command \citename already defined.
                Or name \end... illegal, see p.192 of the manual.
 
@@ -81,7 +87,7 @@ Type  I <command> <return>  to replace it with another command,
 or  <return>  to continue without it.
 
 
-/usr/local/texlive/2014/texmf-dist/tex/latex/harvard/harvard.sty:208: LaTeX Err
+/usr/local/texlive/2015/texmf-dist/tex/latex/harvard/harvard.sty:208: LaTeX Err
 or: Command \citeyear already defined.
                Or name \end... illegal, see p.192 of the manual.
 
@@ -96,7 +102,7 @@ Type  I <command> <return>  to replace it with another command,
 or  <return>  to continue without it.
 
 
-/usr/local/texlive/2014/texmf-dist/tex/latex/harvard/harvard.sty:252: LaTeX Err
+/usr/local/texlive/2015/texmf-dist/tex/latex/harvard/harvard.sty:252: LaTeX Err
 or: Command \harvardleft already defined.
                Or name \end... illegal, see p.192 of the manual.
 
@@ -111,7 +117,7 @@ Type  I <command> <return>  to replace it with another command,
 or  <return>  to continue without it.
 
 
-/usr/local/texlive/2014/texmf-dist/tex/latex/harvard/harvard.sty:253: LaTeX Err
+/usr/local/texlive/2015/texmf-dist/tex/latex/harvard/harvard.sty:253: LaTeX Err
 or: Command \harvardright already defined.
                Or name \end... illegal, see p.192 of the manual.
 
@@ -126,7 +132,7 @@ Type  I <command> <return>  to replace it with another command,
 or  <return>  to continue without it.
 
 
-/usr/local/texlive/2014/texmf-dist/tex/latex/harvard/harvard.sty:260: LaTeX Err
+/usr/local/texlive/2015/texmf-dist/tex/latex/harvard/harvard.sty:260: LaTeX Err
 or: Command \harvardyearleft already defined.
                Or name \end... illegal, see p.192 of the manual.
 
@@ -141,7 +147,7 @@ Type  I <command> <return>  to replace it with another command,
 or  <return>  to continue without it.
 
 
-/usr/local/texlive/2014/texmf-dist/tex/latex/harvard/harvard.sty:261: LaTeX Err
+/usr/local/texlive/2015/texmf-dist/tex/latex/harvard/harvard.sty:261: LaTeX Err
 or: Command \harvardyearright already defined.
                Or name \end... illegal, see p.192 of the manual.
 
@@ -155,14 +161,14 @@ Your command was ignored.
 Type  I <command> <return>  to replace it with another command,
 or  <return>  to continue without it.
 
-) (/usr/local/texlive/2014/texmf-dist/tex/latex/har2nat/har2nat.sty
+) (/usr/local/texlive/2015/texmf-dist/tex/latex/har2nat/har2nat.sty
 Package: har2nat 2005/12/01 1.0 Harvard to natbib
 
-(/usr/local/texlive/2014/texmf-dist/tex/latex/bigfoot/suffix.sty
-Package: suffix 2006/07/15 1.5 Variant command support
+(/usr/local/texlive/2015/texmf-dist/tex/latex/bigfoot/suffix.sty
+Package: suffix 2006/07/15 1.5a Variant command support
 )
 
-/usr/local/texlive/2014/texmf-dist/tex/latex/har2nat/har2nat.sty:29: LaTeX Erro
+/usr/local/texlive/2015/texmf-dist/tex/latex/har2nat/har2nat.sty:29: LaTeX Erro
 r: Command \citeaffixed already defined.
                Or name \end... illegal, see p.192 of the manual.
 
@@ -177,7 +183,7 @@ Type  I <command> <return>  to replace it with another command,
 or  <return>  to continue without it.
 
 
-/usr/local/texlive/2014/texmf-dist/tex/latex/har2nat/har2nat.sty:30: LaTeX Erro
+/usr/local/texlive/2015/texmf-dist/tex/latex/har2nat/har2nat.sty:30: LaTeX Erro
 r: Command \citeasnoun already defined.
                Or name \end... illegal, see p.192 of the manual.
 
@@ -191,27 +197,27 @@ Your command was ignored.
 Type  I <command> <return>  to replace it with another command,
 or  <return>  to continue without it.
 
-) (/usr/local/texlive/2014/texmf-dist/tex/latex/geometry/geometry.sty
+) (/usr/local/texlive/2015/texmf-dist/tex/latex/geometry/geometry.sty
 Package: geometry 2010/09/12 v5.6 Page Geometry
 
-(/usr/local/texlive/2014/texmf-dist/tex/latex/graphics/keyval.sty
-Package: keyval 2014/05/08 v1.15 key=value parser (DPC)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/graphics/keyval.sty
+Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
 \KV@toks@=\toks14
 )
-(/usr/local/texlive/2014/texmf-dist/tex/generic/oberdiek/ifpdf.sty
+(/usr/local/texlive/2015/texmf-dist/tex/generic/oberdiek/ifpdf.sty
 Package: ifpdf 2011/01/30 v2.3 Provides the ifpdf switch (HO)
 Package ifpdf Info: pdfTeX in PDF mode is detected.
 )
-(/usr/local/texlive/2014/texmf-dist/tex/generic/oberdiek/ifvtex.sty
+(/usr/local/texlive/2015/texmf-dist/tex/generic/oberdiek/ifvtex.sty
 Package: ifvtex 2010/03/01 v1.5 Detect VTeX and its facilities (HO)
 Package ifvtex Info: VTeX not detected.
 )
-(/usr/local/texlive/2014/texmf-dist/tex/generic/ifxetex/ifxetex.sty
+(/usr/local/texlive/2015/texmf-dist/tex/generic/ifxetex/ifxetex.sty
 Package: ifxetex 2010/09/12 v0.6 Provides ifxetex conditional
 )
-\Gm@cnth=\count88
-\Gm@cntv=\count89
-\c@Gm@tempcnt=\count90
+\Gm@cnth=\count91
+\Gm@cntv=\count92
+\c@Gm@tempcnt=\count93
 \Gm@bindingoffset=\dimen103
 \Gm@wd@mp=\dimen104
 \Gm@odd@mp=\dimen105
@@ -222,42 +228,42 @@ Package: ifxetex 2010/09/12 v0.6 Provides ifxetex conditional
 \Gm@layoutvoffset=\dimen110
 \Gm@dimlist=\toks15
 )
-(/usr/local/texlive/2014/texmf-dist/tex/latex/preprint/fullpage.sty
+(/usr/local/texlive/2015/texmf-dist/tex/latex/preprint/fullpage.sty
 Package: fullpage 1999/02/23 1.1 (PWD)
 \FP@margin=\skip45
 )
-(/usr/local/texlive/2014/texmf-dist/tex/latex/graphics/graphicx.sty
-Package: graphicx 2014/04/25 v1.0g Enhanced LaTeX Graphics (DPC,SPQR)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/graphics/graphicx.sty
+Package: graphicx 2014/10/28 v1.0g Enhanced LaTeX Graphics (DPC,SPQR)
 
-(/usr/local/texlive/2014/texmf-dist/tex/latex/graphics/graphics.sty
-Package: graphics 2009/02/05 v1.0o Standard LaTeX Graphics (DPC,SPQR)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/graphics/graphics.sty
+Package: graphics 2014/10/28 v1.0p Standard LaTeX Graphics (DPC,SPQR)
 
-(/usr/local/texlive/2014/texmf-dist/tex/latex/graphics/trig.sty
+(/usr/local/texlive/2015/texmf-dist/tex/latex/graphics/trig.sty
 Package: trig 1999/03/16 v1.09 sin cos tan (DPC)
 )
-(/usr/local/texlive/2014/texmf-dist/tex/latex/latexconfig/graphics.cfg
+(/usr/local/texlive/2015/texmf-dist/tex/latex/latexconfig/graphics.cfg
 File: graphics.cfg 2010/04/23 v1.9 graphics configuration of TeX Live
 )
-Package graphics Info: Driver file: pdftex.def on input line 91.
+Package graphics Info: Driver file: pdftex.def on input line 94.
 
-(/usr/local/texlive/2014/texmf-dist/tex/latex/pdftex-def/pdftex.def
+(/usr/local/texlive/2015/texmf-dist/tex/latex/pdftex-def/pdftex.def
 File: pdftex.def 2011/05/27 v0.06d Graphics/color for pdfTeX
 
-(/usr/local/texlive/2014/texmf-dist/tex/generic/oberdiek/infwarerr.sty
+(/usr/local/texlive/2015/texmf-dist/tex/generic/oberdiek/infwarerr.sty
 Package: infwarerr 2010/04/08 v1.3 Providing info/warning/error messages (HO)
 )
-(/usr/local/texlive/2014/texmf-dist/tex/generic/oberdiek/ltxcmds.sty
+(/usr/local/texlive/2015/texmf-dist/tex/generic/oberdiek/ltxcmds.sty
 Package: ltxcmds 2011/11/09 v1.22 LaTeX kernel commands for general use (HO)
 )
-\Gread@gobject=\count91
+\Gread@gobject=\count94
 ))
 \Gin@req@height=\dimen111
 \Gin@req@width=\dimen112
 )
-(/usr/local/texlive/2014/texmf-dist/tex/latex/amsfonts/amssymb.sty
+(/usr/local/texlive/2015/texmf-dist/tex/latex/amsfonts/amssymb.sty
 Package: amssymb 2013/01/14 v3.01 AMS font symbols
 
-(/usr/local/texlive/2014/texmf-dist/tex/latex/amsfonts/amsfonts.sty
+(/usr/local/texlive/2015/texmf-dist/tex/latex/amsfonts/amsfonts.sty
 Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
 \@emptytoks=\toks16
 \symAMSa=\mathgroup4
@@ -265,28 +271,28 @@ Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
 LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
 (Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
 ))
-(/usr/local/texlive/2014/texmf-dist/tex/latex/oberdiek/epstopdf.sty
+(/usr/local/texlive/2015/texmf-dist/tex/latex/oberdiek/epstopdf.sty
 Package: epstopdf 2010/02/09 v2.5 Conversion with epstopdf on the fly (HO)
 
-(/usr/local/texlive/2014/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
+(/usr/local/texlive/2015/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
 Package: epstopdf-base 2010/02/09 v2.5 Base part for package epstopdf
 
-(/usr/local/texlive/2014/texmf-dist/tex/latex/oberdiek/grfext.sty
+(/usr/local/texlive/2015/texmf-dist/tex/latex/oberdiek/grfext.sty
 Package: grfext 2010/08/19 v1.1 Manage graphics extensions (HO)
 
-(/usr/local/texlive/2014/texmf-dist/tex/generic/oberdiek/kvdefinekeys.sty
+(/usr/local/texlive/2015/texmf-dist/tex/generic/oberdiek/kvdefinekeys.sty
 Package: kvdefinekeys 2011/04/07 v1.3 Define keys (HO)
 ))
-(/usr/local/texlive/2014/texmf-dist/tex/latex/oberdiek/kvoptions.sty
+(/usr/local/texlive/2015/texmf-dist/tex/latex/oberdiek/kvoptions.sty
 Package: kvoptions 2011/06/30 v3.11 Key value format for package options (HO)
 
-(/usr/local/texlive/2014/texmf-dist/tex/generic/oberdiek/kvsetkeys.sty
+(/usr/local/texlive/2015/texmf-dist/tex/generic/oberdiek/kvsetkeys.sty
 Package: kvsetkeys 2012/04/25 v1.16 Key value parser (HO)
 
-(/usr/local/texlive/2014/texmf-dist/tex/generic/oberdiek/etexcmds.sty
+(/usr/local/texlive/2015/texmf-dist/tex/generic/oberdiek/etexcmds.sty
 Package: etexcmds 2011/02/16 v1.5 Avoid name clashes with e-TeX commands (HO)
 
-(/usr/local/texlive/2014/texmf-dist/tex/generic/oberdiek/ifluatex.sty
+(/usr/local/texlive/2015/texmf-dist/tex/generic/oberdiek/ifluatex.sty
 Package: ifluatex 2010/03/01 v1.3 Provides the ifluatex switch (HO)
 Package ifluatex Info: LuaTeX not detected.
 )
@@ -295,7 +301,7 @@ Package etexcmds Info: Could not find \expanded.
 (etexcmds)             that some package has redefined \expanded.
 (etexcmds)             In the latter case, load this package earlier.
 )))
-(/usr/local/texlive/2014/texmf-dist/tex/generic/oberdiek/pdftexcmds.sty
+(/usr/local/texlive/2015/texmf-dist/tex/generic/oberdiek/pdftexcmds.sty
 Package: pdftexcmds 2011/11/29 v0.20 Utility functions of pdfTeX for LuaTeX (HO
 )
 Package pdftexcmds Info: LuaTeX not detected.
@@ -308,30 +314,30 @@ Package grfext Info: Graphics extension search list:
 G,.JBIG2,.JB2,.eps]
 (grfext)             \AppendGraphicsExtensions on input line 452.
 
-(/usr/local/texlive/2014/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
+(/usr/local/texlive/2015/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 )))
-(/usr/local/texlive/2014/texmf-dist/tex/latex/tools/array.sty
-Package: array 2008/09/09 v2.4c Tabular extension package (FMi)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/tools/array.sty
+Package: array 2014/10/28 v2.4c Tabular extension package (FMi)
 \col@sep=\dimen113
 \extrarowheight=\dimen114
 \NC@list=\toks17
 \extratabsurround=\skip46
 \backup@length=\skip47
 )
-\c@hypothesis=\count92
+\c@hypothesis=\count95
 
-(/usr/local/texlive/2014/texmf-dist/tex/latex/setspace/setspace.sty
+(/usr/local/texlive/2015/texmf-dist/tex/latex/setspace/setspace.sty
 Package: setspace 2011/12/19 v6.7a set line spacing
 )
-(/usr/local/texlive/2014/texmf-dist/tex/latex/multirow/multirow.sty
+(/usr/local/texlive/2015/texmf-dist/tex/latex/multirow/multirow.sty
 \bigstrutjot=\dimen115
 )
-(/usr/local/texlive/2014/texmf-dist/tex/latex/caption/caption.sty
+(/usr/local/texlive/2015/texmf-dist/tex/latex/caption/caption.sty
 Package: caption 2013/05/02 v3.3-89 Customizing captions (AR)
 
-(/usr/local/texlive/2014/texmf-dist/tex/latex/caption/caption3.sty
+(/usr/local/texlive/2015/texmf-dist/tex/latex/caption/caption3.sty
 Package: caption3 2013/05/02 v1.6-88 caption3 kernel (AR)
 Package caption3 Info: TeX engine: e-TeX on input line 57.
 \captionmargin=\dimen116
@@ -342,35 +348,35 @@ Package caption3 Info: TeX engine: e-TeX on input line 57.
 \caption@parindent=\dimen121
 \caption@hangindent=\dimen122
 )
-\c@ContinuedFloat=\count93
+\c@ContinuedFloat=\count96
 )
-(/usr/local/texlive/2014/texmf-dist/tex/latex/caption/subcaption.sty
+(/usr/local/texlive/2015/texmf-dist/tex/latex/caption/subcaption.sty
 Package: subcaption 2013/02/03 v1.1-62 Sub-captions (AR)
-\c@subfigure=\count94
-\c@subtable=\count95
+\c@subfigure=\count97
+\c@subtable=\count98
 )
-(/usr/local/texlive/2014/texmf-dist/tex/latex/float/float.sty
+(/usr/local/texlive/2015/texmf-dist/tex/latex/float/float.sty
 Package: float 2001/11/08 v1.3d Float enhancements (AL)
-\c@float@type=\count96
+\c@float@type=\count99
 \float@exts=\toks18
 \float@box=\box26
 \@float@everytoks=\toks19
 \@floatcapt=\box27
 )
-(/usr/local/texlive/2014/texmf-dist/tex/latex/tools/afterpage.sty
-Package: afterpage 1995/10/27 v1.08 After-Page Package (DPC)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/tools/afterpage.sty
+Package: afterpage 2014/10/28 v1.08 After-Page Package (DPC)
 \AP@output=\toks20
 \AP@partial=\box28
 \AP@footins=\box29
 )
 
-./terman_women.tex:43: LaTeX Error: Option clash for package geometry.
+./terman_women.tex:45: LaTeX Error: Option clash for package geometry.
 
 See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.43 
+l.45 
      
 The package geometry has already been loaded with options:
   []
@@ -381,7 +387,7 @@ Adding the global options:
 to your \documentclass declaration may fix this.
 Try typing  <return>  to proceed.
 
-(./terman_women.aux
+(./terman_women.aux (./probit.aux) (./negbin.aux)
 
 LaTeX Warning: Label `fig:sfig2' multiply defined.
 
@@ -412,21 +418,101 @@ LaTeX Warning: Label `fig:sfig2' multiply defined.
 
 LaTeX Warning: Label `sub@fig:sfig2' multiply defined.
 
-)
+(./heckit.aux) (./probit-1.aux) (./probit-2.aux
+
+LaTeX Warning: Label `' multiply defined.
+
+) (./probit-3.aux
+
+LaTeX Warning: Label `' multiply defined.
+
+) (./probit-4.aux
+
+LaTeX Warning: Label `' multiply defined.
+
+) (./probit-5.aux
+
+LaTeX Warning: Label `' multiply defined.
+
+) (./probit-6.aux
+
+LaTeX Warning: Label `' multiply defined.
+
+) (./negbin-1.aux
+
+LaTeX Warning: Label `' multiply defined.
+
+) (./negbin-2.aux
+
+LaTeX Warning: Label `' multiply defined.
+
+) (./negbin-3.aux
+
+LaTeX Warning: Label `' multiply defined.
+
+) (./negbin-4.aux
+
+LaTeX Warning: Label `' multiply defined.
+
+) (./negbin-5.aux
+
+LaTeX Warning: Label `' multiply defined.
+
+) (./negbin-6.aux
+
+LaTeX Warning: Label `' multiply defined.
+
+) (./heckit-1.aux
+
+LaTeX Warning: Label `' multiply defined.
+
+) (./heckit-2.aux
+
+LaTeX Warning: Label `' multiply defined.
+
+) (./heckit-3.aux
+
+LaTeX Warning: Label `' multiply defined.
+
+) (./heckit-4.aux
+
+LaTeX Warning: Label `' multiply defined.
+
+) (./heckit-5.aux
+
+LaTeX Warning: Label `' multiply defined.
+
+) (./heckit-6.aux
+
+LaTeX Warning: Label `' multiply defined.
+
+) (./heckit-7.aux
+
+LaTeX Warning: Label `' multiply defined.
+
+) (./heckit-8.aux
+
+LaTeX Warning: Label `' multiply defined.
+
+) (./heckit-9.aux
+
+LaTeX Warning: Label `' multiply defined.
+
+))
 \openout1 = `terman_women.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 55.
-LaTeX Font Info:    ... okay on input line 55.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 55.
-LaTeX Font Info:    ... okay on input line 55.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 55.
-LaTeX Font Info:    ... okay on input line 55.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 55.
-LaTeX Font Info:    ... okay on input line 55.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 55.
-LaTeX Font Info:    ... okay on input line 55.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 55.
-LaTeX Font Info:    ... okay on input line 55.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 57.
+LaTeX Font Info:    ... okay on input line 57.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 57.
+LaTeX Font Info:    ... okay on input line 57.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 57.
+LaTeX Font Info:    ... okay on input line 57.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 57.
+LaTeX Font Info:    ... okay on input line 57.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 57.
+LaTeX Font Info:    ... okay on input line 57.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 57.
+LaTeX Font Info:    ... okay on input line 57.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -462,36 +548,44 @@ LaTeX Font Info:    ... okay on input line 55.
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-(/usr/local/texlive/2014/texmf-dist/tex/context/base/supp-pdf.mkii
+(/usr/local/texlive/2015/texmf-dist/tex/context/base/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count97
+\scratchcounter=\count100
 \scratchdimen=\dimen123
 \scratchbox=\box30
-\nofMPsegments=\count98
-\nofMParguments=\count99
+\nofMPsegments=\count101
+\nofMParguments=\count102
 \everyMPshowfont=\toks21
-\MPscratchCnt=\count100
+\MPscratchCnt=\count103
 \MPscratchDim=\dimen124
-\MPnumerator=\count101
-\makeMPintoPDFobject=\count102
+\MPnumerator=\count104
+\makeMPintoPDFobject=\count105
 \everyMPtoPDFconversion=\toks22
 )
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: float package is loaded.
 Package caption Info: End \AtBeginDocument code.
-LaTeX Font Info:    Try loading font information for U+msa on input line 56.
- (/usr/local/texlive/2014/texmf-dist/tex/latex/amsfonts/umsa.fd
+LaTeX Font Info:    Try loading font information for U+msa on input line 58.
+ (/usr/local/texlive/2015/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 56.
+LaTeX Font Info:    Try loading font information for U+msb on input line 58.
 
-(/usr/local/texlive/2014/texmf-dist/tex/latex/amsfonts/umsb.fd
+(/usr/local/texlive/2015/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-./terman_women.tex:56: Undefined control sequence.
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 58.
+
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/omscmr.fd
+File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <8> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 58.
+
+./terman_women.tex:58: Undefined control sequence.
 <argument> Corresponding author, \url 
                                       {rterman@berkeley.edu}. 
-l.56 \maketitle
+l.58 \maketitle
                
 The control sequence at the end of the top line
 of your error message was never \def'ed. If you have
@@ -499,19 +593,17 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
+LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <6> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 58.
 [0
 
-{/usr/local/texlive/2014/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
+{/usr/local/texlive/2015/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
 [1]
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 87.
- (/usr/local/texlive/2014/texmf-dist/tex/latex/base/omscmr.fd
-File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
-)
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10.95> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 87.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 89.
 
-./terman_women.tex:87: Extra }, or forgotten \endgroup.
-l.87 ... to historical cases in which the veil \{}
+./terman_women.tex:89: Extra }, or forgotten \endgroup.
+l.89 ... to historical cases in which the veil \{}
                                                    footbinding \cite{teng199...
 I've deleted a group-closing symbol because it seems to be
 spurious, as in `$x}$'. But perhaps the } is legitimate and
@@ -520,10 +612,10 @@ the way to recover is to insert both the forgotten and the
 deleted material, e.g., by typing `I$}'.
 
 [2] [3] [4]
-./terman_women.tex:115: Illegal unit of measure (pt inserted).
+./terman_women.tex:117: Illegal unit of measure (pt inserted).
 <to be read again> 
                    \relax 
-l.115 ...unted for only 9 per cent of the corpus.}
+l.117 ...unted for only 9 per cent of the corpus.}
                                                     Because this study explo...
 Dimensions can be in units of em, ex, in, pt, pc,
 cm, mm, dd, cc, nd, nc, bp, or sp; but yours is a new one!
@@ -535,10 +627,10 @@ two letters. (See Chapter 27 of The TeXbook.)
 [5] <n-region-plot.jpg, id=33, 903.375pt x 501.875pt>
 File: n-region-plot.jpg Graphic file (type jpg)
  <use n-region-plot.jpg>
-Package pdftex.def Info: n-region-plot.jpg used on input line 122.
+Package pdftex.def Info: n-region-plot.jpg used on input line 124.
 (pdftex.def)             Requested size: 496.85779pt x 276.03209pt.
 
-Overfull \hbox (27.10277pt too wide) in paragraph at lines 122--123
+Overfull \hbox (27.10277pt too wide) in paragraph at lines 124--125
 [][] 
  []
 
@@ -546,10 +638,10 @@ Overfull \hbox (27.10277pt too wide) in paragraph at lines 122--123
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 [6] [7 <./n-region-plot.jpg>]
-./terman_women.tex:134: Illegal unit of measure (pt inserted).
+./terman_women.tex:136: Illegal unit of measure (pt inserted).
 <to be read again> 
                    \relax 
-l.134 ...d police force"  \cite{cingranelli2012}.}
+l.136 ...d police force"  \cite{cingranelli2012}.}
                                                     Each variable is an ordi...
 Dimensions can be in units of em, ex, in, pt, pc,
 cm, mm, dd, cc, nd, nc, bp, or sp; but yours is a new one!
@@ -558,10 +650,10 @@ To recover gracefully from this error, it's best to
 delete the erroneous units; e.g., type `2' to delete
 two letters. (See Chapter 27 of The TeXbook.)
 
-./terman_women.tex:134: Illegal unit of measure (pt inserted).
+./terman_women.tex:136: Illegal unit of measure (pt inserted).
 <to be read again> 
                    \relax 
-l.134 ...hts} variable is only available to 2004.}
+l.136 ...hts} variable is only available to 2004.}
                                                    The composite variable \e...
 Dimensions can be in units of em, ex, in, pt, pc,
 cm, mm, dd, cc, nd, nc, bp, or sp; but yours is a new one!
@@ -570,10 +662,10 @@ To recover gracefully from this error, it's best to
 delete the erroneous units; e.g., type `2' to delete
 two letters. (See Chapter 27 of The TeXbook.)
 
-./terman_women.tex:134: Illegal unit of measure (pt inserted).
+./terman_women.tex:136: Illegal unit of measure (pt inserted).
 <to be read again> 
                    \relax 
-l.134 ... of the composite variable. See Appendix}
+l.136 ... of the composite variable. See Appendix}
                                                   
 Dimensions can be in units of em, ex, in, pt, pc,
 cm, mm, dd, cc, nd, nc, bp, or sp; but yours is a new one!
@@ -583,10 +675,10 @@ delete the erroneous units; e.g., type `2' to delete
 two letters. (See Chapter 27 of The TeXbook.)
 
 [8]
-./terman_women.tex:138: Illegal unit of measure (pt inserted).
+./terman_women.tex:140: Illegal unit of measure (pt inserted).
 <to be read again> 
                    \relax 
-l.138 ...e{5}This data is only available to 2013.}
+l.140 ...e{5}This data is only available to 2013.}
                                                    Therefore, \emph{Democrac...
 Dimensions can be in units of em, ex, in, pt, pc,
 cm, mm, dd, cc, nd, nc, bp, or sp; but yours is a new one!
@@ -595,32 +687,56 @@ To recover gracefully from this error, it's best to
 delete the erroneous units; e.g., type `2' to delete
 two letters. (See Chapter 27 of The TeXbook.)
 
-[9] <nb1.jpeg, id=48, 702.625pt x 450.68375pt>
+[9] [10]
+\openout2 = `probit.aux'.
+
+ (./probit.tex) [11
+
+]
+\openout2 = `negbin.aux'.
+
+ (./negbin.tex) [12
+
+
+]
+./terman_women.tex:151: Illegal unit of measure (pt inserted).
+<to be read again> 
+                   \relax 
+l.151 ...odel on the \emph{Reported (Binary)} DV.}
+                                                   The results suggest a dou...
+Dimensions can be in units of em, ex, in, pt, pc,
+cm, mm, dd, cc, nd, nc, bp, or sp; but yours is a new one!
+I'll assume that you meant to say pt, for printer's points.
+To recover gracefully from this error, it's best to
+delete the erroneous units; e.g., type `2' to delete
+two letters. (See Chapter 27 of The TeXbook.)
+
+<nb1.jpeg, id=59, 702.625pt x 501.875pt>
 File: nb1.jpeg Graphic file (type jpg)
  <use nb1.jpeg>
-Package pdftex.def Info: nb1.jpeg used on input line 247.
-(pdftex.def)             Requested size: 234.8775pt x 150.6585pt.
+Package pdftex.def Info: nb1.jpeg used on input line 156.
+(pdftex.def)             Requested size: 234.8775pt x 167.77115pt.
 
-<nb2.jpeg, id=49, 702.625pt x 451.6875pt>
+<nb2.jpeg, id=60, 702.625pt x 501.875pt>
 File: nb2.jpeg Graphic file (type jpg)
  <use nb2.jpeg>
-Package pdftex.def Info: nb2.jpeg used on input line 253.
-(pdftex.def)             Requested size: 234.8775pt x 150.99403pt.
+Package pdftex.def Info: nb2.jpeg used on input line 162.
+(pdftex.def)             Requested size: 234.8775pt x 167.77115pt.
 
-<nb3.jpeg, id=50, 702.625pt x 450.68375pt>
+<nb3.jpeg, id=61, 702.625pt x 501.875pt>
 File: nb3.jpeg Graphic file (type jpg)
  <use nb3.jpeg>
-Package pdftex.def Info: nb3.jpeg used on input line 260.
-(pdftex.def)             Requested size: 234.8775pt x 150.6585pt.
+Package pdftex.def Info: nb3.jpeg used on input line 169.
+(pdftex.def)             Requested size: 234.8775pt x 167.77115pt.
 
-Overfull \hbox (2.43332pt too wide) in paragraph at lines 245--265
+Overfull \hbox (2.43332pt too wide) in paragraph at lines 154--174
 []$[]$ $[]$
  []
 
-./terman_women.tex:269: Illegal unit of measure (pt inserted).
+./terman_women.tex:178: Illegal unit of measure (pt inserted).
 <to be read again> 
                    \relax 
-l.269 ... multiple imputation \cite{honaker2011}.}
+l.178 ... multiple imputation \cite{honaker2011}.}
                                                    Finally, I estimated mode...
 Dimensions can be in units of em, ex, in, pt, pc,
 cm, mm, dd, cc, nd, nc, bp, or sp; but yours is a new one!
@@ -629,10 +745,10 @@ To recover gracefully from this error, it's best to
 delete the erroneous units; e.g., type `2' to delete
 two letters. (See Chapter 27 of The TeXbook.)
 
-./terman_women.tex:269: Illegal unit of measure (pt inserted).
+./terman_women.tex:178: Illegal unit of measure (pt inserted).
 <to be read again> 
                    \relax 
-l.269 ...All models are included in the Appendix.}
+l.178 ...all models are included in the Appendix.}
                                                   
 Dimensions can be in units of em, ex, in, pt, pc,
 cm, mm, dd, cc, nd, nc, bp, or sp; but yours is a new one!
@@ -641,9 +757,49 @@ To recover gracefully from this error, it's best to
 delete the erroneous units; e.g., type `2' to delete
 two letters. (See Chapter 27 of The TeXbook.)
 
-[10] [11] [12] [13 <./nb1.jpeg> <./nb2.jpeg> <./nb3.jpeg>] [14] [15] [16]
-./terman_women.tex:300: Undefined control sequence.
-l.300 ...ed by frequency and FREX metrics.\foonote
+./terman_women.tex:184: Illegal unit of measure (pt inserted).
+<to be read again> 
+                   \relax 
+l.184 ...come up in conversation \cite{mohr2013}.}
+                                                  
+Dimensions can be in units of em, ex, in, pt, pc,
+cm, mm, dd, cc, nd, nc, bp, or sp; but yours is a new one!
+I'll assume that you meant to say pt, for printer's points.
+To recover gracefully from this error, it's best to
+delete the erroneous units; e.g., type `2' to delete
+two letters. (See Chapter 27 of The TeXbook.)
+
+[13
+
+] [14 <./nb1.jpeg> <./nb2.jpeg> <./nb3.jpeg>]
+./terman_women.tex:188: Illegal unit of measure (pt inserted).
+<to be read again> 
+                   \relax 
+l.188 ...d in the main analyses, described below.}
+                                                  
+Dimensions can be in units of em, ex, in, pt, pc,
+cm, mm, dd, cc, nd, nc, bp, or sp; but yours is a new one!
+I'll assume that you meant to say pt, for printer's points.
+To recover gracefully from this error, it's best to
+delete the erroneous units; e.g., type `2' to delete
+two letters. (See Chapter 27 of The TeXbook.)
+
+[15]
+./terman_women.tex:201: Illegal unit of measure (pt inserted).
+<to be read again> 
+                   \relax 
+l.201 ...stimate the model \cite{roberts2014stm}.}
+                                                   The Structural Topic Mode...
+Dimensions can be in units of em, ex, in, pt, pc,
+cm, mm, dd, cc, nd, nc, bp, or sp; but yours is a new one!
+I'll assume that you meant to say pt, for printer's points.
+To recover gracefully from this error, it's best to
+delete the erroneous units; e.g., type `2' to delete
+two letters. (See Chapter 27 of The TeXbook.)
+
+[16] [17]
+./terman_women.tex:209: Undefined control sequence.
+l.209 ...ed by frequency and FREX metrics.\foonote
                                                   {The words reported are st...
 The control sequence at the end of the top line
 of your error message was never \def'ed. If you have
@@ -651,10 +807,10 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-./terman_women.tex:300: Illegal unit of measure (pt inserted).
+./terman_women.tex:209: Illegal unit of measure (pt inserted).
 <to be read again> 
                    \relax 
-l.300 ...ars to capture human interest reporting.}
+l.209 ...ars to capture human interest reporting.}
                                                   
 Dimensions can be in units of em, ex, in, pt, pc,
 cm, mm, dd, cc, nd, nc, bp, or sp; but yours is a new one!
@@ -663,10 +819,10 @@ To recover gracefully from this error, it's best to
 delete the erroneous units; e.g., type `2' to delete
 two letters. (See Chapter 27 of The TeXbook.)
 
-./terman_women.tex:311: Illegal unit of measure (pt inserted).
+./terman_women.tex:220: Illegal unit of measure (pt inserted).
 <to be read again> 
                    \relax 
-l.311   \hline \hspace{5}
+l.220   \hline \hspace{5}
                          
 Dimensions can be in units of em, ex, in, pt, pc,
 cm, mm, dd, cc, nd, nc, bp, or sp; but yours is a new one!
@@ -676,125 +832,322 @@ delete the erroneous units; e.g., type `2' to delete
 two letters. (See Chapter 27 of The TeXbook.)
 
 
-Overfull \hbox (1.46413pt too wide) in paragraph at lines 323--323
+Overfull \hbox (1.46413pt too wide) in paragraph at lines 232--232
 []|\OT1/cmr/m/n/10 10| 
  []
 
 
-Overfull \hbox (1.46413pt too wide) in paragraph at lines 324--324
+Overfull \hbox (1.46413pt too wide) in paragraph at lines 233--233
 []|\OT1/cmr/m/n/10 11| 
  []
 
 
-Overfull \hbox (1.46413pt too wide) in paragraph at lines 325--325
+Overfull \hbox (1.46413pt too wide) in paragraph at lines 234--234
 []|\OT1/cmr/m/n/10 12| 
  []
 
 
-Overfull \hbox (1.46413pt too wide) in paragraph at lines 326--326
+Overfull \hbox (1.46413pt too wide) in paragraph at lines 235--235
 []|\OT1/cmr/m/n/10 13| 
  []
 
 
-Overfull \hbox (1.46413pt too wide) in paragraph at lines 327--327
+Overfull \hbox (1.46413pt too wide) in paragraph at lines 236--236
 []|\OT1/cmr/m/n/10 14| 
  []
 
 
-Overfull \hbox (1.46413pt too wide) in paragraph at lines 328--328
+Overfull \hbox (1.46413pt too wide) in paragraph at lines 237--237
 []|\OT1/cmr/m/n/10 15| 
  []
 
-[17] [18] <corpus.jpg, id=82, 622.325pt x 486.81876pt>
+<corpus.jpg, id=78, 622.325pt x 486.81876pt>
 File: corpus.jpg Graphic file (type jpg)
  <use corpus.jpg>
-Package pdftex.def Info: corpus.jpg used on input line 340.
+Package pdftex.def Info: corpus.jpg used on input line 249.
 (pdftex.def)             Requested size: 404.50645pt x 316.42844pt.
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[19
+[18] [19] [20 <./corpus.jpg>] [21
 
-] <2.png, id=86, 401.5pt x 301.125pt>
+] <2.png, id=92, 401.5pt x 301.125pt>
 File: 2.png Graphic file (type png)
- <use 2.png>
-Package pdftex.def Info: 2.png used on input line 384.
-(pdftex.def)             Requested size: 234.8775pt x 176.16429pt.
 
-<3.png, id=87, 401.5pt x 301.125pt>
+<use 2.png>
+Package pdftex.def Info: 2.png used on input line 293.
+(pdftex.def)             Requested size: 234.8775pt x 176.16429pt.
+ <3.png, id=93, 401.5pt x 301.125pt>
 File: 3.png Graphic file (type png)
  <use 3.png>
-Package pdftex.def Info: 3.png used on input line 389.
+Package pdftex.def Info: 3.png used on input line 298.
 (pdftex.def)             Requested size: 234.8775pt x 176.16429pt.
 
-<4.png, id=88, 401.5pt x 301.125pt>
+<4.png, id=94, 401.5pt x 301.125pt>
 File: 4.png Graphic file (type png)
  <use 4.png>
-Package pdftex.def Info: 4.png used on input line 394.
+Package pdftex.def Info: 4.png used on input line 303.
 (pdftex.def)             Requested size: 234.8775pt x 176.16429pt.
 
-<12.png, id=89, 401.5pt x 301.125pt>
+<12.png, id=95, 401.5pt x 301.125pt>
 File: 12.png Graphic file (type png)
  <use 12.png>
-Package pdftex.def Info: 12.png used on input line 399.
+Package pdftex.def Info: 12.png used on input line 308.
 (pdftex.def)             Requested size: 234.8775pt x 176.16429pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 382--402
+Underfull \hbox (badness 10000) in paragraph at lines 291--311
 []$[]$$[]$
  []
 
 
-Overfull \hbox (2.43332pt too wide) in paragraph at lines 382--402
+Overfull \hbox (2.43332pt too wide) in paragraph at lines 291--311
 []$ $[]$ 
  []
 
-[20 <./corpus.jpg>] [21 <./2.png> <./3.png> <./4.png> <./12.png>] [22] [23]
-[24] [25] [26] [27] (./terman_women.bbl [28]
+[22 <./2.png> <./3.png> <./4.png> <./12.png>]
+./terman_women.tex:323: Illegal unit of measure (pt inserted).
+<to be read again> 
+                   \relax 
+l.323 ...ures, with the same substantive results.}
+                                                  
+Dimensions can be in units of em, ex, in, pt, pc,
+cm, mm, dd, cc, nd, nc, bp, or sp; but yours is a new one!
+I'll assume that you meant to say pt, for printer's points.
+To recover gracefully from this error, it's best to
+delete the erroneous units; e.g., type `2' to delete
+two letters. (See Chapter 27 of The TeXbook.)
+
+[23] [24]
+\openout2 = `heckit.aux'.
+
+ (./heckit.tex) [25
+
+]
+./terman_women.tex:331: Illegal unit of measure (pt inserted).
+<to be read again> 
+                   \relax 
+l.331 ...set of rights-related words. See note 10}
+                                                   Finally, I estimated one-...
+Dimensions can be in units of em, ex, in, pt, pc,
+cm, mm, dd, cc, nd, nc, bp, or sp; but yours is a new one!
+I'll assume that you meant to say pt, for printer's points.
+To recover gracefully from this error, it's best to
+delete the erroneous units; e.g., type `2' to delete
+two letters. (See Chapter 27 of The TeXbook.)
+
+./terman_women.tex:331: Illegal unit of measure (pt inserted).
+<to be read again> 
+                   \relax 
+l.331 ...ive models are included in the appendix.}
+                                                  
+Dimensions can be in units of em, ex, in, pt, pc,
+cm, mm, dd, cc, nd, nc, bp, or sp; but yours is a new one!
+I'll assume that you meant to say pt, for printer's points.
+To recover gracefully from this error, it's best to
+delete the erroneous units; e.g., type `2' to delete
+two letters. (See Chapter 27 of The TeXbook.)
+
+[26
+
+]
+./terman_women.tex:341: Illegal unit of measure (pt inserted).
+<to be read again> 
+                   \relax 
+l.341 ...resent in coverage about MENA countries.}
+                                                   Tired of feeling singled ...
+Dimensions can be in units of em, ex, in, pt, pc,
+cm, mm, dd, cc, nd, nc, bp, or sp; but yours is a new one!
+I'll assume that you meant to say pt, for printer's points.
+To recover gracefully from this error, it's best to
+delete the erroneous units; e.g., type `2' to delete
+two letters. (See Chapter 27 of The TeXbook.)
+
+[27] [28] [29] (./terman_women.bbl [30]
 LaTeX Font Info:    Try loading font information for OML+cmr on input line 79.
 
-(/usr/local/texlive/2014/texmf-dist/tex/latex/base/omlcmr.fd
-File: omlcmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/omlcmr.fd
+File: omlcmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OML/cmr/m/n' in size <10.95> not available
 (Font)              Font shape `OML/cmm/m/it' tried instead on input line 79.
- [29] [30]
-[31] [32]) [33] (./terman_women.aux)
+ [31] [32]
+[33] [34]) [35] [36]
+\openout2 = `probit-1.aux'.
+
+ (./probit-1.tex) [37
+
+]
+\openout2 = `probit-2.aux'.
+
+ (./probit-2.tex) [38
+
+
+]
+\openout2 = `probit-3.aux'.
+
+
+(./probit-3.tex) [39
+
+
+]
+\openout2 = `probit-4.aux'.
+
+ (./probit-4.tex) [40
+
+
+]
+\openout2 = `probit-5.aux'.
+
+ (./probit-5.tex) [41
+
+
+]
+\openout2 = `probit-6.aux'.
+
+
+(./probit-6.tex) [42
+
+
+] [43
+
+]
+\openout2 = `negbin-1.aux'.
+
+ (./negbin-1.tex) [44
+
+]
+\openout2 = `negbin-2.aux'.
+
+ (./negbin-2.tex) [45
+
+
+]
+\openout2 = `negbin-3.aux'.
+
+
+(./negbin-3.tex) [46
+
+
+]
+\openout2 = `negbin-4.aux'.
+
+ (./negbin-4.tex) [47
+
+
+]
+\openout2 = `negbin-5.aux'.
+
+ (./negbin-5.tex) [48
+
+
+]
+\openout2 = `negbin-6.aux'.
+
+
+(./negbin-6.tex) [49
+
+
+] [50
+
+]
+\openout2 = `heckit-1.aux'.
+
+ (./heckit-1.tex) [51
+
+]
+\openout2 = `heckit-2.aux'.
+
+ (./heckit-2.tex) [52
+
+
+]
+\openout2 = `heckit-3.aux'.
+
+
+(./heckit-3.tex) [53
+
+
+]
+\openout2 = `heckit-4.aux'.
+
+ (./heckit-4.tex) [54
+
+
+]
+\openout2 = `heckit-5.aux'.
+
+ (./heckit-5.tex) [55
+
+
+]
+\openout2 = `heckit-6.aux'.
+
+
+(./heckit-6.tex) [56
+
+
+]
+\openout2 = `heckit-7.aux'.
+
+ (./heckit-7.tex) [57
+
+
+]
+\openout2 = `heckit-8.aux'.
+
+ (./heckit-8.tex) [58
+
+
+]
+\openout2 = `heckit-9.aux'.
+
+
+(./heckit-9.tex) [59
+
+
+] (./terman_women.aux (./probit.aux) (./negbin.aux)
+(./heckit.aux) (./probit-1.aux) (./probit-2.aux) (./probit-3.aux)
+(./probit-4.aux) (./probit-5.aux) (./probit-6.aux) (./negbin-1.aux)
+(./negbin-2.aux) (./negbin-3.aux) (./negbin-4.aux) (./negbin-5.aux)
+(./negbin-6.aux) (./heckit-1.aux) (./heckit-2.aux) (./heckit-3.aux)
+(./heckit-4.aux) (./heckit-5.aux) (./heckit-6.aux) (./heckit-7.aux)
+(./heckit-8.aux) (./heckit-9.aux))
 
 LaTeX Warning: There were multiply-defined labels.
 
  )
 (\end occurred inside a group at level 1)
 
-### semi simple group (level 1) entered at line 73 (\begingroup)
+### semi simple group (level 1) entered at line 75 (\begingroup)
 ### bottom level 
 Here is how much of TeX's memory you used:
- 4388 strings out of 493117
- 67814 string characters out of 6135433
- 148081 words of memory out of 5000000
- 7753 multiletter control sequences out of 15000+600000
+ 4683 strings out of 493089
+ 71590 string characters out of 6134842
+ 158967 words of memory out of 5000000
+ 7899 multiletter control sequences out of 15000+600000
  15941 words of font info for 61 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 42i,11n,38p,3127b,506s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts
-/cm/cmbx10.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/
-cm/cmbx12.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/c
-m/cmmi10.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm
-/cmmi9.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/c
-mr10.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmr
-12.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17
-.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pf
-b></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb><
-/usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></us
-r/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr
-/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/l
-ocal/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/loc
-al/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/loca
-l/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmti9.pfb>
-Output written on terman_women.pdf (34 pages, 544232 bytes).
+ 42i,11n,39p,3127b,512s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts
+/cm/cmbx10.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/
+cm/cmbx12.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/c
+m/cmmi10.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm
+/cmmi9.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/c
+mr10.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr
+12.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17
+.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pf
+b></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb><
+/usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></us
+r/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr
+/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/l
+ocal/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/loc
+al/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/loca
+l/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmti9.pfb>
+Output written on terman_women.pdf (60 pages, 569669 bytes).
 PDF statistics:
- 183 PDF objects out of 1000 (max. 8388607)
- 121 compressed objects within 2 object streams
+ 267 PDF objects out of 1000 (max. 8388607)
+ 179 compressed objects within 2 object streams
  0 named destinations out of 1000 (max. 500000)
  46 words of extra memory for PDF output out of 10000 (max. 10000000)
 

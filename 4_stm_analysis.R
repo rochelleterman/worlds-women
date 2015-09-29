@@ -103,7 +103,7 @@ meta.topics <- meta.topics[,c(1:18,23:26,28,30,31,37,38,39,40)]
 names(meta.topics)[16:29] <- c("doc.number", "publication", "title", "entities", "iso3c", "text", "country", "year", "text.no.noun", "region", "type", "subject", "top.topic", "n.words")
 
 #write csv for later
-write.csv(meta.topics,"Data/meta-topics.csv", row.names = F)
+write.csv(meta.topics,"Data/Corpora/meta-topics.csv", row.names = F)
 
 ##############################################
 ####### Topic-Document Proportion Tables #####

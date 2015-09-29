@@ -35,8 +35,8 @@ sum(docs[1,1:15]) # 348
 #################################################
 
 ## Various ways to operationalize the DV:
-
 # Option 1) Mean topic distribution per country.year (weighted by words per doc)
+
 country.year.means <- ddply(.data=docs, .variables=.(iso3c,year), numcolwise(sum,na.rm = TRUE))
 # normalize
 country.year.means[,3:17] <- country.year.means[,3:17]/country.year.means$n.words
@@ -56,16 +56,13 @@ head(country.year.sums)
 sum(country.year.sums[3,3:17]) # sum words for 3strow = 1583
 write.csv(country.year.means,"Results/stm/country.year-sums.csv")
 
-# Option 3) Boolean label - rights or not - on article using DTM
-rights.boolean <- read.csv("Results/stm/rights-boolean-country-year.csv")
-
 #################################
 ###### Assign DV and explore ####
 #################################
 
-# assign 3 Rights DVs
-country.year <- cbind(country.year.means[,c(1,2,14)], rights.boolean$rights.perc, country.year.sums[,c(14,18,19)])
-names(country.year) <- c("iso3c", "year","rights.mean", "rights.boolean", "rights.sum","n.words","n.docs")
+# assign 2 Rights DVs
+country.year <- cbind(country.year.means[,c(1,2,14)], country.year.sums[,c(14,18,19)])
+names(country.year) <- c("iso3c", "year","rights.mean","rights.sum","n.words","n.docs")
 
 # duplicates?
 x <- data.frame(cbind(country.year$iso3c,country.year$year))
@@ -119,7 +116,6 @@ rt$muslim.maj <- 0
 rt$muslim.maj[rt$muslim>=.50] <- 1
 rt$muslim.maj[is.na(rt$muslim)] <- NA
 summary(rt$muslim.maj)
-summary(rt$muslim)
 
 ## Adjust n from NA to 0
 rt$n.docs[is.na(rt$n.docs)] <- 0
@@ -134,7 +130,7 @@ rt$n.binary <- as.factor(rt$n.binary)
 summary(rt$n.binary)
 
 ### subset 
-rt <- rt[,c("ccode","year","n.docs","n.words","n.binary","rights.sum","rights.mean", "rights.boolean","muslim","muslim.maj","mena","polity2","physint","amnesty","statedept","gdp.pc.un","pop.wdi","wopol","wosoc","wecon","domestic9","lnreportcount", "count","region", "idealpoint")]
+rt <- rt[,c("ccode","year","n.docs","n.words","n.binary","rights.sum","rights.mean","muslim","muslim.maj","mena","polity2","physint","amnesty","statedept","gdp.pc.un","pop.wdi","wopol","wosoc","wecon","domestic9","lnreportcount", "count","region", "idealpoint")]
 
 # Write
 rt.orig <- rt
@@ -147,7 +143,6 @@ cor(rt$lnreportcount,rt$count,use="complete.obs") #0.4008974
 summary(lm(count ~ lnreportcount, data = rt))
 summary(rt$rights.mean)
 summary(rt$rights.sum)
-summary(rt$rights.boolean)
 summary(rt$idealpoint)
 
 #############################
@@ -205,7 +200,7 @@ write.csv(rt.nearest, "Data/country-year/nearest.csv", row.names = F)
 rt <- rt.orig
 names(rt)
 # subset
-rt <- rt[,c(1,2,13:22,25)]
+rt <- rt[,c(1,2,11:21,24)]
 rt$year <- as.integer(as.character((rt$year)))
 # model 1
 set.seed(1234)
@@ -230,7 +225,6 @@ rt.impute <- a.out$imputations[[1]]
 # overwrite dependent variables -- we don't want to impute those.
 rt.impute$rights.sum <- rt.orig$rights.sum
 rt.impute$rights.mean <- rt.orig$rights.mean
-rt.impute$rights.boolean <- rt.orig$rights.boolean
 rt.impute$n.docs <- rt.orig$n.docs
 rt.impute$n.words <- rt.orig$n.words
 rt.impute$n.binary <- rt.orig$n.binary

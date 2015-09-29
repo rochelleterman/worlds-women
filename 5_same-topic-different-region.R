@@ -32,6 +32,7 @@ make.dtm <- function(data){
   return(dtm)
 }
 
+
 ##########################################
 ######## Word Separating Function ########
 ##########################################
@@ -204,3 +205,30 @@ rights <- subset(meta.topics, top.topic=="rights",select=c(TITLE,REGION,TEXT,YEA
 rights <- arrange(rights,REGION)
 write.csv(rights,"Results/Rights-articles.csv")
 
+##########################
+#### MISC Stuff ######
+######################
+
+## how many docs have the words "right" or "equal"
+
+big.dtm <- make.dtm(meta.topics)
+index <- which(big.dtm$right > 0 | big.dtm$equal | big.dtm$sexist > 0 | big.dtm$sexism > 0) # 2379 docs have the word "right" or "equal"
+
+length(index) / nrow(big.dtm)
+
+meta.topics$rights.boolean <- 0
+meta.topics$rights.boolean[index] <- 1
+names(meta.topics)
+subset <- meta.topics[,c("iso3c", "year", "rights.boolean")]
+
+require(plyr)
+rights.country.year <- ddply(.data=meta.topics, .variables=.(iso3c,year), numcolwise(sum,na.rm = TRUE))
+rights.country.year$n.docs <- (ddply(.data=docs,.variables=.(iso3c,year), .fun=nrow))$V1
+rights.country.year$rights.perc <- rights.country.year$rights.boolean / rights.country.year$n.docs
+write.csv(rights.country.year,"Results/stm/rights-boolean-country-year.csv")
+
+summary(rights.country.year$rights.perc)
+hist(rights.country.year$rights.perc)
+
+require(ggplot2)
+ggplot(rights.country.year, aes(x = iso3c, y = rights.perc)) + geom_bar(stat = "identity")

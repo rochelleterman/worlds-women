@@ -1,46 +1,48 @@
 This is BibTeX, Version 0.99d (TeX Live 2014)
 Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
-The top-level auxiliary file: Terman_women.aux
+The top-level auxiliary file: terman_women.aux
 The style file: apsr.bst
 Database file #1: rights.bib
-You've used 1 entry,
+Warning--empty publisher in porter2001
+You've used 64 entries,
             2874 wiz_defined-function locations,
-            647 strings with 4912 characters,
-and the built_in function-call counts, 2023 in all, are:
-= -- 307
-> -- 16
-< -- 0
-+ -- 123
-- -- 7
-* -- 158
-:= -- 447
-add.period$ -- 4
-call.type$ -- 1
-change.case$ -- 13
-chr.to.int$ -- 1
-cite$ -- 1
-duplicate$ -- 15
-empty$ -- 37
-format.name$ -- 9
-if$ -- 353
+            991 strings with 14631 characters,
+and the built_in function-call counts, 217861 in all, are:
+= -- 35412
+> -- 2166
+< -- 1
++ -- 16130
+- -- 810
+* -- 18060
+:= -- 44262
+add.period$ -- 256
+call.type$ -- 64
+change.case$ -- 832
+chr.to.int$ -- 64
+cite$ -- 65
+duplicate$ -- 1074
+empty$ -- 2180
+format.name$ -- 913
+if$ -- 39127
 int.to.chr$ -- 5
 int.to.str$ -- 0
-missing$ -- 1
-newline$ -- 8
-num.names$ -- 10
-pop$ -- 3
+missing$ -- 76
+newline$ -- 276
+num.names$ -- 681
+pop$ -- 317
 preamble$ -- 1
-purify$ -- 15
+purify$ -- 960
 quote$ -- 0
-skip$ -- 13
+skip$ -- 935
 stack$ -- 0
-substring$ -- 416
-swap$ -- 2
-text.length$ -- 14
+substring$ -- 49515
+swap$ -- 218
+text.length$ -- 897
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 4
-warning$ -- 0
-while$ -- 23
+type$ -- 228
+warning$ -- 1
+while$ -- 1469
 width$ -- 0
-write$ -- 16
+write$ -- 866
+(There was 1 warning)

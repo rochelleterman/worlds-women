@@ -55,18 +55,20 @@
 %\date{}                                           % Activate to display a given date or no date
 
 \begin{document}
-\maketitle
-\baselineskip=2.00\baselineskip
 
+\baselineskip=1.00\baselineskip
 \setcounter{page}{0}
 
 \maketitle\thispagestyle{empty}
 
+\begin{center}
+
 Replication Materials here: https://github.com/rochelleterman/worlds-women
 
-\begin{center}
-\textbf{PRELIMINARY DRAFT: PLEASE DO NOT CIRCULATE OR CITE WITHOUT PERMISSION}
+\textbf{Preliminary Draft: Please do not circulate or cite without permission} 
 \end{center}
+
+\vspace{1cm}
 
 \begin{abstract}
 \noindent Are the U.S. media obsessed with Muslim women's rights? Since the terrorist attacks of September 11, a vast literature has employed the theory of ``gendered orientalism'' to critique American media coverage of women in Muslim and Middle Eastern societies. This paper tests those claims by conducting the first large-scale, systematic, and comparative analysis of U.S. news coverage of women abroad. I examine two proposed mechanisms derived from the theory of gendered orientalism. First, U.S. news coverage of women abroad is driven by confirmation bias; gender oppression in Muslim societies is noticed more and considered news-worthy, while women's oppression in Western societies tends to be ignored. Second, U.S. news media write differently about women in Muslim and Middle Eastern nations than they do about women in other societies. Specifically, stories about the former exhibit a more concentrated discussion about women's rights and gender equality (or lack thereof), even for countries with relatively good records of women's rights. Using novel computational text analytic methods, I test these two hypotheses with new data from 35 years of \emph{New York Times} and \emph{Washington Post} reporting. The results suggest that U.S. news media are more likely to address women's rights abuses if those abuses occur in Muslim or Middle Eastern nations, regardless of the state of gender equality on the ground.
@@ -145,10 +147,10 @@ Finally, I include controls for \emph{GDP per capita} (logged) using World Bank 
 
 I use statistical models that account for the cross-national time-series structure of the data. Because the panel data are highly correlated, I use generalized estimating equations \cite{zorn2001}. When modeling the dependent variable using the \emph{Reporting} binary, I use a probit regression. When modeling the dependent variable using \emph{Reported (Count)}, I use a negative binomial regression since this variable consists of over-dispersed counts. Note that a tobit is inappropriate here because coverage cannot assume negative values \cite{sigelman1999}. To deal with heteroskedasticity, all estimates use Huber-White corrected robust standard errors clustered on country.  Time-variant independent and control variables are lagged by one year to mitigate simultaneity issues and lessen any incorrect direction of inference. I also include a lagged-dependent variable to correct for serial correlation \cite{wooldridge2010}. The results are summarized in Tables \ref{table:probit} and \ref{table:negbin}.
 
+The models provide strong support for Hypothesis 1. All three interaction terms are statistically significant and negative, suggesting that the effect of \emph{Women's Rights Index} varies across Muslim (MENA) and non-Muslim (non-MENA) countries. To help interpret these results, Figure \ref{fig:interactions} visualizes the marginal effect of \emph{Women's Rights} on \emph{Reported (Count)} for each of the three Muslim/MENA-related variables.\footnote{\hspace{5}Results are substantively identical for probit model on the \emph{Reported (Binary)} DV.} The results suggest a double standard when it comes to how the U.S. news media represent women around the world. Not only are women in MENA and Muslim countries represented more often and in greater quantities, they garner special attention if their rights are violated. But the relationship is inverse for other nations, where better women's rights records correlate with higher likelihood of coverage. 
+
 \include{probit}
 \include{negbin}
-
-The models provide strong support for Hypothesis 1. All three interaction terms are statistically significant and negative, suggesting that the effect of \emph{Women's Rights Index} varies across Muslim (MENA) and non-Muslim (non-MENA) countries. To help interpret these results, Figure \ref{fig:interactions} visualizes the marginal effect of \emph{Women's Rights} on \emph{Reported (Count)} for each of the three Muslim/MENA-related variables.\footnote{\hspace{5}Results are substantively identical for probit model on the \emph{Reported (Binary)} DV.} The results suggest a double standard when it comes to how the U.S. news media represent women around the world. Not only are women in MENA and Muslim countries represented more often and in greater quantities, they garner special attention if their rights are violated. But the relationship is inverse for other nations, where better women's rights records correlate with higher likelihood of coverage. 
 
 \begin{figure}
 \begin{subfigure}{.5\textwidth}

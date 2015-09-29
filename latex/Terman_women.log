@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.5.24)  28 SEP 2015 19:55
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.5.24)  28 SEP 2015 20:04
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -565,28 +565,28 @@ LaTeX Font Info:    ... okay on input line 57.
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: float package is loaded.
 Package caption Info: End \AtBeginDocument code.
-LaTeX Font Info:    Try loading font information for U+msa on input line 58.
+LaTeX Font Info:    Try loading font information for U+msa on input line 62.
  (/usr/local/texlive/2015/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 58.
+LaTeX Font Info:    Try loading font information for U+msb on input line 62.
 
 (/usr/local/texlive/2015/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 58.
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 62.
 
 (/usr/local/texlive/2015/texmf-dist/tex/latex/base/omscmr.fd
 File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <8> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 58.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 62.
 
-./terman_women.tex:58: Undefined control sequence.
+./terman_women.tex:62: Undefined control sequence.
 <argument> Corresponding author, \url 
                                       {rterman@berkeley.edu}. 
-l.58 \maketitle
-               
+l.62 \maketitle
+               \thispagestyle{empty}
 The control sequence at the end of the top line
 of your error message was never \def'ed. If you have
 misspelled it (e.g., `\hobx'), type `I' and the correct
@@ -594,16 +594,16 @@ spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <6> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 58.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 62.
 [0
 
 {/usr/local/texlive/2015/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
 [1]
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10.95> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 89.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 91.
 
-./terman_women.tex:89: Extra }, or forgotten \endgroup.
-l.89 ... to historical cases in which the veil \{}
+./terman_women.tex:91: Extra }, or forgotten \endgroup.
+l.91 ... to historical cases in which the veil \{}
                                                    footbinding \cite{teng199...
 I've deleted a group-closing symbol because it seems to be
 spurious, as in `$x}$'. But perhaps the } is legitimate and
@@ -612,10 +612,10 @@ the way to recover is to insert both the forgotten and the
 deleted material, e.g., by typing `I$}'.
 
 [2] [3] [4]
-./terman_women.tex:117: Illegal unit of measure (pt inserted).
+./terman_women.tex:119: Illegal unit of measure (pt inserted).
 <to be read again> 
                    \relax 
-l.117 ...unted for only 9 per cent of the corpus.}
+l.119 ...unted for only 9 per cent of the corpus.}
                                                     Because this study explo...
 Dimensions can be in units of em, ex, in, pt, pc,
 cm, mm, dd, cc, nd, nc, bp, or sp; but yours is a new one!
@@ -627,10 +627,10 @@ two letters. (See Chapter 27 of The TeXbook.)
 [5] <n-region-plot.jpg, id=33, 903.375pt x 501.875pt>
 File: n-region-plot.jpg Graphic file (type jpg)
  <use n-region-plot.jpg>
-Package pdftex.def Info: n-region-plot.jpg used on input line 124.
+Package pdftex.def Info: n-region-plot.jpg used on input line 126.
 (pdftex.def)             Requested size: 496.85779pt x 276.03209pt.
 
-Overfull \hbox (27.10277pt too wide) in paragraph at lines 124--125
+Overfull \hbox (27.10277pt too wide) in paragraph at lines 126--127
 [][] 
  []
 
@@ -638,10 +638,10 @@ Overfull \hbox (27.10277pt too wide) in paragraph at lines 124--125
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 [6] [7 <./n-region-plot.jpg>]
-./terman_women.tex:136: Illegal unit of measure (pt inserted).
+./terman_women.tex:138: Illegal unit of measure (pt inserted).
 <to be read again> 
                    \relax 
-l.136 ...d police force"  \cite{cingranelli2012}.}
+l.138 ...d police force"  \cite{cingranelli2012}.}
                                                     Each variable is an ordi...
 Dimensions can be in units of em, ex, in, pt, pc,
 cm, mm, dd, cc, nd, nc, bp, or sp; but yours is a new one!
@@ -650,10 +650,10 @@ To recover gracefully from this error, it's best to
 delete the erroneous units; e.g., type `2' to delete
 two letters. (See Chapter 27 of The TeXbook.)
 
-./terman_women.tex:136: Illegal unit of measure (pt inserted).
+./terman_women.tex:138: Illegal unit of measure (pt inserted).
 <to be read again> 
                    \relax 
-l.136 ...hts} variable is only available to 2004.}
+l.138 ...hts} variable is only available to 2004.}
                                                    The composite variable \e...
 Dimensions can be in units of em, ex, in, pt, pc,
 cm, mm, dd, cc, nd, nc, bp, or sp; but yours is a new one!
@@ -662,10 +662,10 @@ To recover gracefully from this error, it's best to
 delete the erroneous units; e.g., type `2' to delete
 two letters. (See Chapter 27 of The TeXbook.)
 
-./terman_women.tex:136: Illegal unit of measure (pt inserted).
+./terman_women.tex:138: Illegal unit of measure (pt inserted).
 <to be read again> 
                    \relax 
-l.136 ... of the composite variable. See Appendix}
+l.138 ... of the composite variable. See Appendix}
                                                   
 Dimensions can be in units of em, ex, in, pt, pc,
 cm, mm, dd, cc, nd, nc, bp, or sp; but yours is a new one!
@@ -675,10 +675,10 @@ delete the erroneous units; e.g., type `2' to delete
 two letters. (See Chapter 27 of The TeXbook.)
 
 [8]
-./terman_women.tex:140: Illegal unit of measure (pt inserted).
+./terman_women.tex:142: Illegal unit of measure (pt inserted).
 <to be read again> 
                    \relax 
-l.140 ...e{5}This data is only available to 2013.}
+l.142 ...e{5}This data is only available to 2013.}
                                                    Therefore, \emph{Democrac...
 Dimensions can be in units of em, ex, in, pt, pc,
 cm, mm, dd, cc, nd, nc, bp, or sp; but yours is a new one!
@@ -687,7 +687,20 @@ To recover gracefully from this error, it's best to
 delete the erroneous units; e.g., type `2' to delete
 two letters. (See Chapter 27 of The TeXbook.)
 
-[9] [10]
+[9]
+./terman_women.tex:150: Illegal unit of measure (pt inserted).
+<to be read again> 
+                   \relax 
+l.150 ...odel on the \emph{Reported (Binary)} DV.}
+                                                   The results suggest a dou...
+Dimensions can be in units of em, ex, in, pt, pc,
+cm, mm, dd, cc, nd, nc, bp, or sp; but yours is a new one!
+I'll assume that you meant to say pt, for printer's points.
+To recover gracefully from this error, it's best to
+delete the erroneous units; e.g., type `2' to delete
+two letters. (See Chapter 27 of The TeXbook.)
+
+[10]
 \openout2 = `probit.aux'.
 
  (./probit.tex) [11
@@ -699,44 +712,32 @@ two letters. (See Chapter 27 of The TeXbook.)
 
 
 ]
-./terman_women.tex:151: Illegal unit of measure (pt inserted).
-<to be read again> 
-                   \relax 
-l.151 ...odel on the \emph{Reported (Binary)} DV.}
-                                                   The results suggest a dou...
-Dimensions can be in units of em, ex, in, pt, pc,
-cm, mm, dd, cc, nd, nc, bp, or sp; but yours is a new one!
-I'll assume that you meant to say pt, for printer's points.
-To recover gracefully from this error, it's best to
-delete the erroneous units; e.g., type `2' to delete
-two letters. (See Chapter 27 of The TeXbook.)
-
 <nb1.jpeg, id=59, 702.625pt x 501.875pt>
 File: nb1.jpeg Graphic file (type jpg)
  <use nb1.jpeg>
-Package pdftex.def Info: nb1.jpeg used on input line 156.
+Package pdftex.def Info: nb1.jpeg used on input line 158.
 (pdftex.def)             Requested size: 234.8775pt x 167.77115pt.
 
 <nb2.jpeg, id=60, 702.625pt x 501.875pt>
 File: nb2.jpeg Graphic file (type jpg)
  <use nb2.jpeg>
-Package pdftex.def Info: nb2.jpeg used on input line 162.
+Package pdftex.def Info: nb2.jpeg used on input line 164.
 (pdftex.def)             Requested size: 234.8775pt x 167.77115pt.
 
 <nb3.jpeg, id=61, 702.625pt x 501.875pt>
 File: nb3.jpeg Graphic file (type jpg)
  <use nb3.jpeg>
-Package pdftex.def Info: nb3.jpeg used on input line 169.
+Package pdftex.def Info: nb3.jpeg used on input line 171.
 (pdftex.def)             Requested size: 234.8775pt x 167.77115pt.
 
-Overfull \hbox (2.43332pt too wide) in paragraph at lines 154--174
+Overfull \hbox (2.43332pt too wide) in paragraph at lines 156--176
 []$[]$ $[]$
  []
 
-./terman_women.tex:178: Illegal unit of measure (pt inserted).
+./terman_women.tex:180: Illegal unit of measure (pt inserted).
 <to be read again> 
                    \relax 
-l.178 ... multiple imputation \cite{honaker2011}.}
+l.180 ... multiple imputation \cite{honaker2011}.}
                                                    Finally, I estimated mode...
 Dimensions can be in units of em, ex, in, pt, pc,
 cm, mm, dd, cc, nd, nc, bp, or sp; but yours is a new one!
@@ -745,22 +746,10 @@ To recover gracefully from this error, it's best to
 delete the erroneous units; e.g., type `2' to delete
 two letters. (See Chapter 27 of The TeXbook.)
 
-./terman_women.tex:178: Illegal unit of measure (pt inserted).
+./terman_women.tex:180: Illegal unit of measure (pt inserted).
 <to be read again> 
                    \relax 
-l.178 ...all models are included in the Appendix.}
-                                                  
-Dimensions can be in units of em, ex, in, pt, pc,
-cm, mm, dd, cc, nd, nc, bp, or sp; but yours is a new one!
-I'll assume that you meant to say pt, for printer's points.
-To recover gracefully from this error, it's best to
-delete the erroneous units; e.g., type `2' to delete
-two letters. (See Chapter 27 of The TeXbook.)
-
-./terman_women.tex:184: Illegal unit of measure (pt inserted).
-<to be read again> 
-                   \relax 
-l.184 ...come up in conversation \cite{mohr2013}.}
+l.180 ...all models are included in the Appendix.}
                                                   
 Dimensions can be in units of em, ex, in, pt, pc,
 cm, mm, dd, cc, nd, nc, bp, or sp; but yours is a new one!
@@ -771,11 +760,11 @@ two letters. (See Chapter 27 of The TeXbook.)
 
 [13
 
-] [14 <./nb1.jpeg> <./nb2.jpeg> <./nb3.jpeg>]
-./terman_women.tex:188: Illegal unit of measure (pt inserted).
+ <./nb1.jpeg> <./nb2.jpeg> <./nb3.jpeg>]
+./terman_women.tex:186: Illegal unit of measure (pt inserted).
 <to be read again> 
                    \relax 
-l.188 ...d in the main analyses, described below.}
+l.186 ...come up in conversation \cite{mohr2013}.}
                                                   
 Dimensions can be in units of em, ex, in, pt, pc,
 cm, mm, dd, cc, nd, nc, bp, or sp; but yours is a new one!
@@ -784,11 +773,23 @@ To recover gracefully from this error, it's best to
 delete the erroneous units; e.g., type `2' to delete
 two letters. (See Chapter 27 of The TeXbook.)
 
-[15]
-./terman_women.tex:201: Illegal unit of measure (pt inserted).
+./terman_women.tex:190: Illegal unit of measure (pt inserted).
 <to be read again> 
                    \relax 
-l.201 ...stimate the model \cite{roberts2014stm}.}
+l.190 ...d in the main analyses, described below.}
+                                                  
+Dimensions can be in units of em, ex, in, pt, pc,
+cm, mm, dd, cc, nd, nc, bp, or sp; but yours is a new one!
+I'll assume that you meant to say pt, for printer's points.
+To recover gracefully from this error, it's best to
+delete the erroneous units; e.g., type `2' to delete
+two letters. (See Chapter 27 of The TeXbook.)
+
+[14] [15]
+./terman_women.tex:203: Illegal unit of measure (pt inserted).
+<to be read again> 
+                   \relax 
+l.203 ...stimate the model \cite{roberts2014stm}.}
                                                    The Structural Topic Mode...
 Dimensions can be in units of em, ex, in, pt, pc,
 cm, mm, dd, cc, nd, nc, bp, or sp; but yours is a new one!
@@ -797,9 +798,9 @@ To recover gracefully from this error, it's best to
 delete the erroneous units; e.g., type `2' to delete
 two letters. (See Chapter 27 of The TeXbook.)
 
-[16] [17]
-./terman_women.tex:209: Undefined control sequence.
-l.209 ...ed by frequency and FREX metrics.\foonote
+[16]
+./terman_women.tex:211: Undefined control sequence.
+l.211 ...ed by frequency and FREX metrics.\foonote
                                                   {The words reported are st...
 The control sequence at the end of the top line
 of your error message was never \def'ed. If you have
@@ -807,10 +808,10 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-./terman_women.tex:209: Illegal unit of measure (pt inserted).
+./terman_women.tex:211: Illegal unit of measure (pt inserted).
 <to be read again> 
                    \relax 
-l.209 ...ars to capture human interest reporting.}
+l.211 ...ars to capture human interest reporting.}
                                                   
 Dimensions can be in units of em, ex, in, pt, pc,
 cm, mm, dd, cc, nd, nc, bp, or sp; but yours is a new one!
@@ -819,10 +820,10 @@ To recover gracefully from this error, it's best to
 delete the erroneous units; e.g., type `2' to delete
 two letters. (See Chapter 27 of The TeXbook.)
 
-./terman_women.tex:220: Illegal unit of measure (pt inserted).
+./terman_women.tex:222: Illegal unit of measure (pt inserted).
 <to be read again> 
                    \relax 
-l.220   \hline \hspace{5}
+l.222   \hline \hspace{5}
                          
 Dimensions can be in units of em, ex, in, pt, pc,
 cm, mm, dd, cc, nd, nc, bp, or sp; but yours is a new one!
@@ -832,84 +833,84 @@ delete the erroneous units; e.g., type `2' to delete
 two letters. (See Chapter 27 of The TeXbook.)
 
 
-Overfull \hbox (1.46413pt too wide) in paragraph at lines 232--232
+Overfull \hbox (1.46413pt too wide) in paragraph at lines 234--234
 []|\OT1/cmr/m/n/10 10| 
  []
 
 
-Overfull \hbox (1.46413pt too wide) in paragraph at lines 233--233
+Overfull \hbox (1.46413pt too wide) in paragraph at lines 235--235
 []|\OT1/cmr/m/n/10 11| 
  []
 
 
-Overfull \hbox (1.46413pt too wide) in paragraph at lines 234--234
+Overfull \hbox (1.46413pt too wide) in paragraph at lines 236--236
 []|\OT1/cmr/m/n/10 12| 
  []
 
 
-Overfull \hbox (1.46413pt too wide) in paragraph at lines 235--235
+Overfull \hbox (1.46413pt too wide) in paragraph at lines 237--237
 []|\OT1/cmr/m/n/10 13| 
  []
 
 
-Overfull \hbox (1.46413pt too wide) in paragraph at lines 236--236
+Overfull \hbox (1.46413pt too wide) in paragraph at lines 238--238
 []|\OT1/cmr/m/n/10 14| 
  []
 
 
-Overfull \hbox (1.46413pt too wide) in paragraph at lines 237--237
+Overfull \hbox (1.46413pt too wide) in paragraph at lines 239--239
 []|\OT1/cmr/m/n/10 15| 
  []
 
-<corpus.jpg, id=78, 622.325pt x 486.81876pt>
+[17] [18] <corpus.jpg, id=82, 622.325pt x 486.81876pt>
 File: corpus.jpg Graphic file (type jpg)
  <use corpus.jpg>
-Package pdftex.def Info: corpus.jpg used on input line 249.
+Package pdftex.def Info: corpus.jpg used on input line 251.
 (pdftex.def)             Requested size: 404.50645pt x 316.42844pt.
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[18] [19] [20 <./corpus.jpg>] [21
+[19
 
-] <2.png, id=92, 401.5pt x 301.125pt>
+] <2.png, id=86, 401.5pt x 301.125pt>
 File: 2.png Graphic file (type png)
-
-<use 2.png>
-Package pdftex.def Info: 2.png used on input line 293.
+ <use 2.png>
+Package pdftex.def Info: 2.png used on input line 295.
 (pdftex.def)             Requested size: 234.8775pt x 176.16429pt.
- <3.png, id=93, 401.5pt x 301.125pt>
+
+<3.png, id=87, 401.5pt x 301.125pt>
 File: 3.png Graphic file (type png)
  <use 3.png>
-Package pdftex.def Info: 3.png used on input line 298.
+Package pdftex.def Info: 3.png used on input line 300.
 (pdftex.def)             Requested size: 234.8775pt x 176.16429pt.
 
-<4.png, id=94, 401.5pt x 301.125pt>
+<4.png, id=88, 401.5pt x 301.125pt>
 File: 4.png Graphic file (type png)
  <use 4.png>
-Package pdftex.def Info: 4.png used on input line 303.
+Package pdftex.def Info: 4.png used on input line 305.
 (pdftex.def)             Requested size: 234.8775pt x 176.16429pt.
 
-<12.png, id=95, 401.5pt x 301.125pt>
+<12.png, id=89, 401.5pt x 301.125pt>
 File: 12.png Graphic file (type png)
  <use 12.png>
-Package pdftex.def Info: 12.png used on input line 308.
+Package pdftex.def Info: 12.png used on input line 310.
 (pdftex.def)             Requested size: 234.8775pt x 176.16429pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 291--311
+Underfull \hbox (badness 10000) in paragraph at lines 293--313
 []$[]$$[]$
  []
 
 
-Overfull \hbox (2.43332pt too wide) in paragraph at lines 291--311
+Overfull \hbox (2.43332pt too wide) in paragraph at lines 293--313
 []$ $[]$ 
  []
 
-[22 <./2.png> <./3.png> <./4.png> <./12.png>]
-./terman_women.tex:323: Illegal unit of measure (pt inserted).
+[20 <./corpus.jpg>] [21 <./2.png> <./3.png> <./4.png> <./12.png>]
+./terman_women.tex:325: Illegal unit of measure (pt inserted).
 <to be read again> 
                    \relax 
-l.323 ...ures, with the same substantive results.}
+l.325 ...ures, with the same substantive results.}
                                                   
 Dimensions can be in units of em, ex, in, pt, pc,
 cm, mm, dd, cc, nd, nc, bp, or sp; but yours is a new one!
@@ -918,16 +919,16 @@ To recover gracefully from this error, it's best to
 delete the erroneous units; e.g., type `2' to delete
 two letters. (See Chapter 27 of The TeXbook.)
 
-[23] [24]
+[22] [23]
 \openout2 = `heckit.aux'.
 
- (./heckit.tex) [25
+ (./heckit.tex) [24
 
 ]
-./terman_women.tex:331: Illegal unit of measure (pt inserted).
+./terman_women.tex:333: Illegal unit of measure (pt inserted).
 <to be read again> 
                    \relax 
-l.331 ...set of rights-related words. See note 10}
+l.333 ...set of rights-related words. See note 10}
                                                    Finally, I estimated one-...
 Dimensions can be in units of em, ex, in, pt, pc,
 cm, mm, dd, cc, nd, nc, bp, or sp; but yours is a new one!
@@ -936,10 +937,10 @@ To recover gracefully from this error, it's best to
 delete the erroneous units; e.g., type `2' to delete
 two letters. (See Chapter 27 of The TeXbook.)
 
-./terman_women.tex:331: Illegal unit of measure (pt inserted).
+./terman_women.tex:333: Illegal unit of measure (pt inserted).
 <to be read again> 
                    \relax 
-l.331 ...ive models are included in the appendix.}
+l.333 ...ive models are included in the appendix.}
                                                   
 Dimensions can be in units of em, ex, in, pt, pc,
 cm, mm, dd, cc, nd, nc, bp, or sp; but yours is a new one!
@@ -948,13 +949,13 @@ To recover gracefully from this error, it's best to
 delete the erroneous units; e.g., type `2' to delete
 two letters. (See Chapter 27 of The TeXbook.)
 
-[26
+[25
 
 ]
-./terman_women.tex:341: Illegal unit of measure (pt inserted).
+./terman_women.tex:343: Illegal unit of measure (pt inserted).
 <to be read again> 
                    \relax 
-l.341 ...resent in coverage about MENA countries.}
+l.343 ...resent in coverage about MENA countries.}
                                                    Tired of feeling singled ...
 Dimensions can be in units of em, ex, in, pt, pc,
 cm, mm, dd, cc, nd, nc, bp, or sp; but yours is a new one!
@@ -963,147 +964,147 @@ To recover gracefully from this error, it's best to
 delete the erroneous units; e.g., type `2' to delete
 two letters. (See Chapter 27 of The TeXbook.)
 
-[27] [28] [29] (./terman_women.bbl [30]
-LaTeX Font Info:    Try loading font information for OML+cmr on input line 79.
+[26] [27] [28] (./terman_women.bbl [29]
+LaTeX Font Info:    Try loading font information for OML+cmr on input line 78.
 
 (/usr/local/texlive/2015/texmf-dist/tex/latex/base/omlcmr.fd
 File: omlcmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OML/cmr/m/n' in size <10.95> not available
-(Font)              Font shape `OML/cmm/m/it' tried instead on input line 79.
- [31] [32]
-[33] [34]) [35] [36]
+(Font)              Font shape `OML/cmm/m/it' tried instead on input line 78.
+ [30] [31]
+[32] [33]) [34] [35]
 \openout2 = `probit-1.aux'.
 
- (./probit-1.tex) [37
+ (./probit-1.tex) [36
 
 ]
 \openout2 = `probit-2.aux'.
 
- (./probit-2.tex) [38
+ (./probit-2.tex) [37
 
 
 ]
 \openout2 = `probit-3.aux'.
 
 
-(./probit-3.tex) [39
+(./probit-3.tex) [38
 
 
 ]
 \openout2 = `probit-4.aux'.
 
- (./probit-4.tex) [40
+ (./probit-4.tex) [39
 
 
 ]
 \openout2 = `probit-5.aux'.
 
- (./probit-5.tex) [41
+ (./probit-5.tex) [40
 
 
 ]
 \openout2 = `probit-6.aux'.
 
 
-(./probit-6.tex) [42
+(./probit-6.tex) [41
 
 
-] [43
+] [42
 
 ]
 \openout2 = `negbin-1.aux'.
 
- (./negbin-1.tex) [44
+ (./negbin-1.tex) [43
 
 ]
 \openout2 = `negbin-2.aux'.
 
- (./negbin-2.tex) [45
+ (./negbin-2.tex) [44
 
 
 ]
 \openout2 = `negbin-3.aux'.
 
 
-(./negbin-3.tex) [46
+(./negbin-3.tex) [45
 
 
 ]
 \openout2 = `negbin-4.aux'.
 
- (./negbin-4.tex) [47
+ (./negbin-4.tex) [46
 
 
 ]
 \openout2 = `negbin-5.aux'.
 
- (./negbin-5.tex) [48
+ (./negbin-5.tex) [47
 
 
 ]
 \openout2 = `negbin-6.aux'.
 
 
-(./negbin-6.tex) [49
+(./negbin-6.tex) [48
 
 
-] [50
+] [49
 
 ]
 \openout2 = `heckit-1.aux'.
 
- (./heckit-1.tex) [51
+ (./heckit-1.tex) [50
 
 ]
 \openout2 = `heckit-2.aux'.
 
- (./heckit-2.tex) [52
+ (./heckit-2.tex) [51
 
 
 ]
 \openout2 = `heckit-3.aux'.
 
 
-(./heckit-3.tex) [53
+(./heckit-3.tex) [52
 
 
 ]
 \openout2 = `heckit-4.aux'.
 
- (./heckit-4.tex) [54
+ (./heckit-4.tex) [53
 
 
 ]
 \openout2 = `heckit-5.aux'.
 
- (./heckit-5.tex) [55
+ (./heckit-5.tex) [54
 
 
 ]
 \openout2 = `heckit-6.aux'.
 
 
-(./heckit-6.tex) [56
+(./heckit-6.tex) [55
 
 
 ]
 \openout2 = `heckit-7.aux'.
 
- (./heckit-7.tex) [57
+ (./heckit-7.tex) [56
 
 
 ]
 \openout2 = `heckit-8.aux'.
 
- (./heckit-8.tex) [58
+ (./heckit-8.tex) [57
 
 
 ]
 \openout2 = `heckit-9.aux'.
 
 
-(./heckit-9.tex) [59
+(./heckit-9.tex) [58
 
 
 ] (./terman_women.aux (./probit.aux) (./negbin.aux)
@@ -1119,7 +1120,7 @@ LaTeX Warning: There were multiply-defined labels.
  )
 (\end occurred inside a group at level 1)
 
-### semi simple group (level 1) entered at line 75 (\begingroup)
+### semi simple group (level 1) entered at line 77 (\begingroup)
 ### bottom level 
 Here is how much of TeX's memory you used:
  4683 strings out of 493089
@@ -1144,10 +1145,10 @@ r/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr
 ocal/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/loc
 al/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/loca
 l/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmti9.pfb>
-Output written on terman_women.pdf (60 pages, 569669 bytes).
+Output written on terman_women.pdf (59 pages, 568073 bytes).
 PDF statistics:
- 267 PDF objects out of 1000 (max. 8388607)
- 179 compressed objects within 2 object streams
+ 264 PDF objects out of 1000 (max. 8388607)
+ 177 compressed objects within 2 object streams
  0 named destinations out of 1000 (max. 500000)
  46 words of extra memory for PDF output out of 10000 (max. 10000000)
 

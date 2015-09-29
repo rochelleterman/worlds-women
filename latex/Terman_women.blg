@@ -1,19 +1,43 @@
-This is BibTeX, Version 0.99d (TeX Live 2014)
+This is BibTeX, Version 0.99d (TeX Live 2015)
 Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
 The top-level auxiliary file: terman_women.aux
 The style file: apsr.bst
+A level-1 auxiliary file: probit.aux
+A level-1 auxiliary file: negbin.aux
+A level-1 auxiliary file: heckit.aux
+A level-1 auxiliary file: probit-1.aux
+A level-1 auxiliary file: probit-2.aux
+A level-1 auxiliary file: probit-3.aux
+A level-1 auxiliary file: probit-4.aux
+A level-1 auxiliary file: probit-5.aux
+A level-1 auxiliary file: probit-6.aux
+A level-1 auxiliary file: negbin-1.aux
+A level-1 auxiliary file: negbin-2.aux
+A level-1 auxiliary file: negbin-3.aux
+A level-1 auxiliary file: negbin-4.aux
+A level-1 auxiliary file: negbin-5.aux
+A level-1 auxiliary file: negbin-6.aux
+A level-1 auxiliary file: heckit-1.aux
+A level-1 auxiliary file: heckit-2.aux
+A level-1 auxiliary file: heckit-3.aux
+A level-1 auxiliary file: heckit-4.aux
+A level-1 auxiliary file: heckit-5.aux
+A level-1 auxiliary file: heckit-6.aux
+A level-1 auxiliary file: heckit-7.aux
+A level-1 auxiliary file: heckit-8.aux
+A level-1 auxiliary file: heckit-9.aux
 Database file #1: rights.bib
 Warning--empty publisher in porter2001
 You've used 64 entries,
             2874 wiz_defined-function locations,
-            991 strings with 14631 characters,
-and the built_in function-call counts, 217861 in all, are:
+            1013 strings with 14806 characters,
+and the built_in function-call counts, 217855 in all, are:
 = -- 35412
 > -- 2166
 < -- 1
 + -- 16130
 - -- 810
-* -- 18060
+* -- 18056
 := -- 44262
 add.period$ -- 256
 call.type$ -- 64
@@ -27,13 +51,13 @@ if$ -- 39127
 int.to.chr$ -- 5
 int.to.str$ -- 0
 missing$ -- 76
-newline$ -- 276
+newline$ -- 274
 num.names$ -- 681
 pop$ -- 317
 preamble$ -- 1
 purify$ -- 960
 quote$ -- 0
-skip$ -- 935
+skip$ -- 937
 stack$ -- 0
 substring$ -- 49515
 swap$ -- 218
@@ -44,5 +68,5 @@ type$ -- 228
 warning$ -- 1
 while$ -- 1469
 width$ -- 0
-write$ -- 866
+write$ -- 864
 (There was 1 warning)

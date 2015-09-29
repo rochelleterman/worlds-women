@@ -41,13 +41,13 @@
   >
 ]>
 <requests version="1.0">
-  <internal package="biblatex" priority="9" active="0">
+  <internal package="biblatex" priority="9" active="1">
     <generic>latex</generic>
     <provides type="dynamic">
-      <file>Terman_women.bcf</file>
+      <file>terman_women.bcf</file>
     </provides>
     <requires type="dynamic">
-      <file>Terman_women.bbl</file>
+      <file>terman_women.bbl</file>
     </requires>
     <requires type="static">
       <file>blx-dm.def</file>
@@ -61,26 +61,26 @@
       <file>english.lbx</file>
     </requires>
   </internal>
-  <external package="biblatex" priority="5" active="0">
+  <external package="biblatex" priority="5" active="1">
     <generic>biber</generic>
     <cmdline>
       <binary>biber</binary>
-      <infile>Terman_women</infile>
+      <infile>terman_women</infile>
     </cmdline>
     <input>
-      <file>Terman_women.bcf</file>
+      <file>terman_women.bcf</file>
     </input>
     <output>
-      <file>Terman_women.bbl</file>
+      <file>terman_women.bbl</file>
     </output>
     <provides type="dynamic">
-      <file>Terman_women.bbl</file>
+      <file>terman_women.bbl</file>
     </provides>
     <requires type="dynamic">
-      <file>Terman_women.bcf</file>
+      <file>terman_women.bcf</file>
     </requires>
     <requires type="editable">
-      <file>references.bib</file>
+      <file>rights.bib</file>
     </requires>
   </external>
 </requests>

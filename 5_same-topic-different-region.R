@@ -14,7 +14,7 @@ require(rJava) # needed for stemming function
 library(SnowballC) # also needed for stemming function
 
 # Load Data
-meta.topics <- read.csv("Data/Corpora/meta-topics.csv")
+meta.topics <- read.csv("Data/topic-proportions/meta-topics.csv")
 
 ##############################
 ######## DTM function ########
@@ -177,11 +177,9 @@ asia.uni <- distinctive.words("Asia",rights)
 
 # get top 200 words for SMD
 top.smd <- top.score("smd")
-write.csv(top.smd,"Results/distinctive-words/rights/rights-smd.csv")
 
 ## get top 200 words for Standardized Log Odd
 top.slo <- top.score("st.log.odds")
-write.csv(top.slo,"Results/distinctive-words/rights/rights-slo.csv")
 
 ##############################################
 ######### Find docs per region/topic #########
@@ -191,19 +189,16 @@ write.csv(top.slo,"Results/distinctive-words/rights/rights-slo.csv")
 highest <- arrange(meta.topics,REGION,desc(rights)) 
 highest <- data.frame(head(highest[highest$REGION=="Africa","TITLE"],20),head(highest[highest$REGION=="Asia","TITLE"],20),head(highest[highest$REGION=="EECA","TITLE"],20),head(highest[highest$REGION=="LA","TITLE"],20),head(highest[highest$REGION=="MENA","TITLE"],20),head(highest[highest$REGION=="West","TITLE"],20))
 names(highest) <- c("Africa","Asia","EECA","LA","MENA","West")
-write.csv(highest,"Results/titles/rights-highest.csv")
 
 # Option 2) random sample titles by top-topic.
 sample<- meta.topics[meta.topics$top.topic=="rights",]
 names(sample)
 sample <- data.frame(sample(sample[sample$REGION=="Africa","TITLE"],5),sample(sample[sample$REGION=="Asia","TITLE"],5),sample(sample[sample$REGION=="EECA","TITLE"],5),sample(sample[sample$REGION=="LA","TITLE"],5),sample(sample[sample$REGION=="MENA","TITLE"],5),sample(sample[sample$REGION=="West","TITLE"],5))
 sample
-write.csv(sample,"Results/titles/rights-sample.csv")
 
 # Option 3) find all titles (and articles) in sub-corpus.
 rights <- subset(meta.topics, top.topic=="rights",select=c(TITLE,REGION,TEXT,YEAR,COUNTRY_FINAL))
 rights <- arrange(rights,REGION)
-write.csv(rights,"Results/Rights-articles.csv")
 
 ##########################
 #### MISC Stuff ######
@@ -225,7 +220,7 @@ require(plyr)
 rights.country.year <- ddply(.data=meta.topics, .variables=.(iso3c,year), numcolwise(sum,na.rm = TRUE))
 rights.country.year$n.docs <- (ddply(.data=docs,.variables=.(iso3c,year), .fun=nrow))$V1
 rights.country.year$rights.perc <- rights.country.year$rights.boolean / rights.country.year$n.docs
-write.csv(rights.country.year,"Results/stm/rights-boolean-country-year.csv")
+write.csv(rights.country.year,"Data/topic-proportions/rights-boolean-country-year.csv")
 
 summary(rights.country.year$rights.perc)
 hist(rights.country.year$rights.perc)

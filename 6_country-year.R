@@ -21,7 +21,7 @@ library(data.table)  # for missing valus
 library(sampleSelection)
 
 # load data
-meta.topics <- read.csv("Data/Corpora/meta-topics.csv")
+meta.topics <- read.csv("Data/topic-proportions/meta-topics.csv")
 names(meta.topics)
 
 # prep docs
@@ -46,7 +46,6 @@ country.year.means$n <- (ddply(.data=docs,.variables=.(iso3c,year), .fun=nrow))$
 # test
 head(country.year.means) 
 sum(country.year.means[1,3:17]) # should be 1
-write.csv(country.year.means,"Results/stm/country.year-means.csv")
 
 # Option 2) Total Number of Words Devoted to Each Topic per country.year
 country.year.sums <- ddply(.data=docs, .variables=.(iso3c,year), numcolwise(sum,na.rm = TRUE))
@@ -55,10 +54,10 @@ country.year.sums$n <- (ddply(.data=docs,.variables=.(iso3c,year), .fun=nrow))$V
 # test
 head(country.year.sums) 
 sum(country.year.sums[3,3:17]) # sum words for 3strow = 1583
-write.csv(country.year.means,"Results/stm/country.year-sums.csv")
 
 # Option 3) Boolean label - rights or not - on article using DTM
-rights.boolean <- read.csv("Results/stm/rights-boolean-country-year.csv")
+rights.boolean <- read.csv("Results/rights-boolean-country-year.csv")
+
 
 #################################
 ###### Assign DV and explore ####
@@ -67,6 +66,8 @@ rights.boolean <- read.csv("Results/stm/rights-boolean-country-year.csv")
 # assign 3 Rights DVs
 country.year <- cbind(country.year.means[,c(1,2,14)], rights.boolean$rights.perc, country.year.sums[,c(14,18,19)])
 names(country.year) <- c("iso3c", "year","rights.mean", "rights.boolean", "rights.sum","n.words","n.docs")
+# write
+write.csv(country.year, "Data/topic-proportions/country-year.csv")
 
 # duplicates?
 x <- data.frame(cbind(country.year$iso3c,country.year$year))

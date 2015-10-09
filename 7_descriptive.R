@@ -7,7 +7,7 @@ library(ggplot2)
 library(reshape2)
 
 # Load data
-docs <- read.csv("Data/meta-topics.csv")
+docs <- read.csv("Data/topic-proportions/meta-topics.csv")
 rt <- read.csv("Data/country-year/original.csv")
 
 # from topic proportions to number of words
@@ -24,7 +24,6 @@ n.paper
 
 # number of articles per region
 n.region <- ddply(.data=docs, .variables=.(region), .fun=nrow)
-write.csv(n.region,"Results/descriptive/region_year.csv")
 
 # plot
 jpeg(filename = "Results/descriptive/n-region-barplot.jpeg",width=900,height=600,type="quartz")

@@ -21,5 +21,7 @@ Data/*
 *.ipynb_checkpoints
 *.ipynb_checkpoints/*
 *.pptx
+latex
+latex/*
 
 *.RData

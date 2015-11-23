@@ -7,7 +7,7 @@
 ### 6. Exports data
 
 rm(list=ls())
-setwd("~/Dropbox/berkeley/Dissertation/Data\ and\ Analyais/Git\ Repos/worlds-women")
+setwd("~/Dropbox/berkeley/Git-Repos/worlds-women")
 
 ####################
 #### Load Data #####

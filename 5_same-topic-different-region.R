@@ -6,7 +6,7 @@
 
 #  Prepping.
 rm(list=ls())
-setwd("~/Dropbox/berkeley/Dissertation/Data\ and\ Analyais/Git\ Repos/worlds-women")
+setwd("~/Dropbox/berkeley/Git-Repos/worlds-women")
 library("matrixStats")
 library(RTextTools)
 library(tm)

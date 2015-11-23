@@ -1,6 +1,6 @@
 # This script analyses the estimated STM
 
-setwd("~/Dropbox/berkeley/Dissertation/Data\ and\ Analyais/Git\ Repos/worlds-women")
+setwd("~/Dropbox/berkeley/Git-Repos/worlds-women")
 library(stm)
 library(plyr)
 library(xtable)

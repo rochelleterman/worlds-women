@@ -4,7 +4,7 @@
 # 3) Imputes missing values using nearest-value and Amelia techniques
 
 rm(list=ls())
-setwd("~/Dropbox/berkeley/Dissertation/Data\ and\ Analyais/Git\ Repos/worlds-women")
+setwd("~/Dropbox/berkeley/Git-Repos/worlds-women")
 
 library(plyr)
 library("MASS")

@@ -1,7 +1,7 @@
 #### This script runs some basic descriptive stats
 
 rm(list=ls())
-setwd("/Users/rterman/Dropbox/berkeley/Dissertation/Data\ and\ Analyais/Git\ Repos/worlds-women")
+setwd("~/Dropbox/berkeley/Git-Repos/worlds-women")
 library(plyr)
 library(ggplot2)
 library(reshape2)

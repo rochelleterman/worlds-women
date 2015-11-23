@@ -1,6 +1,6 @@
 # This script estimates the STM on women-processed.csv
 
-setwd("~/Dropbox/berkeley/Dissertation/Data\ and\ Analyais/Git\ Repos/worlds-women")
+setwd("~/Dropbox/berkeley/Git-Repos/worlds-women")
 library(stm)
 library(plyr)
 rm(list=ls())

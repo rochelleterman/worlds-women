@@ -65,9 +65,10 @@ summary(rt.1$muslim)
 rt$mena[rt$ccode == 666] <- 1
 
 # n.obs
-nrow(rt[rt$year>1979,])
+nrow(rt[rt$year>1979,]) # 6226
 
 # make panel data
+names(rt)
 rt <- pdata.frame(rt, c("ccode","year"))
 ```
 
@@ -78,6 +79,7 @@ rt <- pdata.frame(rt, c("ccode","year"))
 ```{r}
 # MUSLIM MAJORITY
 logit1 <- glm(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(women_composite,1)*lag(muslim.maj,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt, family = binomial(link="probit"))
+coeftest(logit1, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))
 logit1.se <- coeftest(logit1, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 jpeg("Results/regressions/interactive-plots/logit1.jpeg",width=700,height=500,type="quartz")
@@ -136,13 +138,14 @@ part.logit.6 <- glm(n.binary ~ lag(women_composite,1)*lag(muslim.maj,1) + lag(co
 part.logit.6.se <- coeftest(part.logit.6, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 # write
-stargazer(part.logit.1, part.logit.2, part.logit.3, part.logit.4, part.logit.5, part.logit.6, out = "Results/regressions/robust/probit-part.tex", type = "latex", label = "table:probit", style = "ajps", title = "Probit Analysis of U.S. News Coverage about Women Abroad", se = list(part.logit.1.se, part.logit.2.se, part.logit.3.se, part.logit.4.se, part.logit.5.se, part.logit.6.se), notes="Robust standard errors clustered on country appear in parentheses.",  dep.var.labels = "Reported (Binary)", covariate.labels=c("Women's Rights Index","Muslim Majority", "Country Reports", "Democracy", "Instability", "Population", "GDP per capita", "Women's Rights x Muslim Majority"), star.cutoffs = c(0.05, 0.01, .001))
+stargazer(part.logit.1, part.logit.2, part.logit.3, part.logit.4, part.logit.5, part.logit.6, out = "Results/regressions/robust/probit-part.tex", type = "latex", label = "table:probit-part", style = "ajps", title = "Probit Analysis of U.S. News Coverage about Women Abroad", se = list(part.logit.1.se, part.logit.2.se, part.logit.3.se, part.logit.4.se, part.logit.5.se, part.logit.6.se), notes="Robust standard errors clustered on country appear in parentheses.",  dep.var.labels = "Reported (Binary)", covariate.labels=c("Women's Rights Index","Muslim Majority", "Country Reports", "Democracy", "Instability", "Population", "GDP per capita", "Women's Rights x Muslim Majority"), star.cutoffs = c(0.05, 0.01, .001))
 ```
 
 ## 2.3 OLS 
 
 ```{r}
-lm.binary<- lm(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(women_composite,1)*lag(muslim.maj,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt)
+# without lagged DV
+lm.binary<- lm(n.binary ~ lag(count, 1) + lag(women_composite,1)*lag(muslim.maj,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt)
 summary(lm.binary)
 coeftest(lm.binary, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))
 ```
@@ -324,7 +327,7 @@ part.nb.6 <- glm.nb(n.docs ~ lag(women_composite,1)*lag(muslim.maj,1) + lag(coun
 part.nb.6.se <- coeftest(part.nb.6, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 # write
-stargazer(part.nb.1, part.nb.2, part.nb.3, part.nb.4, part.nb.5, part.nb.6, out = "Results/regressions/robust/negbin-part.tex", type = "latex", label = "table:probit", style = "ajps", title = "Probit Analysis of U.S. News Coverage about Women Abroad", se = list(part.nb.1.se, part.nb.2.se, part.nb.3.se, part.nb.4.se, part.nb.5.se, part.nb.6.se), notes="Robust standard errors clustered on country appear in parentheses.",  dep.var.labels = "Reported (Count)", covariate.labels=c("Women's Rights Index","Muslim Majority", "Country Reports", "Democracy", "Instability", "Population", "GDP per capita", "Women's Rights x Muslim Majority"), star.cutoffs = c(0.05, 0.01, .001))
+stargazer(part.nb.1, part.nb.2, part.nb.3, part.nb.4, part.nb.5, part.nb.6, out = "Results/regressions/robust/negbin-part.tex", type = "latex", label = "table:negbin-part", style = "ajps", title = "Probit Analysis of U.S. News Coverage about Women Abroad", se = list(part.nb.1.se, part.nb.2.se, part.nb.3.se, part.nb.4.se, part.nb.5.se, part.nb.6.se), notes="Robust standard errors clustered on country appear in parentheses.",  dep.var.labels = "Reported (Count)", covariate.labels=c("Women's Rights Index","Muslim Majority", "Country Reports", "Democracy", "Instability", "Population", "GDP per capita", "Women's Rights x Muslim Majority"), star.cutoffs = c(0.05, 0.01, .001))
 ```
 
 ## 3.3 OLS
@@ -350,6 +353,7 @@ coeftest(lm.count.2, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))
 ```{r}
 # muslim majority
 nb.r1.1 <- glm.nb(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(wopol,1)*lag(muslim.maj,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt)
+summary(nb.r1.1)
 nb.r1.1.se <- coeftest(nb.r1.1, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 # mena
@@ -631,7 +635,6 @@ stargazer(heckit.r6.1, heckit.r6.2, heckit.r6.3, type = "latex", out = "Results/
 ### 4.3.7 Fractional Logit without Lagged DV
 
 ```{r}
-rt$rights <- rt$rights.mean
 heckit.r7.1 <- glm(rights ~ lag(women_composite,1) + lag(muslim.maj,1) + lag(polity2, 1) + lag(physint,1), data = rt, family=binomial(link="logit"), weights = n.words)
 summary(heckit.r7.1)
 heckit.r7.1.se <- coeftest(heckit.r7.1, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]

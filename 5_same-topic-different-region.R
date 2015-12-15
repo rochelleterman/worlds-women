@@ -200,9 +200,9 @@ sample
 rights <- subset(meta.topics, top.topic=="rights",select=c(TITLE,REGION,TEXT,YEAR,COUNTRY_FINAL))
 rights <- arrange(rights,REGION)
 
-##########################
-#### MISC Stuff ######
-######################
+##################################
+#### Alt. Rights Classifier ######
+##################################
 
 ## how many docs have the words "right" or "equal"
 

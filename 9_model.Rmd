@@ -70,6 +70,22 @@ nrow(rt[rt$year>1979,]) # 6226
 # make panel data
 names(rt)
 rt <- pdata.frame(rt, c("ccode","year"))
+
+# set lagged variables
+rt$n.docs.lag <- lag(rt$n.docs, 1)
+rt$n.binary.lag <- lag(rt$n.binary, 1)
+rt$rights.lag <- lag(rt$rights, 1)
+rt$muslim.maj <- lag(rt$muslim.maj, 1)
+rt$muslim <- lag(rt$muslim, 1)
+rt$women_composite <- lag(rt$women_composite, 1)
+rt$wopol <- lag(rt$wopol, 1)
+rt$wosoc <- lag(rt$wosoc, 1)
+rt$wecon <- lag(rt$wecon, 1)
+rt$count <- lag(rt$count, 1)
+rt$polity2 <- lag(rt$polity2, 1)
+rt$domestic9 <- lag(rt$domestic9, 1)
+rt$pop.wdi <- lag(rt$pop.wdi, 1)
+rt$gdp.pc.un <- lag(rt$gdp.pc.un, 1)
 ```
 
 # 2. Logit Model on Reports (Binary)
@@ -78,28 +94,29 @@ rt <- pdata.frame(rt, c("ccode","year"))
 
 ```{r}
 # MUSLIM MAJORITY
-logit1 <- glm(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(women_composite,1)*lag(muslim.maj,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt, family = binomial(link="probit"))
+logit1 <- glm(n.binary ~ n.binary.lag + count + women_composite*muslim.maj + polity2 + domestic9 + log(pop.wdi) + log(gdp.pc.un), data = rt, family = binomial(link="probit"), control = list(maxit = 50))
+summary(logit1)
 coeftest(logit1, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))
 logit1.se <- coeftest(logit1, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 jpeg("Results/regressions/interactive-plots/logit1.jpeg",width=700,height=500,type="quartz")
-interaction_plot_binary(logit1, effect="lag(women_composite, 1)", moderator="lag(muslim.maj, 1)", interaction="lag(women_composite, 1):lag(muslim.maj, 1)", factor_labels=c("Not Muslim","Muslim"), xlabel="Muslim majority", ylabel="Marginal Effect of Women's Rights on Coverage", title="")
+interaction_plot_binary(logit1, effect="women_composite", moderator="muslim.maj", interaction="women_composite:muslim.maj", factor_labels=c("Not Muslim","Muslim"), xlabel="Muslim majority", ylabel="Marginal Effect of Women's Rights on Coverage", title="")
 dev.off()
 
 # MENA
-logit2 <- glm(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(women_composite,1)*mena + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt, family = "binomial"(link="probit"))
+logit2 <- glm(n.binary ~ n.binary.lag + count + women_composite*mena + polity2 + domestic9 + log(pop.wdi) + log(gdp.pc.un), data = rt, family = binomial(link="probit"), control = list(maxit = 50))
 logit2.se <- coeftest(logit2, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 jpeg("Results/regressions/interactive-plots/logit2.jpeg",width=700,height=500,type="quartz")
-interaction_plot_binary(logit2, effect="lag(women_composite, 1)", moderator="mena", interaction="lag(women_composite, 1):mena", factor_labels=c("Not Mena","Mena"), xlabel="Mena", ylabel="Marginal Effect of Women's Rights on Coverage", title="")
+interaction_plot_binary(logit2, effect="women_composite", moderator="mena", interaction="women_composite:mena", factor_labels=c("Not Mena","Mena"), xlabel="Mena", ylabel="Marginal Effect of Women's Rights on Coverage", title="")
 dev.off()
 
 # PERCENT MUSLIM
-logit3 <- glm(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(women_composite,1)*lag(muslim,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt, family = "binomial"(link="probit"))
+logit3 <- glm(n.binary ~ n.binary.lag + count + women_composite*muslim + polity2 + domestic9 + log(pop.wdi) + log(gdp.pc.un), data = rt, family = binomial(link="probit"), control = list(maxit = 50))
 logit3.se <- coeftest(logit3, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 jpeg("Results/regressions/interactive-plots/logit3.jpeg",width=700,height=500,type="quartz")
-interaction_plot_continuous(logit3, effect="lag(women_composite, 1)", moderator="lag(muslim, 1)", interaction="lag(women_composite, 1):lag(muslim, 1)", mean=T, title="",xlabel="Percentage Muslim", ylabel="Marginal Effect of Women's Rights on Coverage")
+interaction_plot_continuous(logit3, effect="women_composite", moderator="muslim", interaction="women_composite:muslim", mean=T, title="",xlabel="Percentage Muslim", ylabel="Marginal Effect of Women's Rights on Coverage")
 dev.off()
 
 # PRINT
@@ -114,27 +131,27 @@ TODO: MENA and Muslim Percentage in Robustness tests.
 
 ```{r}
 # basic model (women's rights * muslim majority)
-part.logit.1 <- glm(n.binary ~ lag(women_composite,1)*lag(muslim.maj,1), data = rt, family = binomial(link="probit"))
+part.logit.1 <- glm(n.binary ~ women_composite*muslim.maj, data = rt, family = binomial(link="probit"))
 part.logit.1.se <- coeftest(part.logit.1, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 # add Country Reports
-part.logit.2 <- glm(n.binary ~ lag(women_composite,1)*lag(muslim.maj,1) + lag(count, 1), data = rt, family = binomial(link="probit"))
+part.logit.2 <- glm(n.binary ~ women_composite*muslim.maj + count, data = rt, family = binomial(link="probit"))
 part.logit.2.se <- coeftest(part.logit.2, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 # add Democracy
-part.logit.3 <- glm(n.binary ~ lag(women_composite,1)*lag(muslim.maj,1) + lag(count, 1) + lag(polity2,1), data = rt, family = binomial(link="probit"))
+part.logit.3 <- glm(n.binary ~  women_composite*muslim.maj + count + polity2, data = rt, family = binomial(link="probit"))
 part.logit.3.se <- coeftest(part.logit.3, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 # add Instability
-part.logit.4 <- glm(n.binary ~ lag(women_composite,1)*lag(muslim.maj,1) + lag(count, 1) + lag(polity2,1) + lag(domestic9,1), data = rt, family = binomial(link="probit"))
+part.logit.4 <- glm(n.binary ~  women_composite*muslim.maj + count + polity2 + domestic9, data = rt, family = binomial(link="probit"))
 part.logit.4.se <- coeftest(part.logit.4, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 # add Population
-part.logit.5 <- glm(n.binary ~ lag(women_composite,1)*lag(muslim.maj,1) + lag(count, 1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)), data = rt, family = binomial(link="probit"))
+part.logit.5 <- glm(n.binary ~  women_composite*muslim.maj + count + polity2 + domestic9 + log(pop.wdi), data = rt, family = binomial(link="probit"))
 part.logit.5.se <- coeftest(part.logit.5, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 # add GDP
-part.logit.6 <- glm(n.binary ~ lag(women_composite,1)*lag(muslim.maj,1) + lag(count, 1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)), data = rt, family = binomial(link="probit"))
+part.logit.6 <- glm(n.binary ~ women_composite*muslim.maj + count + polity2 + domestic9 + log(pop.wdi) + log(gdp.pc.un), data = rt, family = binomial(link="probit"))
 part.logit.6.se <- coeftest(part.logit.6, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 # write
@@ -145,7 +162,7 @@ stargazer(part.logit.1, part.logit.2, part.logit.3, part.logit.4, part.logit.5, 
 
 ```{r}
 # without lagged DV
-lm.binary<- lm(n.binary ~ lag(count, 1) + lag(women_composite,1)*lag(muslim.maj,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt)
+lm.binary<- lm(n.binary ~ count + women_composite*muslim.maj + polity2 + domestic9 + log(pop.wdi) +log(gdp.pc.un),data = rt)
 summary(lm.binary)
 coeftest(lm.binary, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))
 ```
@@ -156,15 +173,15 @@ coeftest(lm.binary, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))
 
 ```{r}
 # muslim majority
-logit.r1.1 <- glm(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(wopol,1)*lag(muslim.maj,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt, family = "binomial")
+logit.r1.1 <- glm(n.binary ~ n.binary.lag + count + wopol*muslim.maj + polity2 + domestic9 + log(pop.wdi) +log(gdp.pc.un),data = rt, family = "binomial")
 logit.r1.1.se <- coeftest(logit.r1.1, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 # mena
-logit.r1.2 <- glm(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(wopol,1)*lag(mena,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt, family = "binomial")
+logit.r1.2 <- glm(n.binary ~ n.binary.lag + count + wopol*mena + polity2 + domestic9 + log(pop.wdi) +log(gdp.pc.un),data = rt, family = "binomial")
 logit.r1.2.se <- coeftest(logit.r1.2, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 # muslim percentage
-logit.r1.3 <- glm(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(wopol,1)*lag(muslim,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt, family = "binomial")
+logit.r1.3 <- glm(n.binary ~ n.binary.lag + count + wopol*muslim + polity2 + domestic9 + log(pop.wdi) +log(gdp.pc.un),data = rt, family = "binomial")
 logit.r1.3.se <- coeftest(logit.r1.3, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 # PRINT
@@ -175,15 +192,15 @@ stargazer(logit.r1.1, logit.r1.2, logit.r1.3, type = "latex", out = "Results/reg
 
 ```{r}
 # muslim majority
-logit.r2.1 <- glm(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(wosoc,1)*lag(muslim.maj,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt, family = "binomial")
+logit.r2.1 <- glm(n.binary ~ n.binary.lag + count + wosoc*muslim.maj + polity2 + domestic9 + log(pop.wdi) +log(gdp.pc.un),data = rt, family = "binomial")
 logit.r2.1.se <- coeftest(logit.r2.1, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 # mena
-logit.r2.2 <- glm(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(wosoc,1)*lag(mena,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt, family = "binomial")
+logit.r2.2 <- glm(n.binary ~ n.binary.lag + count + wosoc*mena + polity2 + domestic9 + log(pop.wdi) +log(gdp.pc.un),data = rt, family = "binomial")
 logit.r2.2.se <- coeftest(logit.r2.2, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 # muslim percentage
-logit.r2.3 <- glm(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(wosoc,1)*lag(muslim,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt, family = "binomial")
+logit.r2.3 <- glm(n.binary ~ n.binary.lag + count + wosoc*muslim + polity2 + domestic9 + log(pop.wdi) +log(gdp.pc.un),data = rt, family = "binomial")
 logit.r2.3.se <- coeftest(logit.r2.3, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 # PRINT
@@ -194,15 +211,15 @@ stargazer(logit.r2.1, logit.r2.2, logit.r2.3, type = "latex", out = "Results/reg
 
 ```{r}
 # muslim majority
-logit.r3.1 <- glm(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(wecon,1)*lag(muslim.maj,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt, family = "binomial")
+logit.r3.1 <- glm(n.binary ~ n.binary.lag + count + wecon*muslim.maj + polity2 + domestic9 + log(pop.wdi) +log(gdp.pc.un),data = rt, family = "binomial")
 logit.r3.1.se <- coeftest(logit.r3.1, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 # mena
-logit.r3.2 <- glm(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(wecon,1)*lag(mena,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt, family = "binomial")
+logit.r3.2 <- glm(n.binary ~ n.binary.lag + count + wecon*mena + polity2 + domestic9 + log(pop.wdi) +log(gdp.pc.un),data = rt, family = "binomial")
 logit.r3.2.se <- coeftest(logit.r3.2, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 # muslim percentage
-logit.r3.3 <- glm(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(wecon,1)*lag(muslim,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt, family = "binomial")
+logit.r3.3 <- glm(n.binary ~ n.binary.lag + count + wecon*muslim + polity2 + domestic9 + log(pop.wdi) +log(gdp.pc.un),data = rt, family = "binomial")
 logit.r3.3.se <- coeftest(logit.r3.3, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 # PRINT
@@ -216,15 +233,15 @@ rt.no.israel <- rt
 rt.no.israel$mena[rt.no.israel$ccode == 666] <- 0
 
 # muslim majority
-logit.r4.1 <- glm(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(women_composite,1)*lag(muslim.maj,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt.no.israel, family = "binomial")
+logit.r4.1 <- glm(n.binary ~ n.binary.lag + count + women_composite*muslim.maj + polity2 + domestic9 + log(pop.wdi) +log(gdp.pc.un),data = rt.no.israel, family = "binomial")
 logit.r4.1.se <- coeftest(logit.r4.1, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 # mena
-logit.r4.2 <- glm(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(women_composite,1)*lag(mena,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt.no.israel, family = "binomial")
+logit.r4.2 <- glm(n.binary ~ n.binary.lag + count + women_composite*mena + polity2 + domestic9 + log(pop.wdi) +log(gdp.pc.un),data = rt.no.israel, family = "binomial")
 logit.r4.2.se <- coeftest(logit.r4.2, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 # muslim percentage
-logit.r4.3 <- glm(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(women_composite,1)*lag(muslim,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt.no.israel, family = "binomial")
+logit.r4.3 <- glm(n.binary ~ n.binary.lag + count + women_composite*muslim + polity2 + domestic9 + log(pop.wdi) +log(gdp.pc.un),data = rt.no.israel, family = "binomial")
 logit.r4.3.se <- coeftest(logit.r4.3, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 # PRINT
@@ -242,15 +259,15 @@ rt.imputed$women_composite <- rowMeans(cbind(rt.imputed$wopol,rt.imputed$wosoc,r
 rt.imputed <- pdata.frame(rt.imputed, c("ccode","year"))
 
 # muslim majority
-logit.r5.1 <- glm(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(women_composite,1)*lag(muslim.maj,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt.imputed, family = "binomial")
+logit.r5.1 <- glm(n.binary ~ n.binary.lag + count + women_composite*muslim.maj + polity2 + domestic9 + log(pop.wdi) +log(gdp.pc.un),data = rt.imputed, family = "binomial")
 logit.r5.1.se <- coeftest(logit.r5.1, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 # mena
-logit.r5.2 <- glm(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(women_composite,1)*lag(mena,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt.imputed, family = "binomial")
+logit.r5.2 <- glm(n.binary ~ n.binary.lag + count + women_composite*mena + polity2 + domestic9 + log(pop.wdi) +log(gdp.pc.un),data = rt.imputed, family = "binomial")
 logit.r5.2.se <- coeftest(logit.r5.2, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 # muslim percentage
-logit.r5.3 <- glm(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(women_composite,1)*lag(muslim,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt.imputed, family = "binomial")
+logit.r5.3 <- glm(n.binary ~ n.binary.lag + count + women_composite*muslim + polity2 + domestic9 + log(pop.wdi) +log(gdp.pc.un),data = rt.imputed, family = "binomial")
 logit.r5.3.se <- coeftest(logit.r5.3, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 # PRINT
@@ -265,34 +282,34 @@ stargazer(logit.r5.1, logit.r5.2, logit.r5.3, type = "latex", out = "Results/reg
 
 ```{r}
 # MUSLIM MAJORITY
-nb1 <- glm.nb(n.docs ~ lag(n.docs, 1) + lag(count, 1) + lag(women_composite,1)*lag(muslim.maj,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt)
+nb1 <- glm.nb(n.docs ~ n.docs.lag + count + women_composite*muslim.maj + polity2 + domestic9 + log(pop.wdi) +log(gdp.pc.un),data = rt)
 summary(nb1)
 nb1.se <- coeftest(nb1, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 jpeg("Results/regressions/interactive-plots/nb1.jpeg",width=700,height=500,type="quartz")
-interaction_plot_binary(nb1, effect="lag(women_composite, 1)", moderator="lag(muslim.maj, 1)", interaction="lag(women_composite, 1):lag(muslim.maj, 1)", factor_labels=c("Not Muslim Majority","Muslim Majority"), xlabel="", ylabel="Marginal Effect of Women's Rights on Coverage", title="")
+interaction_plot_binary(nb1, effect="women_composite", moderator="muslim.maj", interaction="women_composite:muslim.maj", factor_labels=c("Not Muslim Majority","Muslim Majority"), xlabel="", ylabel="Marginal Effect of Women's Rights on Coverage", title="")
 dev.off()
 
 # MENA
-nb2 <- glm.nb(n.docs ~ lag(n.docs, 1) + lag(count, 1) + lag(women_composite,1)*mena + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt)
+nb2 <- glm.nb(n.docs ~ n.docs.lag + count + women_composite*mena + polity2 + domestic9 + log(pop.wdi) +log(gdp.pc.un),data = rt)
 summary(nb2)
 nb2.se <- coeftest(nb2, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 jpeg("Results/regressions/interactive-plots/nb2.jpeg",width=700,height=500,type="quartz")
-interaction_plot_binary(nb2, effect="lag(women_composite, 1)", moderator="mena", interaction="lag(women_composite, 1):mena", factor_labels=c("Not Mena","Mena"), xlabel="", ylabel="Marginal Effect of Women's Rights on Coverage", title="")
+interaction_plot_binary(nb2, effect="women_composite", moderator="mena", interaction="women_composite:mena", factor_labels=c("Not Mena","Mena"), xlabel="", ylabel="Marginal Effect of Women's Rights on Coverage", title="")
 dev.off()
 
 # MUSLIM PERCENTAGE
-nb3 <- glm.nb(n.docs ~ lag(n.docs, 1) + lag(count, 1) + lag(women_composite,1)*lag(muslim,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt)
+nb3 <- glm.nb(n.docs ~ n.docs.lag + count + women_composite*muslim + polity2 + domestic9 + log(pop.wdi) +log(gdp.pc.un),data = rt)
 summary(nb3)
 nb3.se <- coeftest(nb3, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 jpeg("Results/regressions/interactive-plots/nb3.jpeg",width=700,height=500,type="quartz")
-interaction_plot_continuous(nb3, effect="lag(women_composite, 1)", moderator="lag(muslim, 1)", interaction="lag(women_composite, 1):lag(muslim, 1)", mean=T, title="",xlabel="Percentage Muslim", ylabel="Marginal Effect of Women's Rights on Coverage")
+interaction_plot_continuous(nb3, effect="women_composite", moderator="lag(muslim, 1)", interaction="women_composite:lag(muslim, 1)", mean=T, title="",xlabel="Percentage Muslim", ylabel="Marginal Effect of Women's Rights on Coverage")
 dev.off()
 
 # PRINT
-stargazer(nb1, nb2, nb3, type = "latex", out = "Results/regressions/tables/negbin.tex", label = "table:negbin", title = "Negative Binomial Analysis of U.S. News Coverage about Women Abroad", style = "ajps", se = list(nb1.se, nb2.se, nb3.se), notes="Robust standard errors clustered on country appear in parentheses.",  dep.var.labels = "Reported (Count)", covariate.labels=c("Lagged DV", "Country Reports", "Women's Rights Index","Muslim Majority","MENA", "Muslim Percentage", "Democracy", "Instability", "Population", "GDP per capita", "Women's Rights x Muslim Majority", "Women's Rights x MENA","Women's Rights x Muslim Percentage"), star.cutoffs = c(0.05, 0.01, 0.001))
+stargazer(nb1, nb2, nb3, type = "latex", out = "Results/regressions/main-results/negbin.tex", label = "table:negbin", title = "Negative Binomial Analysis of U.S. News Coverage about Women Abroad", style = "ajps", se = list(nb1.se, nb2.se, nb3.se), notes="Robust standard errors clustered on country appear in parentheses.",  dep.var.labels = "Reported (Count)", covariate.labels=c("Lagged DV", "Country Reports", "Women's Rights Index","Muslim Majority","MENA", "Muslim Percentage", "Democracy", "Instability", "Population", "GDP per capita", "Women's Rights x Muslim Majority", "Women's Rights x MENA","Women's Rights x Muslim Percentage"), star.cutoffs = c(0.05, 0.01, 0.001))
 ```
 
 ## 3.2 Partial Models
@@ -303,27 +320,27 @@ TODO: MENA and Muslim Percentage in Robustness tests.
 
 ```{r}
 # basic model (women's rights * muslim majority)
-part.nb.1 <- glm.nb(n.docs ~ lag(women_composite,1)*lag(muslim.maj,1), data = rt)
+part.nb.1 <- glm.nb(n.docs ~ women_composite*muslim.maj, data = rt)
 part.nb.1.se <- coeftest(part.nb.1, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 # add Country Reports
-part.nb.2 <- glm.nb(n.docs ~ lag(women_composite,1)*lag(muslim.maj,1) + lag(count, 1), data = rt)
+part.nb.2 <- glm.nb(n.docs ~ women_composite*muslim.maj + count, data = rt)
 part.nb.2.se <- coeftest(part.nb.2, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 # add Democracy
-part.nb.3 <- glm.nb(n.docs ~ lag(women_composite,1)*lag(muslim.maj,1) + lag(count, 1) + lag(polity2, 1), data = rt)
+part.nb.3 <- glm.nb(n.docs ~ women_composite*muslim.maj + count + polity2, data = rt)
 part.nb.3.se <- coeftest(part.nb.3, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 # add Instability
-part.nb.4 <- glm.nb(n.docs ~ lag(women_composite,1)*lag(muslim.maj,1) + lag(count, 1) + lag(polity2, 1) + lag(domestic9, 1), data = rt)
+part.nb.4 <- glm.nb(n.docs ~ women_composite*muslim.maj + count + polity2 + lag(domestic9, 1), data = rt)
 part.nb.4.se <- coeftest(part.nb.4, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 # add Population
-part.nb.5 <- glm.nb(n.docs ~ lag(women_composite,1)*lag(muslim.maj,1) + lag(count, 1) + lag(polity2, 1) + lag(domestic9, 1) + log(lag(pop.wdi,1)), data = rt)
+part.nb.5 <- glm.nb(n.docs ~ women_composite*muslim.maj + count + polity2 + lag(domestic9, 1) + log(pop.wdi), data = rt)
 part.nb.5.se <- coeftest(part.nb.5, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 # add GDP
-part.nb.6 <- glm.nb(n.docs ~ lag(women_composite,1)*lag(muslim.maj,1) + lag(count, 1) + lag(polity2, 1) + lag(domestic9, 1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)), data = rt)
+part.nb.6 <- glm.nb(n.docs ~ women_composite*muslim.maj + count + polity2 + lag(domestic9, 1) + log(pop.wdi) +log(gdp.pc.un), data = rt)
 part.nb.6.se <- coeftest(part.nb.6, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 # write
@@ -334,14 +351,14 @@ stargazer(part.nb.1, part.nb.2, part.nb.3, part.nb.4, part.nb.5, part.nb.6, out 
 
 ### 3.3.1 With lagged DV
 ```{r}
-lm.count.1 <- lm(n.docs ~ lag(n.docs, 1) + lag(count, 1) + lag(women_composite,1)*lag(muslim.maj,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt)
+lm.count.1 <- lm(n.docs ~ n.docs.lag + count + women_composite*muslim.maj + polity2 + domestic9 + log(pop.wdi) +log(gdp.pc.un),data = rt)
 summary(lm.count.1)
 coeftest(lm.count.1, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))
 ```
 
 ### 3.3.1 Without lagged DV
 ```{r}
-lm.count.2 <- lm(n.docs ~ lag(count, 1) + lag(women_composite,1)*lag(muslim.maj,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt)
+lm.count.2 <- lm(n.docs ~ count + women_composite*muslim.maj + polity2 + domestic9 + log(pop.wdi) +log(gdp.pc.un),data = rt)
 summary(lm.count.2)
 coeftest(lm.count.2, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))
 ```
@@ -352,16 +369,16 @@ coeftest(lm.count.2, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))
 
 ```{r}
 # muslim majority
-nb.r1.1 <- glm.nb(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(wopol,1)*lag(muslim.maj,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt)
+nb.r1.1 <- glm.nb(n.binary ~ n.binary.lag + count + wopol*muslim.maj + polity2 + domestic9 + log(pop.wdi) +log(gdp.pc.un),data = rt)
 summary(nb.r1.1)
 nb.r1.1.se <- coeftest(nb.r1.1, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 # mena
-nb.r1.2 <- glm.nb(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(wopol,1)*lag(mena,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt)
+nb.r1.2 <- glm.nb(n.binary ~ n.binary.lag + count + wopol*mena + polity2 + domestic9 + log(pop.wdi) +log(gdp.pc.un),data = rt)
 nb.r1.2.se <- coeftest(nb.r1.2, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 # muslim percentage
-nb.r1.3 <- glm.nb(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(wopol,1)*lag(muslim,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt)
+nb.r1.3 <- glm.nb(n.binary ~ n.binary.lag + count + wopol*muslim + polity2 + domestic9 + log(pop.wdi) +log(gdp.pc.un),data = rt)
 nb.r1.3.se <- coeftest(nb.r1.3, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 # PRINT
@@ -372,15 +389,15 @@ stargazer(nb.r1.1, nb.r1.2, nb.r1.3, type = "latex",  out = "Results/regressions
 
 ```{r}
 # muslim majority
-nb.r2.1 <- glm.nb(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(wosoc,1)*lag(muslim.maj,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt)
+nb.r2.1 <- glm.nb(n.binary ~ n.binary.lag + count + wosoc*muslim.maj + polity2 + domestic9 + log(pop.wdi) +log(gdp.pc.un),data = rt)
 nb.r2.1.se <- coeftest(nb.r2.1, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 # mena
-nb.r2.2 <- glm.nb(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(wosoc,1)*lag(mena,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt)
+nb.r2.2 <- glm.nb(n.binary ~ n.binary.lag + count + wosoc*mena + polity2 + domestic9 + log(pop.wdi) +log(gdp.pc.un),data = rt)
 nb.r2.2.se <- coeftest(nb.r2.2, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 # muslim percentage
-nb.r2.3 <- glm.nb(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(wosoc,1)*lag(muslim,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt)
+nb.r2.3 <- glm.nb(n.binary ~ n.binary.lag + count + wosoc*muslim + polity2 + domestic9 + log(pop.wdi) +log(gdp.pc.un),data = rt)
 nb.r2.3.se <- coeftest(nb.r2.3, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 # PRINT
@@ -391,15 +408,15 @@ stargazer(nb.r2.1, nb.r2.2, nb.r2.3, type = "latex", out = "Results/regressions/
 
 ```{r}
 # muslim majority
-nb.r3.1 <- glm.nb(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(wecon,1)*lag(muslim.maj,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt)
+nb.r3.1 <- glm.nb(n.binary ~ n.binary.lag + count + wecon*muslim.maj + polity2 + domestic9 + log(pop.wdi) +log(gdp.pc.un),data = rt)
 nb.r3.1.se <- coeftest(nb.r3.1, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 # mena
-nb.r3.2 <- glm.nb(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(wecon,1)*lag(mena,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt)
+nb.r3.2 <- glm.nb(n.binary ~ n.binary.lag + count + wecon*mena + polity2 + domestic9 + log(pop.wdi) +log(gdp.pc.un),data = rt)
 nb.r3.2.se <- coeftest(nb.r3.2, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 # muslim percentage
-nb.r3.3 <- glm.nb(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(wecon,1)*lag(muslim,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt)
+nb.r3.3 <- glm.nb(n.binary ~ n.binary.lag + count + wecon*muslim + polity2 + domestic9 + log(pop.wdi) +log(gdp.pc.un),data = rt)
 nb.r3.3.se <- coeftest(nb.r3.3, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 # PRINT
@@ -413,15 +430,15 @@ rt.no.israel <- rt
 rt.no.israel$mena[rt.no.israel$ccode == 666] <- 0
 
 # muslim majority
-nb.r4.1 <- glm.nb(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(women_composite,1)*lag(muslim.maj,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt.no.israel)
+nb.r4.1 <- glm.nb(n.binary ~ n.binary.lag + count + women_composite*muslim.maj + polity2 + domestic9 + log(pop.wdi) +log(gdp.pc.un),data = rt.no.israel)
 nb.r4.1.se <- coeftest(nb.r4.1, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 # mena
-nb.r4.2 <- glm.nb(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(women_composite,1)*lag(mena,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt.no.israel)
+nb.r4.2 <- glm.nb(n.binary ~ n.binary.lag + count + women_composite*mena + polity2 + domestic9 + log(pop.wdi) +log(gdp.pc.un),data = rt.no.israel)
 nb.r4.2.se <- coeftest(nb.r4.2, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 # muslim percentage
-nb.r4.3 <- glm.nb(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(women_composite,1)*lag(muslim,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt.no.israel)
+nb.r4.3 <- glm.nb(n.binary ~ n.binary.lag + count + women_composite*muslim + polity2 + domestic9 + log(pop.wdi) +log(gdp.pc.un),data = rt.no.israel)
 nb.r4.3.se <- coeftest(nb.r4.3, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 # PRINT
@@ -437,15 +454,15 @@ rt.imputed$women_composite <- rowMeans(cbind(rt.imputed$wopol,rt.imputed$wosoc,r
 rt.imputed <- pdata.frame(rt.imputed, c("ccode","year"))
 
 # muslim majority
-nb.r5.1 <- glm.nb(n.docs ~ lag(n.docs, 1) + lag(count, 1) + lag(women_composite,1)*lag(muslim.maj,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt.imputed)
+nb.r5.1 <- glm.nb(n.docs ~ n.docs.lag + count + women_composite*muslim.maj + polity2 + domestic9 + log(pop.wdi) +log(gdp.pc.un),data = rt.imputed)
 nb.r5.1.se <- coeftest(nb.r5.1, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 # mena
-nb.r5.2 <- glm.nb(n.docs ~ lag(n.docs, 1) + lag(count, 1) + lag(women_composite,1)*lag(mena,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt.imputed)
+nb.r5.2 <- glm.nb(n.docs ~ n.docs.lag + count + women_composite*mena + polity2 + domestic9 + log(pop.wdi) +log(gdp.pc.un),data = rt.imputed)
 nb.r5.2.se <- coeftest(nb.r5.2, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 # muslim percentage
-nb.r5.3 <- glm.nb(n.docs ~ lag(n.docs, 1) + lag(count, 1) + lag(women_composite,1)*lag(muslim,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),data = rt.imputed)
+nb.r5.3 <- glm.nb(n.docs ~ n.docs.lag + count + women_composite*muslim + polity2 + domestic9 + log(pop.wdi) +log(gdp.pc.un),data = rt.imputed)
 nb.r5.3.se <- coeftest(nb.r5.3, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 # PRINT
@@ -458,48 +475,48 @@ stargazer(nb.r5.1, nb.r5.2, nb.r5.3, type = "latex", out = "Results/regressions/
 
 ```{r}
 ## Muslim Majority
-heckit1 <- heckit(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(women_composite,1)*lag(muslim.maj,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),
-                 rights ~ lag(rights, 1) + lag(women_composite,1) + lag(muslim.maj,1) + lag(polity2, 1) + lag(physint,1),
+heckit1 <- heckit(n.binary ~ n.binary.lag + count + women_composite*muslim.maj + polity2 + domestic9 + log(pop.wdi) +log(gdp.pc.un),
+                 rights ~ rights.lag + women_composite + muslim.maj + polity2 + physint,
                  rt )
 summary(heckit1)
 heckit1.se = coeftest(heckit1$lm, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 heckit1.se
 
 # MENA
-heckit2 <- heckit(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(women_composite,1)*lag(mena,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),
-                  rights ~ lag(rights, 1) + lag(women_composite,1) + lag(mena,1) + lag(polity2, 1) + lag(physint,1),
+heckit2 <- heckit(n.binary ~ n.binary.lag + count + women_composite*mena + polity2 + domestic9 + log(pop.wdi) +log(gdp.pc.un),
+                  rights ~ rights.lag + women_composite + mena + polity2 + physint,
                   rt )
 heckit2.se = coeftest(heckit2$lm, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 # Muslim percentage
-heckit3 <- heckit(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(women_composite,1)*lag(muslim,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),
-                  rights ~ lag(rights, 1) + lag(women_composite,1) + lag(muslim,1) + lag(polity2, 1) + lag(physint,1),
+heckit3 <- heckit(n.binary ~ n.binary.lag + count + women_composite*muslim + polity2 + domestic9 + log(pop.wdi) +log(gdp.pc.un),
+                  rights ~ rights.lag + women_composite + muslim + polity2 + physint,
                   rt )
 summary(heckit3$lm)
 heckit3.se = coeftest(heckit3$lm, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 # print
-stargazer(heckit1$lm, heckit2$lm, heckit3$lm, type = "latex", out = "Results/regressions/tables/heckit.tex", label = "table:heckit", style = "ajps", title = "Two-Step Analysis of Rights Focus in U.S. News Coverage about Women Abroad", se = list(heckit1.se, heckit2.se, heckit3.se), notes="Robust standard errors clustered on country appear in parentheses.",  dep.var.labels = "Rights Focus", covariate.labels=c("Intercept", "Lagged DV", "Women's Rights Index","Muslim Majority","MENA", "Muslim Percentage", "Democracy", "Physical Integrity Rights"), star.cutoffs = c(0.05, 0.01, 0.001))
+stargazer(heckit1$lm, heckit2$lm, heckit3$lm, type = "latex", out = "Results/regressions/main-results/heckit.tex", label = "table:heckit", style = "ajps", title = "Two-Step Analysis of Rights Focus in U.S. News Coverage about Women Abroad", se = list(heckit1.se, heckit2.se, heckit3.se), notes="Robust standard errors clustered on country appear in parentheses.",  dep.var.labels = "Rights Focus", covariate.labels=c("Intercept", "Lagged DV", "Women's Rights Index","Muslim Majority","MENA", "Muslim Percentage", "Democracy", "Physical Integrity Rights"), star.cutoffs = c(0.05, 0.01, 0.001))
 ```
 
 ## 4.2 Partial Models
 
 ```{r}
 # Basic model - rights and muslim.maj
-part.heckit.1 <- heckit(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(women_composite,1)*lag(muslim.maj,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),
-                 rights ~ lag(women_composite,1) + lag(muslim.maj,1),
+part.heckit.1 <- heckit(n.binary ~ n.binary.lag + count + women_composite*muslim.maj + polity2 + domestic9 + log(pop.wdi) +log(gdp.pc.un),
+                 rights ~ women_composite + muslim.maj,
                  rt )
 part.heckit.1.se = coeftest(part.heckit.1$lm, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 # Add Democracy
-part.heckit.2 <- heckit(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(women_composite,1)*lag(muslim.maj,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),
-                 rights ~ lag(women_composite,1) + lag(muslim.maj,1) + lag(polity2, 1),
+part.heckit.2 <- heckit(n.binary ~ n.binary.lag + count + women_composite*muslim.maj + polity2 + domestic9 + log(pop.wdi) +log(gdp.pc.un),
+                 rights ~ women_composite + muslim.maj + polity2,
                  rt )
 part.heckit.2.se = coeftest(part.heckit.2$lm, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 # Add Physical Integrity
-part.heckit.3 <- heckit(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(women_composite,1)*lag(muslim.maj,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),
-                 rights ~ lag(women_composite,1) + lag(muslim.maj,1) + lag(polity2, 1) + lag(physint,1),
+part.heckit.3 <- heckit(n.binary ~ n.binary.lag + count + women_composite*muslim.maj + polity2 + domestic9 + log(pop.wdi) +log(gdp.pc.un),
+                 rights ~ women_composite + muslim.maj + polity2 + physint,
                  rt )
 part.heckit.3.se = coeftest(part.heckit.3$lm, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
@@ -513,20 +530,20 @@ stargazer(part.heckit.1$lm, part.heckit.2$lm, part.heckit.3$lm, type = "latex", 
 
 ```{r}
 # muslim maj
-heckit.r1.1 <- heckit(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(wopol,1)*lag(muslim.maj,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),
-                      rights ~ lag(rights) + lag(wopol,1) + lag(muslim.maj,1) + lag(polity2, 1) + lag(physint,1),
+heckit.r1.1 <- heckit(n.binary ~ n.binary.lag + count + wopol*muslim.maj + polity2 + domestic9 + log(pop.wdi) +log(gdp.pc.un),
+                      rights ~ lag(rights) + wopol + muslim.maj + polity2 + physint,
                       rt)
 heckit.r1.1.se <- coeftest(heckit.r1.1$lm, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 # mena
-heckit.r1.2 <- heckit(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(wopol,1)*lag(mena,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),
-                      rights ~ lag(rights) + lag(wopol,1) + lag(mena,1) + lag(polity2, 1) + lag(physint,1),
+heckit.r1.2 <- heckit(n.binary ~ n.binary.lag + count + wopol*mena + polity2 + domestic9 + log(pop.wdi) +log(gdp.pc.un),
+                      rights ~ lag(rights) + wopol + mena + polity2 + physint,
                       rt )
 heckit.r1.2.se <- coeftest(heckit.r1.2$lm, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 # muslim perc.
-heckit.r1.3 <- heckit(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(wopol,1)*lag(muslim,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),
-                      rights ~ lag(rights) + lag(wopol,1) + lag(muslim,1) + lag(polity2, 1) + lag(physint,1),
+heckit.r1.3 <- heckit(n.binary ~ n.binary.lag + count + wopol*muslim + polity2 + domestic9 + log(pop.wdi) +log(gdp.pc.un),
+                      rights ~ lag(rights) + wopol + muslim + polity2 + physint,
                       rt )
 heckit.r1.3.se <- coeftest(heckit.r1.3$lm, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
@@ -538,20 +555,20 @@ stargazer(heckit.r1.1$lm, heckit.r1.2$lm, heckit.r1.3$lm, type = "latex", out = 
 
 ```{r}
 # muslim maj
-heckit.r2.1 <- heckit(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(wosoc,1)*lag(muslim.maj,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),
-                      rights ~ lag(rights) + lag(wosoc,1) + lag(muslim.maj,1) + lag(polity2, 1) + lag(physint,1),
+heckit.r2.1 <- heckit(n.binary ~ n.binary.lag + count + wosoc*muslim.maj + polity2 + domestic9 + log(pop.wdi) +log(gdp.pc.un),
+                      rights ~ lag(rights) + wosoc + muslim.maj + polity2 + physint,
                       rt)
 heckit.r2.1.se <- coeftest(heckit.r2.1$lm, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 # mena
-heckit.r2.2 <- heckit(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(wosoc,1)*lag(mena,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),
-                      rights ~ lag(rights) + lag(wosoc,1) + lag(mena,1) + lag(polity2, 1) + lag(physint,1),
+heckit.r2.2 <- heckit(n.binary ~ n.binary.lag + count + wosoc*mena + polity2 + domestic9 + log(pop.wdi) +log(gdp.pc.un),
+                      rights ~ lag(rights) + wosoc + mena + polity2 + physint,
                       rt )
 heckit.r2.2.se <- coeftest(heckit.r2.2$lm, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 # muslim perc.
-heckit.r2.3 <- heckit(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(wosoc,1)*lag(muslim,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),
-                      rights ~ lag(rights) + lag(wosoc,1) + lag(muslim,1) + lag(polity2, 1) + lag(physint,1),
+heckit.r2.3 <- heckit(n.binary ~ n.binary.lag + count + wosoc*muslim + polity2 + domestic9 + log(pop.wdi) +log(gdp.pc.un),
+                      rights ~ lag(rights) + wosoc + muslim + polity2 + physint,
                       rt )
 heckit.r2.3.se <- coeftest(heckit.r2.3$lm, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
@@ -563,20 +580,20 @@ stargazer(heckit.r2.1$lm, heckit.r2.2$lm, heckit.r2.3$lm, type = "latex", out = 
 
 ```{r}
 # muslim maj
-heckit.r3.1 <- heckit(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(wecon,1)*lag(muslim.maj,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),
-                      rights ~ lag(rights) + lag(wecon,1) + lag(muslim.maj,1) + lag(polity2, 1) + lag(physint,1),
+heckit.r3.1 <- heckit(n.binary ~ n.binary.lag + count + wecon*muslim.maj + polity2 + domestic9 + log(pop.wdi) +log(gdp.pc.un),
+                      rights ~ lag(rights) + wecon + muslim.maj + polity2 + physint,
                       rt)
 heckit.r3.1.se <- coeftest(heckit.r3.1$lm, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 # mena
-heckit.r3.2 <- heckit(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(wecon,1)*lag(mena,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),
-                      rights ~ lag(rights) + lag(wecon,1) + lag(mena,1) + lag(polity2, 1) + lag(physint,1),
+heckit.r3.2 <- heckit(n.binary ~ n.binary.lag + count + wecon*mena + polity2 + domestic9 + log(pop.wdi) +log(gdp.pc.un),
+                      rights ~ lag(rights) + wecon + mena + polity2 + physint,
                       rt )
 heckit.r3.2.se <- coeftest(heckit.r3.2$lm, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 # muslim perc.
-heckit.r3.3 <- heckit(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(wecon,1)*lag(muslim,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),
-                      rights ~ lag(rights) + lag(wecon,1) + lag(muslim,1) + lag(polity2, 1) + lag(physint,1),
+heckit.r3.3 <- heckit(n.binary ~ n.binary.lag + count + wecon*muslim + polity2 + domestic9 + log(pop.wdi) +log(gdp.pc.un),
+                      rights ~ lag(rights) + wecon + muslim + polity2 + physint,
                       rt )
 heckit.r3.3.se <- coeftest(heckit.r3.3$lm, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
@@ -591,20 +608,20 @@ rt.no.israel <- rt
 rt.no.israel$mena[rt.no.israel$ccode == 666] <- 0
 
 # muslim maj
-heckit.r4.1 <- heckit(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(women_composite,1)*lag(muslim.maj,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),
-                      rights ~ lag(rights, 1) + lag(women_composite,1) + lag(muslim.maj,1) + lag(polity2, 1) + lag(physint,1),
+heckit.r4.1 <- heckit(n.binary ~ n.binary.lag + count + women_composite*muslim.maj + polity2 + domestic9 + log(pop.wdi) +log(gdp.pc.un),
+                      rights ~ rights.lag + women_composite + muslim.maj + polity2 + physint,
                       rt.no.israel)
 heckit.r4.1.se <- coeftest(heckit.r4.1$lm, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 # mena
-heckit.r4.2 <- heckit(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(women_composite,1)*lag(mena,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),
-                      rights ~ lag(rights, 1) + lag(women_composite,1) + lag(mena,1) + lag(polity2, 1) + lag(physint,1),
+heckit.r4.2 <- heckit(n.binary ~ n.binary.lag + count + women_composite*mena + polity2 + domestic9 + log(pop.wdi) +log(gdp.pc.un),
+                      rights ~ rights.lag + women_composite + mena + polity2 + physint,
                       rt.no.israel )
 heckit.r4.2.se <- coeftest(heckit.r4.2$lm, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 # muslim perc.
-heckit.r4.3 <- heckit(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(women_composite,1)*lag(muslim,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),
-                      rights ~ lag(rights, 1) + lag(women_composite,1) + lag(muslim,1) + lag(polity2, 1) + lag(physint,1),
+heckit.r4.3 <- heckit(n.binary ~ n.binary.lag + count + women_composite*muslim + polity2 + domestic9 + log(pop.wdi) +log(gdp.pc.un),
+                      rights ~ rights.lag + women_composite + muslim + polity2 + physint,
                       rt.no.israel )
 heckit.r4.3.se <- coeftest(heckit.r4.3$lm, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
@@ -617,15 +634,15 @@ stargazer(heckit.r4.1$lm, heckit.r4.2$lm, heckit.r4.3$lm, out = "Results/regress
 ### 4.3.6 Fractional Logit 
 
 ```{r}
-heckit.r6.1 <- glm(rights ~ lag(rights, 1) + lag(women_composite,1) + lag(muslim.maj,1) + lag(polity2, 1) + lag(physint,1), data = rt, family=binomial(link="logit"), weights = n.words)
+heckit.r6.1 <- glm(rights ~ rights.lag + women_composite + muslim.maj + polity2 + physint, data = rt, family=binomial(link="logit"), weights = n.words)
 summary(heckit.r6.1)
 heckit.r6.1.se <- coeftest(heckit.r6.1, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
-heckit.r6.2 <- glm(rights ~ lag(rights, 1) + lag(women_composite,1) + lag(mena,1) + lag(polity2, 1) + lag(physint,1), data = rt, family=binomial(link="logit"), weights = n.words)
+heckit.r6.2 <- glm(rights ~ rights.lag + women_composite + mena + polity2 + physint, data = rt, family=binomial(link="logit"), weights = n.words)
 summary(heckit.r6.2)
 heckit.r6.2.se <- coeftest(heckit.r6.2, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
-heckit.r6.3 <- glm(rights ~ lag(rights, 1) + lag(women_composite,1) + lag(muslim,1) + lag(polity2, 1) + lag(physint,1), data = rt, family=binomial(link="logit"), weights = n.words)
+heckit.r6.3 <- glm(rights ~ rights.lag + women_composite + muslim + polity2 + physint, data = rt, family=binomial(link="logit"), weights = n.words)
 summary(heckit.r6.3)
 heckit.r6.3.se <- coeftest(heckit.r6.3, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
@@ -635,15 +652,15 @@ stargazer(heckit.r6.1, heckit.r6.2, heckit.r6.3, type = "latex", out = "Results/
 ### 4.3.7 Fractional Logit without Lagged DV
 
 ```{r}
-heckit.r7.1 <- glm(rights ~ lag(women_composite,1) + lag(muslim.maj,1) + lag(polity2, 1) + lag(physint,1), data = rt, family=binomial(link="logit"), weights = n.words)
+heckit.r7.1 <- glm(rights ~ women_composite + muslim.maj + polity2 + physint, data = rt, family=binomial(link="logit"), weights = n.words)
 summary(heckit.r7.1)
 heckit.r7.1.se <- coeftest(heckit.r7.1, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
-heckit.r7.2 <- glm(rights ~lag(women_composite,1) + lag(mena,1) + lag(polity2, 1) + lag(physint,1), data = rt, family=binomial(link="logit"), weights = n.words)
+heckit.r7.2 <- glm(rights ~women_composite + mena + polity2 + physint, data = rt, family=binomial(link="logit"), weights = n.words)
 summary(heckit.r7.1)
 heckit.r7.2.se <- coeftest(heckit.r7.2, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
-heckit.r7.3 <- glm(rights ~ lag(women_composite,1) + lag(muslim,1) + lag(polity2, 1) + lag(physint,1), data = rt, family=binomial(link="logit"), weights = n.words)
+heckit.r7.3 <- glm(rights ~ women_composite + muslim + polity2 + physint, data = rt, family=binomial(link="logit"), weights = n.words)
 summary(heckit.r7.1)
 heckit.r7.3.se <- coeftest(heckit.r7.3, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
@@ -656,21 +673,21 @@ stargazer(heckit.r7.1, heckit.r7.2, heckit.r7.3, type = "latex", style = "ajps",
 rt$rights <- rt$rights.boolean
 
 # Muslim Majority
-heckit.r8.1 <- heckit(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(women_composite,1)*lag(muslim.maj,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),
-                      rights ~ lag(rights, 1) + lag(women_composite,1) + lag(muslim.maj,1) + lag(polity2, 1) + lag(physint,1),
+heckit.r8.1 <- heckit(n.binary ~ n.binary.lag + count + women_composite*muslim.maj + polity2 + domestic9 + log(pop.wdi) +log(gdp.pc.un),
+                      rights ~ rights.lag + women_composite + muslim.maj + polity2 + physint,
                       rt )
 heckit.r8.1.se = coeftest(heckit.r8.1$lm, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 heckit.r8.1.se
 
 # MENA
-heckit.r8.2 <- heckit(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(women_composite,1)*lag(mena,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),
-                      rights ~ lag(rights, 1) + lag(women_composite,1) + lag(mena,1) + lag(polity2, 1) + lag(physint,1),
+heckit.r8.2 <- heckit(n.binary ~ n.binary.lag + count + women_composite*mena + polity2 + domestic9 + log(pop.wdi) +log(gdp.pc.un),
+                      rights ~ rights.lag + women_composite + mena + polity2 + physint,
                       rt )
 heckit.r8.2.se = coeftest(heckit.r8.2$lm, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 # Muslim percentage
-heckit.r8.3 <- heckit(n.binary ~ lag(n.binary, 1) + lag(count, 1) + lag(women_composite,1)*lag(muslim,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),
-                      rights ~ lag(rights, 1) + lag(women_composite,1) + lag(muslim,1) + lag(polity2, 1) + lag(physint,1),
+heckit.r8.3 <- heckit(n.binary ~ n.binary.lag + count + women_composite*muslim + polity2 + domestic9 + log(pop.wdi) +log(gdp.pc.un),
+                      rights ~ rights.lag + women_composite + muslim + polity2 + physint,
                       rt )
 summary(heckit.r8.3$lm)
 heckit.r8.3.se = coeftest(heckit.r8.3$lm, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
@@ -685,21 +702,21 @@ stargazer(heckit.r8.1$lm, heckit.r8.2$lm, heckit.r8.3$lm, type = "latex", out = 
 rt$rights <- rt$rights.boolean
 
 # Muslim Majority
-heckit.r9.1 <- heckit(n.binary ~ lag(count, 1) + lag(women_composite,1)*lag(muslim.maj,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),
-                  rights ~ lag(women_composite,1) + lag(muslim.maj,1) + lag(polity2, 1) + lag(physint,1),
+heckit.r9.1 <- heckit(n.binary ~ count + women_composite*muslim.maj + polity2 + domestic9 + log(pop.wdi) +log(gdp.pc.un),
+                  rights ~ women_composite + muslim.maj + polity2 + physint,
                   rt )
 heckit.r9.1.se = coeftest(heckit.r9.1$lm, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 heckit.r9.1.se
 
  # MENA
-heckit.r9.2 <- heckit(n.binary ~lag(count, 1) + lag(women_composite,1)*lag(mena,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),
-                  rights ~ lag(women_composite,1) + lag(mena,1) + lag(polity2, 1) + lag(physint,1),
+heckit.r9.2 <- heckit(n.binary ~count + women_composite*mena + polity2 + domestic9 + log(pop.wdi) +log(gdp.pc.un),
+                  rights ~ women_composite + mena + polity2 + physint,
                   rt )
 heckit.r9.2.se = coeftest(heckit.r9.2$lm, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
 # Muslim percentage
-heckit.r9.3 <- heckit(n.binary ~ lag(count, 1) + lag(women_composite,1)*lag(muslim,1) + lag(polity2,1) + lag(domestic9,1) + log(lag(pop.wdi,1)) + log(lag(gdp.pc.un,1)),
-                  rights ~ lag(women_composite,1) + lag(muslim,1) + lag(polity2, 1) + lag(physint,1),
+heckit.r9.3 <- heckit(n.binary ~ count + women_composite*muslim + polity2 + domestic9 + log(pop.wdi) +log(gdp.pc.un),
+                  rights ~ women_composite + muslim + polity2 + physint,
                   rt )
 summary(heckit.r9.3$lm)
 heckit.r9.3.se = coeftest(heckit.r9.3$lm, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]

@@ -137,21 +137,21 @@ top.score <- function(score){
 ##############################
 ###### make sub-corpus #######
 ##############################
-
+names(meta.topics)
 # Option 1) find documents for each topic using top topic
-rights <- meta.topics[meta.topics$top.topic == "rights",]
+topic.subset <- meta.topics[meta.topics$top.topic == "rape",]
 
-# Option 2), get docs with distribution of topics >.5
-get.highest.docs <- function(x){
-  docs <- subset(meta.topics,topic.docs[[x]]>.4,select=c(x,"PUBLICATION","TITLE","YEAR","COUNTRY_FINAL","REGION","SUBJECT","TEXT","TEXT.NO.NOUN"))
+# Option 2), get docs with distribution of topics >.4, .5 etc
+get.highest.docs <- function(x, n=.5){
+  docs <- meta.topics[meta.topics[[x]]>n,c(x,"publication","title","year","country","region","subject","text","text.no.noun")]
   docs <- docs[order(docs[[x]],decreasing = TRUE),]
   return(docs)
 }
-rights <- get.highest.docs("rights")
+topic.subset <- get.highest.docs("rights", .3)
 
 # Option 3) Get 20 most representative articles for each region on the topic
 highest <- arrange(meta.topics,REGION,desc(rights)) 
-rights <- rbind(head(highest[highest$REGION=="Africa",],20),head(highest[highest$REGION=="Asia",],20),head(highest[highest$REGION=="EECA",],20),head(highest[highest$REGION=="LA",],20),head(highest[highest$REGION=="MENA",],20),head(highest[highest$REGION=="West",],20))
+topic.subset <- rbind(head(highest[highest$REGION=="Africa",],20),head(highest[highest$REGION=="Asia",],20),head(highest[highest$REGION=="EECA",],20),head(highest[highest$REGION=="LA",],20),head(highest[highest$REGION=="MENA",],20),head(highest[highest$REGION=="West",],20))
 
 # find n - how many documents in each region in the subcorpus?
 summary(rights$REGION)
@@ -161,15 +161,15 @@ summary(rights$REGION)
 #############################
 
 # Make DTM from topical subcorpus made above
-rights <- make.dtm(rights)
+topic.subset <- make.dtm(topic.subset)
 
 # Get Distinctive Words Scores
-mena.uni <- distinctive.words("MENA",rights)
-eeca.uni <- distinctive.words("EECA",rights)
-west.uni <- distinctive.words("West",rights)
-africa.uni <- distinctive.words("Africa",rights)
-la.uni <- distinctive.words("LA",rights)
-asia.uni <- distinctive.words("Asia",rights)
+mena.uni <- distinctive.words("MENA",topic.subset)
+eeca.uni <- distinctive.words("EECA",topic.subset)
+west.uni <- distinctive.words("West",topic.subset)
+africa.uni <- distinctive.words("Africa",topic.subset)
+la.uni <- distinctive.words("LA",topic.subset)
+asia.uni <- distinctive.words("Asia",topic.subset)
 
 #########################
 ##### write results #####

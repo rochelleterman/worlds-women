@@ -59,22 +59,6 @@ for (i in 1:15){
   dev.off()
 }
 
-#### Interactions
-
-# fit model
-mod.15.int <- stm(docs,vocab, 15, prevalence=~REGION*s(YEAR), data=meta, model=model)
-labelTopics(mod.15.int)
-
-# estimate effect
-prep.int <- estimateEffect(1:15 ~ REGION * YEAR,mod.15.int,meta=meta,uncertainty="Global") 
-
-# plot topics over time by region
-plot.estimateEffect(prep.int,covariate="YEAR",method="continuous",topics=3,moderator="REGION",moderator.value="MENA",linecol="red", add=F,ylim=c(0,.2),printlegend=F)
-
-plot.estimateEffect(prep.int,covariate="YEAR",method="continuous",topics=12,moderator="REGION",moderator.value="EECA",linecol="blue", add=T, ylim=c(0,.2),printlegend=F)
-
-legend("topleft","(x,y)",legend=c("MENA","EECA"),fill=c("red","blue"))
-
 #######################################################
 ######### Combine Meta Data + Topic Distributions #####
 #######################################################
@@ -99,8 +83,8 @@ cor(meta.topics$number.of.non.stop.words, meta.topics$n.words)
 
 # subset
 names(meta.topics)
-meta.topics <- meta.topics[,c(1:18,23:26,28,30,31,37,38,39,40)]
-names(meta.topics)[16:29] <- c("doc.number", "publication", "title", "entities", "iso3c", "text", "country", "year", "text.no.noun", "region", "type", "subject", "top.topic", "n.words")
+meta.topics <- meta.topics[,c(38,1:17,22:25,27,29,30,36,37,39,40)]
+names(meta.topics)[16:29] <- c("docs","publication", "title", "entities", "iso3c", "text", "country", "year", "text.no.noun", "region", "type", "subject", "top.topic", "n.words")
 
 #write csv for later
 write.csv(meta.topics,"Data/topic-proportions/meta-topics.csv", row.names = F)
@@ -147,3 +131,18 @@ mean.regions <- round(mean.regions,2)
 mean.regions
 
 
+#### Interactions
+
+# fit model
+mod.15.int <- stm(docs,vocab, 15, prevalence=~REGION*s(YEAR), data=meta, model=model)
+labelTopics(mod.15.int)
+
+# estimate effect
+prep.int <- estimateEffect(1:15 ~ REGION * YEAR,mod.15.int,meta=meta,uncertainty="Global") 
+
+# plot topics over time by region
+plot.estimateEffect(prep.int,covariate="YEAR",method="continuous",topics=3,moderator="REGION",moderator.value="MENA",linecol="red", add=F,ylim=c(0,.2),printlegend=F)
+
+plot.estimateEffect(prep.int,covariate="YEAR",method="continuous",topics=12,moderator="REGION",moderator.value="EECA",linecol="blue", add=T, ylim=c(0,.2),printlegend=F)
+
+legend("topleft","(x,y)",legend=c("MENA","EECA"),fill=c("red","blue"))

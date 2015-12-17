@@ -23,11 +23,11 @@ meta.topics <- read.csv("Data/topic-proportions/meta-topics.csv")
 # this function passes a subcorpus of the meta-topics.csv data for documents on a specific topic, 
 # and makes a DTM out of it. There are many ways one could subset. See below for options.
 make.dtm <- function(data){ 
-  dtm <- create_matrix(data[["TEXT.NO.NOUN"]], language="english", removeNumbers=TRUE,
+  dtm <- create_matrix(data[["text.no.noun"]], language="english", removeNumbers=TRUE,
                             stemWords=TRUE, removeSparseTerms=.999, toLower = TRUE, 
                             removePunctuation = TRUE)
   dtm <- as.data.frame(as.matrix(dtm))
-  dtm$region <- data[["REGION"]]
+  dtm$region <- data[["region"]]
   dtm[,1] <- NULL
   return(dtm)
 }

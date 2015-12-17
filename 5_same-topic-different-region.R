@@ -150,11 +150,11 @@ get.highest.docs <- function(x, n=.5){
 topic.subset <- get.highest.docs("rights", .3)
 
 # Option 3) Get 20 most representative articles for each region on the topic
-highest <- arrange(meta.topics,REGION,desc(rights)) 
-topic.subset <- rbind(head(highest[highest$REGION=="Africa",],20),head(highest[highest$REGION=="Asia",],20),head(highest[highest$REGION=="EECA",],20),head(highest[highest$REGION=="LA",],20),head(highest[highest$REGION=="MENA",],20),head(highest[highest$REGION=="West",],20))
+highest <- arrange(meta.topics,region,desc(rights)) 
+topic.subset <- rbind(head(highest[highest$region=="Africa",],20),head(highest[highest$region=="Asia",],20),head(highest[highest$region=="EECA",],20),head(highest[highest$region=="LA",],20),head(highest[highest$region=="MENA",],20),head(highest[highest$region=="West",],20))
 
 # find n - how many documents in each region in the subcorpus?
-summary(rights$REGION)
+summary(topic.subset$region)
 
 #############################
 ##### distinctive words #####
@@ -186,19 +186,19 @@ top.slo <- top.score("st.log.odds")
 ##############################################
 
 # Option 1) find most representative titles for topic by region (i.e. marriage)
-highest <- arrange(meta.topics,REGION,desc(rights)) 
-highest <- data.frame(head(highest[highest$REGION=="Africa","TITLE"],20),head(highest[highest$REGION=="Asia","TITLE"],20),head(highest[highest$REGION=="EECA","TITLE"],20),head(highest[highest$REGION=="LA","TITLE"],20),head(highest[highest$REGION=="MENA","TITLE"],20),head(highest[highest$REGION=="West","TITLE"],20))
+highest <- arrange(meta.topics,region,desc(rape)) 
+highest <- data.frame(head(highest[highest$region=="Africa","title"],20),head(highest[highest$region=="Asia","title"],20),head(highest[highest$region=="EECA","title"],20),head(highest[highest$region=="LA","title"],20),head(highest[highest$region=="MENA","title"],20),head(highest[highest$region=="West","title"],20))
 names(highest) <- c("Africa","Asia","EECA","LA","MENA","West")
 
 # Option 2) random sample titles by top-topic.
 sample<- meta.topics[meta.topics$top.topic=="rights",]
 names(sample)
-sample <- data.frame(sample(sample[sample$REGION=="Africa","TITLE"],5),sample(sample[sample$REGION=="Asia","TITLE"],5),sample(sample[sample$REGION=="EECA","TITLE"],5),sample(sample[sample$REGION=="LA","TITLE"],5),sample(sample[sample$REGION=="MENA","TITLE"],5),sample(sample[sample$REGION=="West","TITLE"],5))
+sample <- data.frame(sample(sample[sample$region=="Africa","title"],5),sample(sample[sample$region=="Asia","title"],5),sample(sample[sample$region=="EECA","title"],5),sample(sample[sample$region=="LA","title"],5),sample(sample[sample$region=="MENA","title"],5),sample(sample[sample$region=="West","title"],5))
 sample
 
 # Option 3) find all titles (and articles) in sub-corpus.
-rights <- subset(meta.topics, top.topic=="rights",select=c(TITLE,REGION,TEXT,YEAR,COUNTRY_FINAL))
-rights <- arrange(rights,REGION)
+all <- subset(meta.topics, top.topic=="rights",select=c(rights,title,region,text,year,country))
+all <- arrange(rights,region)
 
 ##################################
 #### Alt. Rights Classifier ######
@@ -227,3 +227,15 @@ hist(rights.country.year$rights.perc)
 
 require(ggplot2)
 ggplot(rights.country.year, aes(x = iso3c, y = rights.perc)) + geom_bar(stat = "identity")
+
+## Topic correlations
+
+mena <- meta.topics[meta.topics$region=="MENA", ]
+west <- meta.topics[meta.topics$region=="West", ]
+africa <- meta.topics[meta.topics$region=="Africa", ]
+asia <- meta.topics[meta.topics$region=="Asia", ]
+la <- meta.topics[meta.topics$region=="LA", ]
+eeca <- meta.topics[meta.topics$region=="EECA", ]
+
+cor(mena$religion, mena$rights)
+cor(asia$religion, asia$rights)

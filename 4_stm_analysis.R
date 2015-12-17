@@ -83,8 +83,8 @@ legend("topleft","(x,y)",legend=c("MENA","EECA"),fill=c("red","blue"))
 topic.docs <- as.data.frame(mod.15.new$theta) 
 colnames(topic.docs) <- c("cancer", "reproductive", "religion", "business", "marriage", "arts", "migration", "rape", "war", "literature", "personal", "rights","politics", "sports", "fashion")
 
-topic.docs$docs <- rownames(topic.docs)
 meta.topics <- cbind(topic.docs,meta)
+meta.topics$docs <- rownames(topic.docs)
 names(meta.topics)
 
 # add column for top topic for each article

@@ -1,14 +1,13 @@
 # This script analyses the estimated STM
 
 setwd("~/Dropbox/berkeley/Git-Repos/worlds-women")
-library(stm)
-library(plyr)
-library(xtable)
 rm(list=ls())
+require(stm)
+require(plyr)
+require(xtable)
 
 ### Load Data
 load("Data/stm.RData")
-model <- mod.15.new
 
 ############################
 ###### Label Topics ########
@@ -18,11 +17,12 @@ model <- mod.15.new
 prob <- labelTopics(model, n= 10)$prob
 frex <- labelTopics(model, n=10)$frex
 dat <- data.frame(labels)
+names(dat) <- "Labels"
 dat$Probability <- apply( prob, 1 , paste , collapse = ", " )
 dat$FREX <- apply( frex, 1 , paste , collapse = ", " )
 
-# export to Latex
-xtable(dat)
+# export to html
+print(xtable(dat), type = "html", file="Results/stm/topics.html")
 
 ##################################
 ######### Plot Topics  ###########
@@ -45,11 +45,11 @@ plot.topicCorr(mod.out.corr)
 prep <- estimateEffect(1:15 ~ REGION+s(YEAR),model,meta=meta,uncertainty="Global",documents=docs)
 
 # topics over time
-plot.estimateEffect(prep,covariate="YEAR",method="continuous",topics=c(12),printlegend=TRUE,xlab="Year",xlim=c(1980,2014),main = "Comparing Topics over Time",labeltype="custom",custom.labels=c("Rights"),ylim=c(0,.25),nsims=200)
+plot.estimateEffect(prep,covariate="YEAR",method="continuous",topics=c(14),printlegend=TRUE,xlab="Year",xlim=c(1980,2014),main = "Comparing Topics over Time",labeltype="custom",custom.labels=c("Religion"),ylim=c(0,.25),nsims=200)
 
 # topics over region
 regions = c("Asia","EECA","MENA","Africa","West","LA")
-plot.estimateEffect(prep,"REGION",method="pointestimate",topics=12,printlegend=TRUE,labeltype="custom",custom.labels=regions,main="Women's Rights",ci.level=.95,nsims=100)
+plot.estimateEffect(prep,"REGION",method="pointestimate",topics=9,printlegend=TRUE,labeltype="custom",custom.labels=regions,main="Women's Rights",ci.level=.95,nsims=100)
 
 # Write Topic Proportion Estimates by Region
 for (i in 1:15){
@@ -63,28 +63,27 @@ for (i in 1:15){
 ######### Combine Meta Data + Topic Distributions #####
 #######################################################
 
-#Number of Documents by Number of Topics matrix of topic proportions
-topic.docs <- as.data.frame(mod.15.new$theta) 
-colnames(topic.docs) <- c("cancer", "reproductive", "religion", "business", "marriage", "arts", "migration", "rape", "war", "literature", "personal", "rights","politics", "sports", "fashion")
-
-meta.topics <- cbind(topic.docs,meta)
-meta.topics$docs <- rownames(topic.docs)
-names(meta.topics)
-
+# Number of Documents by Number of Topics matrix of topic proportions
+topic.docs <- as.data.frame(model$theta) 
+colnames(topic.docs) <- c("business", "sports", "reproductive health", "travel", "fashion", "UN", "rape", "combat", "rights", "politics", "lifestories", "perspectives", "marriage.family", "religion", "cancer")
 # add column for top topic for each article
-meta.topics$top.topic <- names(topic.docs)[apply(topic.docs, 1, which.max)]
+topic.docs$top.topic <- names(topic.docs)[apply(topic.docs, 1, which.max)]
+
+# prepare meta data
+meta.topics <- meta[,c("PUBLICATION", "TITLE", "entities", "COUNTRY_CODE", "TEXT", "COUNTRY_FINAL", "YEAR", "TEXT.NO.NOUN", "REGION", "TYPE", "SUBJECT")]
+names(meta.topics) <- c("publication", "title", "entities", "iso3c", "text", "country", "year", "text.no.noun", "region", "type", "subject")
+
+# merge
+meta.topics <- cbind(topic.docs, meta.topics)
+
+# add doc.number
+meta.topics$docs <- rownames(topic.docs)
 
 # add number of words
 n.words <- function(doc){
   return(sum(doc[2,]))
 }
 meta.topics$n.words <- as.numeric(lapply(docs, n.words))
-cor(meta.topics$number.of.non.stop.words, meta.topics$n.words)
-
-# subset
-names(meta.topics)
-meta.topics <- meta.topics[,c(38,1:17,22:25,27,29,30,36,37,39,40)]
-names(meta.topics)[16:29] <- c("docs","publication", "title", "entities", "iso3c", "text", "country", "year", "text.no.noun", "region", "type", "subject", "top.topic", "n.words")
 
 #write csv for later
 write.csv(meta.topics,"Data/topic-proportions/meta-topics.csv", row.names = F)
@@ -130,8 +129,9 @@ rownames(mean.regions)[16] <- "Total"
 mean.regions <- round(mean.regions,2)
 mean.regions
 
-
-#### Interactions
+##########################
+####### Interactions #####
+##########################
 
 # fit model
 mod.15.int <- stm(docs,vocab, 15, prevalence=~REGION*s(YEAR), data=meta, model=model)

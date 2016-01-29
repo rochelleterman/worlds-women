@@ -1,13 +1,12 @@
 # This script estimates the STM on women-processed.csv
 
+rm(list=ls())
 setwd("~/Dropbox/berkeley/Git-Repos/worlds-women")
 library(stm)
 library(plyr)
-rm(list=ls())
 
 ### Load Data
 women <- read.csv('Data/Corpora/women-processed.csv')
-names(women)
 
 ####################################
 ######### Pre-processing ###########
@@ -15,7 +14,7 @@ names(women)
 
 # custom stopwords
 countries <- read.csv("Data/country_codes.csv")
-stopwords.country <- c(as.character(countries$Key), "saudi", "german")
+stopwords.country <- c(as.character(countries$Key), "saudi", "german", "ese", "ian")
 stopwords.country <- tolower(stopwords.country)
 
 # process
@@ -23,44 +22,53 @@ temp<-textProcessor(documents=women$TEXT.NO.NOUN,metadata=women,customstopwords=
 meta<-temp$meta
 vocab<-temp$vocab
 docs<-temp$documents
-out <- prepDocuments(docs, vocab, meta, lower.thresh=2)
+out <- prepDocuments(docs, vocab, meta, lower.thresh=10)
 docs<-out$documents
 vocab<-out$vocab
 meta <-out$meta
 
-#Removing 22185 of 37485 terms (26344 of 1073997 tokens) due to frequency 
-#Your corpus now has 4522 documents, 15300 terms and 1047653 tokens.
+# Removing 29737 of 37390 terms (66329 of 1073578 tokens) due to frequency 
+# Your corpus now has 4531 documents, 7653 terms and 1007249 tokens.
 
 ##################################
 ######### Choose Model ###########
 ##################################
 
-# mod.15.new <- stm(docs,vocab, 15, prevalence=~REGION+s(YEAR)+PUBLICATION, data=meta, seed = 22222, max.em.its = 200)
+mod.15.15 <- stm(docs,vocab, 15, prevalence=~REGION+s(YEAR)+PUBLICATION, data=meta, seed = 15, max.em.its = 50)
+
+# assign model
+model <- mod.15.15
+
+# rerun model to convergence
+model <- stm(docs,vocab, 15, prevalence=~REGION+s(YEAR), data=meta, seed = 15, max.em.its = 200)
+
+# label
+labelTopics(model)
 
 # Topic Quality plot
 jpeg("Results/stm/exclusivity-and-cohesiveness.jpeg",width=750,height=500,type="quartz")
-topicQuality(model=mod.15.new, documents=docs)
+topicQuality(model=model, documents=docs)
 dev.off()
 
 # Topic Labels plot
 jpeg("Results/stm/labels-1.jpeg",width=700,height=1000,type="quartz")
-plot.STM(mod.15.new,type="labels",topics=1:10,width=75)
+plot.STM(model,type="labels",topics=1:10,width=75)
 dev.off()
 
 jpeg("Results/stm/labels-2.jpeg",width=700,height=1000,type="quartz")
-plot.STM(mod.15.new,type="labels",topics=11:15,width=75)
+plot.STM(model,type="labels",topics=11:15,width=75)
 dev.off()
 
-# assign model for later
-model <-mod.15.new
+##################################
+######### Label Topics ###########
+##################################
 
-####################################
-######### Explore Topics ###########
-####################################
+# Labels
+labelTopics(model)
 
 # Example Docs
 thoughts1 <- findThoughts(model,texts=meta$TITLE,n=3,topics=1)$docs[[1]]
-thoughts2 <- findThoughts(model,texts=meta$TITLE,n=4,topics=2)$docs[[1]]
+thoughts2 <- findThoughts(model,texts=meta$TITLE,n=3,topics=2)$docs[[1]]
 thoughts3 <- findThoughts(model,texts=meta$TITLE,n=3,topics=3)$docs[[1]]
 thoughts4 <- findThoughts(model,texts=meta$TITLE,n=3,topics=4)$docs[[1]]
 thoughts5 <- findThoughts(model,texts=meta$TITLE,n=3,topics=5)$docs[[1]]
@@ -74,9 +82,6 @@ thoughts12 <- findThoughts(model,texts=meta$TITLE,n=3,topics=12)$docs[[1]]
 thoughts13 <- findThoughts(model,texts=meta$TITLE,n=3,topics=13)$docs[[1]]
 thoughts14 <- findThoughts(model,texts=meta$TITLE,n=3,topics=14)$docs[[1]]
 thoughts15 <- findThoughts(model,texts=meta$TITLE,n=3,topics=15)$docs[[1]]
-
-# Labels
-labelTopics(model)
 
 # representative titles
 plotQuote(thoughts1, width=40, main="Topic 1") 
@@ -95,8 +100,8 @@ plotQuote(thoughts13, width=40, main="Topic 13")
 plotQuote(thoughts14, width=40, main="Topic 14") 
 plotQuote(thoughts15, width=40, main="Topic 15") 
 
-# assign hand labels
-labels = c("Cancer", "Reproductive Health", "Religion", "Business & Work", "Marriage & Family", "Arts", "Migration", "Gender-Based Violence", "War & Combat", "Literature", "Human Interest", "Women's Rights & Gender Equality","Politics", "Sports", "Fashion")
+
+labels = c("Business", "Sports", "Reproductive Health", "Travel", "Fashion", "UN", "Sexual Assault", "Combat", "Women's Rights and Gender Equality", "Politics", "Profiles", "Human Interest", "Marriage & Family", "Religion", "Cancer")
 
 # save data
-save(docs, vocab, meta, labels, mod.15.new, file = "Data/stm.RData")
+save(docs, vocab, meta, labels, model, file = "Data/stm.RData")

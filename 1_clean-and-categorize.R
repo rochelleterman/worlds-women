@@ -8,6 +8,7 @@
 
 rm(list=ls())
 setwd("~/Dropbox/berkeley/Git-Repos/worlds-women")
+require(countrycode)
 
 ####################
 #### Load Data #####
@@ -39,10 +40,12 @@ paid <- grep("Paid Notice",women$TITLE,ignore.case=T)
 women <- women[-paid,]
 
 # get rid of duplicates
-
 x <- women[, c("DATE", "TITLE")]
 x <- which(duplicated(x))
 women <- women[-x,]
+
+# add UID
+women$UID <- 1:nrow(women)
 
 ###############################
 ########## Year ###############
@@ -69,9 +72,9 @@ women$COUNTRY_TOP_PERCENT <- NA # the countrt with the top relevancy percent
 women$COUNTRY_FINAL <- NA #the country in COUNTRY_TOP_PERCENT in standardized format
 women$COUNTRY_CODE <- NA #the iso3c code representing the country in COUNTRY_FINAL
 
-############################
+######################
 ### Remove Regions ###
-###########################
+######################
 
 regions<- c("NORTH AMERICA", "AFRICA", "EUROPEAN UNION MEMBER STATES", "EUROPE", "AFRICA", "ASIA","CARIBBEAN ISLANDS","CENTRAL AFRICA", "CENTRAL EUROPE", "EASTERN ASIA", "CENTRAL ASIA", "EASTERN EUROPE", "GULF STATES", "MEDITERRANEAN", "MIDDLE EAST", "NORTH & SOUTH AMERICAS", "NORTHERN AFRICA", "NORTHERN ASIA", "SOUTH AMERICA", "SOUTH-EASTERN ASIA", "WESTERN AFRICA", "WESTERN EUROPE", "SUB SAHARAN AFRICA", "LATIN AMERICA", "SOUTHERN ASIA", "SOUTHERN AFRICA", "ANTARCTICA", "EASTERN AFRICA", "CENTRAL AMERICA")
 
@@ -113,6 +116,7 @@ country.major <- function(x){
   return(countries.top)
 }
 
+# test
 country.major(16)
 
 # apply function to data
@@ -121,7 +125,8 @@ n = seq(1:row)
 women$COUNTRY_MAJOR[1:row] <- lapply(n,country.major)
 women$COUNTRY_MAJOR[women$COUNTRY_MAJOR=="character(0)"] <- NA
 
-### HOW MANY ARTICLES WITH MORE THAN 1 MAJOR COUNTRY?
+# HOW MANY ARTICLES WITH MORE THAN 1 MAJOR COUNTRY?
+# ====================================================
 
 # get indexes of articles with more than 1 major country
 x <- vector()
@@ -132,7 +137,6 @@ for (i in 1:nrow(women)){
 }
 more <- women[x,] 
 rownames(more)
-
 
 # turn major countries into a data frame
 country.list <- more$COUNTRY_MAJOR
@@ -145,7 +149,6 @@ for (i in 1:length(country.list)){
 }
 x <- data.frame(x)
 rownames(x) <- rownames(more)
-
 more.index <- rownames(women)[rownames(women) %in% rownames(more)]
 
 # percentage of articles with more than 1 major country
@@ -200,18 +203,7 @@ sort(unique(missing.final$COUNTRY_TOP_PERCENT))
 ### Country Codes ###
 #####################
 
-# Define function to get country code (ccode) from COUNTRY_FINAL and put it in column COUNTRY_CODE
-country.code <- function(x,y,z){
-  country.index <- (grepl(x, z$COUNTRY_FINAL,ignore.case=T))
-  z$COUNTRY_CODE[country.index] <- as.character(y)
-  return(z$COUNTRY_CODE)
-}
-
-# Apply function to all countries in the key-value list
-n <- nrow(countries)
- for(i in 1:n){
-  women$COUNTRY_CODE <- country.code(countries$Key[i],countries$iso3c[i],women)
- }
+women$COUNTRY_CODE <- countrycode(women$COUNTRY_FINAL,"country.name","iso3c")
 
 # Fix problematic codes
 unique(women$COUNTRY_FINAL[is.na(women$COUNTRY_CODE)])
@@ -230,8 +222,6 @@ women$COUNTRY_CODE[women$COUNTRY_FINAL=="Kosovo" & women$YEAR > 2007] <- "MNE"
 ### Apply Regions ###
 #####################
 
-### This method is from my country_codes.csv file. It only applies a region from key, i.e. "FINAL COUNTRY".
-names(countries)
 women$REGION <- NA
 for (i in 1:n){
   country <- as.character(countries$Key[i])

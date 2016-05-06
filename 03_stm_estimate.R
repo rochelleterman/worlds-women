@@ -67,40 +67,9 @@ dev.off()
 labelTopics(model)
 
 # Example Docs
-thoughts1 <- findThoughts(model,texts=meta$TITLE,n=3,topics=1)$docs[[1]]
-thoughts2 <- findThoughts(model,texts=meta$TITLE,n=3,topics=2)$docs[[1]]
-thoughts3 <- findThoughts(model,texts=meta$TITLE,n=3,topics=3)$docs[[1]]
-thoughts4 <- findThoughts(model,texts=meta$TITLE,n=3,topics=4)$docs[[1]]
-thoughts5 <- findThoughts(model,texts=meta$TITLE,n=3,topics=5)$docs[[1]]
-thoughts6 <- findThoughts(model,texts=meta$TITLE,n=3,topics=6)$docs[[1]]
-thoughts7 <- findThoughts(model,texts=meta$TITLE,n=3,topics=7)$docs[[1]]
-thoughts8 <- findThoughts(model,texts=meta$TITLE,n=3,topics=8)$docs[[1]]
-thoughts9 <- findThoughts(model,texts=meta$TITLE,n=3,topics=9)$docs[[1]]
-thoughts10 <- findThoughts(model,texts=meta$TITLE,n=3,topics=10)$docs[[1]]
-thoughts11 <- findThoughts(model,texts=meta$TITLE,n=3,topics=11)$docs[[1]]
-thoughts12 <- findThoughts(model,texts=meta$TITLE,n=3,topics=12)$docs[[1]]
-thoughts13 <- findThoughts(model,texts=meta$TITLE,n=3,topics=13)$docs[[1]]
-thoughts14 <- findThoughts(model,texts=meta$TITLE,n=3,topics=14)$docs[[1]]
-thoughts15 <- findThoughts(model,texts=meta$TITLE,n=3,topics=15)$docs[[1]]
+findThoughts(model,texts=meta$TITLE,n=3,topics=1:15)
 
-# representative titles
-plotQuote(thoughts1, width=40, main="Topic 1") 
-plotQuote(thoughts2, width=40, main="Topic 2")  
-plotQuote(thoughts3, width=40, main="Topic 3")  
-plotQuote(thoughts4, width=40, main="Topic 4") 
-plotQuote(thoughts5, width=40, main="Topic 5") 
-plotQuote(thoughts6, width=40, main="Topic 6") 
-plotQuote(thoughts7, width=40, main="Topic 7") 
-plotQuote(thoughts8, width=40, main="Topic 8") 
-plotQuote(thoughts9, width=40, main="Topic 9") 
-plotQuote(thoughts10, width=40, main="Topic 10") 
-plotQuote(thoughts11, width=40, main="Topic 11") 
-plotQuote(thoughts12, width=40, main="Topic 12") 
-plotQuote(thoughts13, width=40, main="Topic 13") 
-plotQuote(thoughts14, width=40, main="Topic 14") 
-plotQuote(thoughts15, width=40, main="Topic 15") 
-
-
+# Add labels
 labels = c("Business", "Sports", "Reproductive Health", "Travel", "Fashion", "UN", "Sexual Assault", "Combat", "Women's Rights and Gender Equality", "Politics", "Profiles", "Human Interest", "Marriage & Family", "Religion", "Cancer")
 
 # save data

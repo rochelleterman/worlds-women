@@ -67,10 +67,11 @@ dev.off()
 labelTopics(model)
 
 # Example Docs
-findThoughts(model,texts=meta$TITLE,n=3,topics=1:15)
+thought <- findThoughts(model,texts=meta$TITLE,n=10,topics=6)
+plot(thought)
 
 # Add labels
-labels = c("Business", "Sports", "Reproductive Health", "Travel", "Fashion", "UN", "Sexual Assault", "Combat", "Women's Rights and Gender Equality", "Politics", "Profiles", "Human Interest", "Marriage & Family", "Religion", "Cancer")
+labels = c("Business", "Sports", "Public Health", "Fashion", "Arts", "United Nations", "Sexual Assault", "Combat", "Women's Rights and Gender Equality", "Politics", "Profiles", "Human Interest", "Marriage & Family", "Religion", "Reproductive & Personal Health")
 
 # save data
 save(docs, vocab, meta, labels, model, file = "Data/stm.RData")

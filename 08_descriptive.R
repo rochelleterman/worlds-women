@@ -3,6 +3,7 @@
 rm(list=ls())
 setwd("~/Dropbox/berkeley/Git-Repos/worlds-women")
 library(plyr)
+library(dplyr)
 library(ggplot2)
 library(reshape2)
 
@@ -43,6 +44,24 @@ summary(as.factor(rt$n.binary))
 
 # number of obs > 1979
 nrow(rt[rt$year > 1979,])# 6292
+
+##################################
+######## women's rights  #######
+##################################
+
+# make composite
+rt$women_composite <- rowMeans(cbind(rt$wopol,rt$wosoc,rt$wecon), na.rm = T)
+histogram(rt$women_composite)
+
+# split into 2 samples
+muslim <- rt[rt$muslim.maj==1,]
+non.muslim <- rt[rt$muslim.maj==0,]
+
+# best n worst muslim countries
+arrange(ddply(muslim, .(country), summarize, record = mean(women_composite, na.rm = T)), desc(record))
+
+# best n worst non-muslim countries
+arrange(ddply(non.muslim, .(country), summarize, record = mean(women_composite, na.rm = T)), desc(record))
 
 ##################################
 ######## Words per Topics  #######

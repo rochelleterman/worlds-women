@@ -373,7 +373,7 @@ nb1 <- glm.nb(n.docs ~ n.docs.lag + count + women_composite*muslim.maj + polity2
 summary(nb1)
 nb1.se <- coeftest(nb1, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
-jpeg("Results/regressions/interactive-plots/nb1.jpeg",width=700,height=500,type="quartz")
+pdf("Results/regressions/interactive-plots/nb1.pdf",width=7,height=5)
 interaction_plot_binary(nb1, effect="women_composite", moderator="muslim.maj", interaction="women_composite:muslim.maj", factor_labels=c("Not Muslim Majority","Muslim Majority"), xlabel="", ylabel="Marginal Effect of Women's Rights on Coverage", title="")
 dev.off()
 
@@ -382,7 +382,7 @@ nb2 <- glm.nb(n.docs ~ n.docs.lag + count + women_composite*mena + polity2 + dom
 summary(nb2)
 nb2.se <- coeftest(nb2, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
-jpeg("Results/regressions/interactive-plots/nb2.jpeg",width=700,height=500,type="quartz")
+pdf("Results/regressions/interactive-plots/nb2.pdf",width=7,height=5)
 interaction_plot_binary(nb2, effect="women_composite", moderator="mena", interaction="women_composite:mena", factor_labels=c("Not Mena","Mena"), xlabel="", ylabel="Marginal Effect of Women's Rights on Coverage", title="")
 dev.off()
 
@@ -391,7 +391,7 @@ nb3 <- glm.nb(n.docs ~ n.docs.lag + count + women_composite*muslim + polity2 + d
 summary(nb3)
 nb3.se <- coeftest(nb3, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
-jpeg("Results/regressions/interactive-plots/nb3.jpeg",width=700,height=500,type="quartz")
+pdf("Results/regressions/interactive-plots/nb3.pdf",width=7,height=5)
 interaction_plot_continuous(nb3, effect="women_composite", moderator="muslim", interaction="women_composite:muslim", mean=T, title="",xlabel="Percentage Muslim", ylabel="Marginal Effect of Women's Rights on Coverage")
 dev.off()
 
@@ -603,9 +603,15 @@ stargazer(nb.r7.1, nb.r7.2, nb.r7.3, type = "html", out = "Results/regressions/r
 heckit1 <- heckit(n.binary ~ n.binary.lag + count + women_composite*muslim.maj + polity2 + domestic9 + log(pop.wdi) +log(gdp.pc.un),
                  rights ~ rights.lag + women_composite + muslim.maj + polity2 + physint,
                  rt )
-summary(heckit1)
+summary(heckit1$lm)
 heckit1.se = coeftest(heckit1$lm, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 heckit1.se
+
+# Coefficient Plot
+require(coefplot)
+pdf(file = "Results/regressions/main-results/heckit1-coefplot.pdf", width = 8, height = 5)
+coefplot(heckit1$lm, title = "", coefficients = c("XOrights.lag", "XOwomen_composite", "XOmuslim.maj", "XOpolity2", "XOphysint"), newNames = c(XOrights.lag = "Lagged DV" , XOwomen_composite = "Women's Rights Index", XOmuslim.maj = "Muslim Majority", XOpolity2 = "Physical Integrity Rights", XOphysint = "Democracy"))
+dev.off()
 
 # MENA
 heckit2 <- heckit(n.binary ~ n.binary.lag + count + women_composite*mena + polity2 + domestic9 + log(pop.wdi) +log(gdp.pc.un),
@@ -620,8 +626,10 @@ heckit3 <- heckit(n.binary ~ n.binary.lag + count + women_composite*muslim + pol
 summary(heckit3$lm)
 heckit3.se = coeftest(heckit3$lm, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
 
-# print
+
+# print - HTML
 stargazer(heckit1$lm, heckit2$lm, heckit3$lm, type = "html", out = "Results/regressions/main-results/heckit.html", label = "table:heckit", style = "ajps", title = "Two-Step Analysis of Rights Focus in U.S. News Coverage about Women Abroad", se = list(heckit1.se, heckit2.se, heckit3.se), notes="Robust standard errors clustered on country appear in parentheses.",  dep.var.labels = "Rights Focus", covariate.labels=c("Intercept", "Lagged DV", "Women's Rights Index","Muslim Majority","MENA", "Muslim Percentage", "Democracy", "Physical Integrity Rights"), star.cutoffs = c(0.05, 0.01, 0.001))
+
 ```
 
 ## 4.2 Partial Models

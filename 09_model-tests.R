@@ -43,6 +43,7 @@ stargazer(rt, type="text")
 # subset with an observation
 rt.1 <- rt[rt$n.binary==1,]
 summary(rt.1$muslim)
+stargazer(rt.1, type="text")
 
 # israel
 rt$mena[rt$ccode == 666] <- 0

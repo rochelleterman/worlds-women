@@ -29,9 +29,11 @@ print(xtable(dat), type = "html", file="Results/stm/topics.html")
 ##################################
 
 # Corpus Summary of Topic Proportions
-jpeg("Results/stm/corpus-summary.jpeg",width=700,height=550,type="quartz")
+pdf("Results/stm/corpus-summary.pdf",width=9.5,height=9)
 plot.STM(model,type="summary",custom.labels=labels,main="")
 dev.off()
+
+labelTopics(model)
 
 # Topic Correlation
 mod.out.corr<-topicCorr(model)
@@ -59,13 +61,25 @@ for (i in 1:15){
   dev.off()
 }
 
+# Write Topic Proportion Estimates by Region - PDFs
+for (i in 1:15){
+  file <- file.path("Results/stm/region-proportion-plots/pdfs",paste(as.character(i),".pdf",sep = ""))
+  pdf(file,width=4,height=3)
+  plot.estimateEffect(prep,"REGION",method="pointestimate",topics=i,printlegend=TRUE,labeltype="custom",custom.labels=regions,main=labels[i],ci.level=.95,nsims=100)
+  dev.off()
+}
+
+pdf("Results/stm/region-proportion-plots/pdfs/rights.pdf",width=9,height=5.5)
+plot.estimateEffect(prep,"REGION",method="pointestimate",topics=9,printlegend=TRUE,labeltype="custom",custom.labels=regions,main="Women's Rights",ci.level=.95,nsims=100)
+dev.off()
+
 #######################################################
 ######### Combine Meta Data + Topic Distributions #####
 #######################################################
 
 # Number of Documents by Number of Topics matrix of topic proportions
 topic.docs <- as.data.frame(model$theta) 
-colnames(topic.docs) <- c("business", "sports", "reproductive health", "travel", "fashion", "UN", "rape", "combat", "rights", "politics", "lifestories", "perspectives", "marriage.family", "religion", "cancer")
+colnames(topic.docs) <- c("business", "sports", "public health", "travel", "fashion", "UN", "rape", "combat", "rights", "politics", "lifestories", "perspectives", "marriage.family", "religion", "reproductive health")
 # add column for top topic for each article
 topic.docs$top.topic <- names(topic.docs)[apply(topic.docs, 1, which.max)]
 

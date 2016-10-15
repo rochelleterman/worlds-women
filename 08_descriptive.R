@@ -26,6 +26,9 @@ n.paper
 # number of articles per region
 n.region <- ddply(.data=docs, .variables=.(region), .fun=nrow)
 
+# mean words per article
+mean(docs$n.words) # 344.9318
+
 # plot: articles per region
 jpeg(filename = "Results/descriptive/n-region-barplot.jpeg",width=900,height=600,type="quartz")
 barplot(summary(docs$region))

@@ -20,7 +20,7 @@ require('dendextend')
 require('dendextendRcpp')
 
 # Load Data
-meta.topics <- read.csv("Data/topic-proportions/meta-topics-country-year.csv")
+meta.topics <- read.csv("Data/topic-proportions/meta-topics-country-year.csv", stringsAsFactors = T)
 
 ##############################
 ######## DTM function ########
@@ -197,10 +197,17 @@ d <- data.frame(matrix(NA, nrow = 20, ncol = 6))
 names(d) <- levels(meta.topics$region)
 for (region in levels(meta.topics$region)){
   x <- meta.topics[meta.topics$region==region,]
-  titles <- head(x[order(x$rape, decreasing = T), "title"],20)
-  years <- head(x[order(x$rape, decreasing = T), "year"],20)
-  d[[region]] <- paste(years, titles, sep = "--" )
+  titles <- head(x[order(x$sports, decreasing = T), "title"],20)
+  #years <- head(x[order(x$sports, decreasing = T), "year"],20)
+  #d[[region]] <- paste(years, titles, sep = "--" )
+  d[[region]] <- titles
 }
+
+d$MENA
+d$West
+
+r <- meta.topics$text[meta.topics$title=="INTERNATIONAL SPORTS: A Quiet Revolution in Iran; Beneath Coat and Scarf, Women Discover the Freedom to Play"]
+r
 
 # to look further
 x <- arrange(meta.topics[meta.topics$region=="Africa",], rape, decreasing = TRUE)

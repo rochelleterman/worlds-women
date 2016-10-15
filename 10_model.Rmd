@@ -130,7 +130,7 @@ rt.imputed$gdp.pc.un <- lag(rt.imputed$gdp.pc.un, 1)
 
 ```{r}
 # MUSLIM MAJORITY
-logit1 <- glm(n.binary ~ n.binary.lag + count + women_composite*muslim.maj*as.factor(year) + polity2 + domestic9 + log(pop.wdi) + log(gdp.pc.un), data = rt, family = binomial(link="probit"), control = list(maxit = 50))
+logit1 <- glm(n.binary ~ n.binary.lag + count + women_composite*muslim.maj + polity2 + domestic9 + log(pop.wdi) + log(gdp.pc.un), data = rt, family = binomial(link="probit"), control = list(maxit = 50))
 summary(logit1)
 coeftest(logit1, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))
 logit1.se <- coeftest(logit1, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
@@ -362,6 +362,25 @@ interaction_plot_binary(logit.r7.2, effect="women_composite", moderator="mena", 
 interaction_plot_continuous(logit.r7.3, effect="women_composite", moderator="muslim", interaction="women_composite:muslim", mean=T, title="",xlabel="Percentage Muslim", ylabel="Marginal Effect of Women's Rights on Coverage")
 
 ```
+
+## 2.4.8 Fixed Effects
+
+```{r}
+# MUSLIM MAJORITY
+logit.r8.1 <- glm(n.binary ~ n.binary.lag + count + women_composite*muslim.maj + polity2 + domestic9 + log(pop.wdi) + log(gdp.pc.un) + as.factor(year), data = rt, family = binomial(link="probit"), control = list(maxit = 50))
+summary(logit.r8.1)
+coeftest(logit.r8.1, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))
+logit.r8.1.se <- coeftest(logit.r8.1, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
+
+# MENA
+logit.r8.2 <- glm(n.binary ~ n.binary.lag + count + women_composite*mena + polity2 + domestic9 + log(pop.wdi) + log(gdp.pc.un) + as.factor(year), data = rt, family = binomial(link="probit"), control = list(maxit = 50))
+logit.r8.2.se <- coeftest(logit.r8.2, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
+
+# PERCENT MUSLIM
+logit.r8.3 <- glm(n.binary ~ n.binary.lag + count + women_composite*muslim + polity2 + domestic9 + log(pop.wdi) + log(gdp.pc.un) + as.factor(year), data = rt, family = binomial(link="probit"), control = list(maxit = 50))
+logit.r8.3.se <- coeftest(logit.r8.3, vcov=function(x) vcovHC(x, cluster="group", type="HC1"))[,2]
+```
+
 
 # 3. Negative Binomial Model on Reports (Count)
 

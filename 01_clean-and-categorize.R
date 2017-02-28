@@ -240,6 +240,7 @@ women$REGION[women$COUNTRY_FINAL=="Myanmar (Burma)"] <- "Asia"
 
 # Subsetting Data
 women.foreign <- subset(women,!COUNTRY_CODE=="USA")
+1 - nrow(women.foreign) / nrow(women)
 women.foreign <- subset(women.foreign,!is.na(COUNTRY_CODE))
 
 # with only 1 major country
